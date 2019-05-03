@@ -1,7 +1,9 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
 using namespace sf;
+using namespace std;
 
 class Player {
    Vector2f pPosition;
@@ -10,25 +12,21 @@ class Player {
 
    Texture pTexture;
 
-   // Boolean statements to check for 2D input.
-   bool moveLeft, moveRight, moveUp, moveDown;
-
-   // Alternative input control variables.
-   // For possibility of joystick movement.
+   // Movement components in x and y directions.
    float pMoveX, pMoveY;
-   // or even a vector velocity variable if you're feeling fancy and want
-   // to make your code more arcane and less readable.
+
+   // Or we can use a vector velocity variable if we're feeling fancy and want
+   // to make our code even more arcane and less readable.
    Vector2f pVelocity;
 
-   float speed;
-
 public:
-   Player();
-   Sprite getSprite(); // I like Sprite. Caffeine-free.
-   
-   void moveX(float val);
+   Player(int playerNum);
+   Sprite& getSprite(); // I like Sprite. Caffeine-free.
 
-   void moveY(float val);
+   Vector2f& getPosition();
 
-   void update(float elapsedTime);
+   void move(float const &valX, float const &valY);
+
+   void update(float& elapsedTime);
+
 };
