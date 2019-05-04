@@ -9,6 +9,11 @@ void Engine::update(float& dtAsSeconds)
    player0.update(dtAsSeconds);
    currentState.add(player0.getSprite());
 
+   for (Projectile& p : bullets) {
+      p.update(dtAsSeconds);
+      currentState.add(p.getSprite());
+   }
+
    enemy.update(dtAsSeconds, player0.getPosition());
    currentState.add(enemy.getSprite());
 

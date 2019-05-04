@@ -30,13 +30,18 @@ Engine::Engine()
    // Associate the sprite with the texture.
    m_BackgroundSprite.setTexture(m_BackgroundTexture);
 
-   enemy = Enemy();
-
+   
    currentState.add(player0.getSprite());
+
+   for (Projectile p : bullets) {
+      currentState.add(p.getSprite());
+   }
+
+   enemy = Enemy();
    currentState.add(enemy.getSprite());
 
    for (int i = 0; i < MAX_ENEMY1; i++) {
-      enemies[i] = Enemy(1);
+      enemies[i] = Enemy(2);
       enemies[i].getPosition().x = i * 10;
       currentState.add(enemies[i].getSprite());
    }
@@ -61,9 +66,7 @@ void Engine::start()
    float tickFloat = (float)tickRate / 1000000;
    float alpha = 0;
    Int64 accumulator = 0;
-   /*int updateCount = 0;
-   int drawCount = 0;
-*/
+   
    Clock clock;
    Time dt;
 
@@ -75,14 +78,16 @@ void Engine::start()
 
       // Make a fraction from the delta time (frameTime)
       frameTime = dt.asMicroseconds() - dtAsSeconds;
-      if (frameTime > 250000) frameTime = 250000;
+      //if (frameTime > 250000) frameTime = 250000;
       dtAsSeconds = dt.asMicroseconds();
 
       accumulator += frameTime;
 
       while (accumulator >= tickRate) {
 
+         // Save the current state into previous and update
          previousState = currentState;
+         fireRateDeltaPlayer0 += tickFloat;
          input();
          update(tickFloat);
          
@@ -90,7 +95,7 @@ void Engine::start()
       }
       alpha = (float)accumulator / tickRate;
 
-      // NOW RENDER, INTERPOLATING BETWEEN PREVIOUS AND CURRENT STATES
+      // Interpolate between previous and current states
       State interpolate = (currentState  * alpha) +
                        (previousState * (1.0f - alpha));
       

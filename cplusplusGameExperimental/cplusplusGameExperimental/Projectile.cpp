@@ -9,8 +9,8 @@ Projectile::Projectile() {
    pTexture.loadFromFile("Player.png");
    pSprite.setTexture(pTexture);
    pSprite.setOrigin(5, 5);
-   //pSprite.setScale(0.5f, 0.5f);
-   pSprite.scale(2.0f, 2.0f);
+   pSprite.setScale(0.5f, 0.5f);
+   //pSprite.scale(2.0f, 2.0f);
    //pSprite.setColor(Color(255, 128, 0, 255));
    lifeTimeCounter = 0.0;
 }

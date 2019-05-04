@@ -7,7 +7,7 @@ Player::Player(int playerNum) {
    pTexture.loadFromFile("Player.png");
    pSprite.setTexture(pTexture);
    pSprite.setOrigin(5, 5);
-   pSprite.scale(10, 10);
+   pSprite.scale(2, 2);
    switch (playerNum) {
    case 0:
       pPosition.x = 800;
