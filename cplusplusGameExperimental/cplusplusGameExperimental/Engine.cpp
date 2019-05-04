@@ -31,19 +31,19 @@ Engine::Engine()
    m_BackgroundSprite.setTexture(m_BackgroundTexture);
 
    
-   currentState.add(player0.getSprite());
+   currentState.add(player0);
 
    for (Projectile p : bullets) {
-      currentState.add(p.getSprite());
+      currentState.add(p);
    }
 
    enemy = Enemy();
-   currentState.add(enemy.getSprite());
+   currentState.add(enemy);
 
    for (int i = 0; i < MAX_ENEMY1; i++) {
       enemies[i] = Enemy(2);
-      enemies[i].getPosition().x = i * 10;
-      currentState.add(enemies[i].getSprite());
+      enemies[i].setPosition(i*10, 0);
+      currentState.add(enemies[i]);
    }
    
    previousState = currentState;

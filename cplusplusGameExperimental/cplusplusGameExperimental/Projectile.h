@@ -3,11 +3,7 @@
 
 using namespace sf;
 
-class Projectile {
-   Vector2f pPosition;
-
-   Sprite pSprite;
-
+class Projectile : public Sprite {
    Texture pTexture;
 
    float pMoveX, pMoveY;
@@ -16,9 +12,7 @@ class Projectile {
    
 public:
    Projectile();
-   Sprite& getSprite();
-   FloatRect& getRect();
-   void shootStraight(Vector2f& pos, float& vX, float& vY);
-   void shootSpread(Vector2f& pos, float& vX, float& vY);
+   void shootStraight(const Vector2f& pos, float& vX, float& vY);
+   void shootSpread(const Vector2f& pos, float& vX, float& vY);
    void update(float& elapsedTime);
 };

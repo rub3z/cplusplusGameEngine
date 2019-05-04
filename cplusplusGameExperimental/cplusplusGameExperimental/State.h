@@ -9,15 +9,11 @@ using namespace sf;
 
 class State : public Drawable {
 private:
-   //friend class RenderTarget;
    friend class State;
    vector<Sprite> sprites;
-   //friend void Engine::update(float& dtAsSeconds);
    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 public:
-   
-   //State operator=(State otherState);
    void clear();
    void add(Sprite s);
    State operator*(float alphaNum);
