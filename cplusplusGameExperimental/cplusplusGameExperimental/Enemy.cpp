@@ -4,10 +4,10 @@
 
 Enemy::Enemy() {
    pTexture.loadFromFile("Player.png");
-   pSprite.setTexture(pTexture);
-   pSprite.setOrigin(5, 5);
-   pSprite.setScale(15.0f, 15.0f);
-   pSprite.setColor(Color(255, rand()%128, rand()%128, 255));
+   this->setTexture(pTexture);
+   this->setOrigin(5, 5);
+   this->setScale(15.0f, 15.0f);
+   this->setColor(Color(255, rand()%128, rand()%128, 255));
 
    enemyType = 0;
 
@@ -17,16 +17,15 @@ Enemy::Enemy() {
    pVelX = 0;
    pVelY = 0;
 
-   pPosition.x = 0;
-   pPosition.y = 0;
+   this->setPosition(0, 0);
 }
 
 Enemy::Enemy(int type) {
    pTexture.loadFromFile("Player.png");
-   pSprite.setTexture(pTexture);
-   pSprite.setOrigin(5, 5);
-   pSprite.setScale(1.5f, 1.5f);
-   pSprite.setColor(Color(255, rand() % 128, rand() % 128, 255));
+   this->setTexture(pTexture);
+   this->setOrigin(5, 5);
+   this->setScale(1.5f, 1.5f);
+   this->setColor(Color(255, rand() % 128, rand() % 128, 255));
 
    enemyType = type;
 
@@ -36,32 +35,22 @@ Enemy::Enemy(int type) {
    pVelX = 0;
    pVelY = 0;
 
-   pPosition.x = 0;
-   pPosition.y = 0;
-}
-
-Sprite& Enemy::getSprite() {
-   return pSprite;
-}
-
-Vector2f& Enemy::getPosition() {
-   return pPosition;
+   this->setPosition(0, 0);
 }
 
 void Enemy::hit(FloatRect& other) {
-   pPosition.x = 0;
-   pPosition.y = 0;
+   this->setPosition(0, 0);
 }
 
 void Enemy::hit()
 {
-   pPosition.x = 0;
-   pPosition.y = 0;
+   this->setPosition((((float)rand() / RAND_MAX) * 1920), 
+                     (((float)rand() / RAND_MAX) * 1080));
 }
 
-void Enemy::update(float& elapsedTime, Vector2f& playerPos) {
-   distanceX = playerPos.x - pPosition.x;
-   distanceY = playerPos.y - pPosition.y;
+void Enemy::update(float& elapsedTime, const Vector2f& playerPos) {
+   distanceX = playerPos.x - this->getPosition().x;
+   distanceY = playerPos.y - this->getPosition().y;
    distance = sqrt(pow(distanceX, 2) + pow(distanceY, 2));
    pAccX = 0;
    pAccY = 0;
@@ -69,8 +58,7 @@ void Enemy::update(float& elapsedTime, Vector2f& playerPos) {
    case 0:
       pVelX = (ENEMY1_SPEED / distance) * (distanceX) * elapsedTime + pAccX;
       pVelY = (ENEMY1_SPEED / distance) * (distanceY) * elapsedTime + pAccY;
-      pPosition.x += pVelX;
-      pPosition.y += pVelY;
+      this->move(pVelX, pVelY);
       break;
    case 1:
       if (distance < 400) {
@@ -83,10 +71,7 @@ void Enemy::update(float& elapsedTime, Vector2f& playerPos) {
          pVelX = (ENEMY1_SPEED / distance) * (distanceX) * elapsedTime + pAccX;
          pVelY = (ENEMY1_SPEED / distance) * (distanceY) * elapsedTime + pAccY;
       }
-
-      pPosition.x += pVelX;
-      pPosition.y += pVelY;
-
+      this->move(pVelX, pVelY);
       break;
    case 2:
       if (distance < 400) {
@@ -100,13 +85,11 @@ void Enemy::update(float& elapsedTime, Vector2f& playerPos) {
          pVelY = (ENEMY1_SPEED / distance) * (distanceY) * elapsedTime + pAccY;
       }
 
-      pPosition.x += pVelX + (((float)rand() / RAND_MAX) * ENEMY1_RANDOM) - (ENEMY1_RANDOM / 2);
-      pPosition.y += pVelY + (((float)rand() / RAND_MAX) * ENEMY1_RANDOM) - (ENEMY1_RANDOM / 2);
+      this->move(pVelX + (((float)rand() / RAND_MAX) * ENEMY1_RANDOM) - (ENEMY1_RANDOM / 2),
+                 pVelY + (((float)rand() / RAND_MAX) * ENEMY1_RANDOM) - (ENEMY1_RANDOM / 2));
 
       break;
    default:
       break;
    }
-
-   pSprite.setPosition(pPosition);
 }

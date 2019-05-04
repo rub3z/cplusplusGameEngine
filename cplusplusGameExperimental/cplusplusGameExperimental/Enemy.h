@@ -4,11 +4,7 @@
 using namespace sf;
 
 
-class Enemy {
-   Vector2f pPosition;
-
-   Sprite pSprite;
-
+class Enemy : public Sprite {
    Texture pTexture;
 
    int enemyType;
@@ -21,9 +17,7 @@ class Enemy {
 public:
    Enemy();
    Enemy(int type);
-   Sprite& getSprite();
-   Vector2f& getPosition();
    void hit(FloatRect& other);
    void hit();
-   void update(float& elapsedTime, Vector2f& playerPos);
+   void update(float& elapsedTime, const Vector2f& playerPos);
 };

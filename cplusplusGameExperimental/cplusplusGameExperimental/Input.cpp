@@ -40,20 +40,20 @@ void Engine::input()
    if (KEY_ESC || BUTTON_B_0) m_Window.close();
 
    // Keyboard movement.
-   // Also, input into .move has to be reset to 0.
+   // Also, input into .movement has to be reset to 0.
    // For some reason.
-   player0.move(KEY_A && !KEY_D ? -INPUT_MAX :
+   player0.movement(KEY_A && !KEY_D ? -INPUT_MAX :
                 !KEY_A && KEY_D ? INPUT_MAX : 0.0f,
                KEY_W && !KEY_S ? -INPUT_MAX : 
                 !KEY_W && KEY_S ? INPUT_MAX : 0.0f);
-   player1.move(INPUT_RESET, INPUT_RESET);
-   player2.move(INPUT_RESET, INPUT_RESET);
+   player1.movement(INPUT_RESET, INPUT_RESET);
+   player2.movement(INPUT_RESET, INPUT_RESET);
 
    // Gamepad movement (which is obviously much better).
    if (Joystick::isConnected(0)) {
       if (LSTICK_X_0 > INNER_DEADZONE || LSTICK_X_0 < -INNER_DEADZONE ||
           LSTICK_Y_0 > INNER_DEADZONE || LSTICK_Y_0 < -INNER_DEADZONE)
-         player0.move(LSTICK_X_0, LSTICK_Y_0);
+         player0.movement(LSTICK_X_0, LSTICK_Y_0);
 
       // Rapid fire with RB.
       if (BUTTON_RB_0) {
@@ -89,7 +89,7 @@ void Engine::input()
    if (Joystick::isConnected(1)) {
       if (LSTICK_X_1 > INNER_DEADZONE || LSTICK_X_1 < -INNER_DEADZONE ||
          LSTICK_Y_1 > INNER_DEADZONE || LSTICK_Y_1 < -INNER_DEADZONE)
-         player1.move(LSTICK_X_1, LSTICK_Y_1);
+         player1.movement(LSTICK_X_1, LSTICK_Y_1);
 
       // Rapid fire with RB.
       if (BUTTON_RB_1) {
@@ -125,7 +125,7 @@ void Engine::input()
    if (Joystick::isConnected(2)) {
       if (LSTICK_X_2 > INNER_DEADZONE || LSTICK_X_2 < -INNER_DEADZONE ||
          LSTICK_Y_2 > INNER_DEADZONE || LSTICK_Y_2 < -INNER_DEADZONE)
-         player2.move(LSTICK_X_2, LSTICK_Y_2);
+         player2.movement(LSTICK_X_2, LSTICK_Y_2);
 
       // Rapid fire with RB.
       if (BUTTON_RB_2) {

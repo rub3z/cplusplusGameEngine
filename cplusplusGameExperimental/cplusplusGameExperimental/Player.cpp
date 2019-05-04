@@ -5,50 +5,37 @@
 
 Player::Player(int playerNum) {
    pTexture.loadFromFile("Player.png");
-   pSprite.setTexture(pTexture);
-   pSprite.setOrigin(5, 5);
-   pSprite.scale(2, 2);
+   this->setTexture(pTexture);
+   this->setOrigin(5, 5);
+   this->scale(6, 6);
+   
    switch (playerNum) {
    case 0:
-      pPosition.x = 800;
-      pPosition.y = 800;
-      pSprite.setColor(Color::Red);
+      this->setPosition(800, 800);
+      this->setColor(Color::Red);
       break;
    case 1:
-      pPosition.x = 850;
-      pPosition.y = 800;
-      pSprite.setColor(Color::Blue);
+      this->setPosition(850, 800);
+      this->setColor(Color::Blue);
       break;
    case 2:
-      pPosition.x = 900;
-      pPosition.y = 800;
-      pSprite.setColor(Color::Green);
+      this->setPosition(900, 800);
+      this->setColor(Color::Green);
       break;
    case 3:
-      pPosition.x = 950;
-      pPosition.y = 800;
-      pSprite.setColor(Color::Yellow);
+      this->setPosition(950, 800);
+      this->setColor(Color::Yellow);
       break;
 
    }
 }
 
-Sprite& Player::getSprite() {
-   return pSprite;
-}
-
-Vector2f& Player::getPosition() {
-   return pPosition;
-}
-
-void Player::move(float const &valX, float const &valY) {
+void Player::movement(float const &valX, float const &valY) {
    pMoveX = valX;
    pMoveY = valY;
 }
 
 void Player::update(float& elapsedTime) {
-   pPosition.x += pMoveX * PLAYER_SPEED * elapsedTime;
-   pPosition.y += pMoveY * PLAYER_SPEED * elapsedTime;
-
-   pSprite.setPosition(pPosition);
+   this->move(pMoveX * PLAYER_SPEED * elapsedTime,
+              pMoveY * PLAYER_SPEED * elapsedTime);
 }
