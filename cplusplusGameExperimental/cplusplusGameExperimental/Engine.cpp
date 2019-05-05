@@ -35,17 +35,8 @@ Engine::Engine()
    for (Projectile & p : bullets) {
       gameState.add(&p);
    }
-
-   enemy = Enemy();
-   gameState.add(&enemy);
-
-   //for (int i = 0; i < MAX_ENEMY1; i++) {
-   //   enemies[i] = Enemy(2);
-   //   enemies[i].setPosition(i*10, 0);
-   //   gameState.add(&enemies[i]);
-   //}
-
-   enemies = Enemies(1);
+   
+   enemies = Enemies(2);
    for (int i = 0; i < MAX_ENEMY1; i++) {
       gameState.add(&enemies[i]);
    }

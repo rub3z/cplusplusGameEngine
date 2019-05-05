@@ -42,9 +42,6 @@ private:
    float fireRateDeltaPlayer2;
    float fireRateDeltaPlayer3;
    Projectile bullets[MAX_BULLETS];
-
-   Enemy enemy;
-   //Enemy enemies[MAX_ENEMY1];
    
    Enemies enemies;
 
