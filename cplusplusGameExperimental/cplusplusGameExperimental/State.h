@@ -10,12 +10,15 @@ using namespace sf;
 class State : public Drawable {
 private:
    friend class State;
-   vector<Sprite> sprites;
+   vector<Sprite> previous;
+   vector<Sprite *> current;
    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 public:
    void clear();
-   void add(Sprite s);
+   void interpolate(float alphaNum);
+   void add(Sprite * s);
+   void save();
    State operator*(float alphaNum);
    State operator+(State otherState);
 };

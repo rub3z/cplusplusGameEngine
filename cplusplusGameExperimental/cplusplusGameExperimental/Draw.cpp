@@ -8,6 +8,8 @@ void Engine::draw(State & drawState)
 
    // Draw the background
    m_Window.draw(m_BackgroundSprite);
+
+   // Draw sprites
    m_Window.draw(drawState);
 
    m_Window.display();
