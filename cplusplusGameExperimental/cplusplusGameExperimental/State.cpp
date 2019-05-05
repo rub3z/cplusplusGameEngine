@@ -4,34 +4,33 @@
 
 void State::draw(sf::RenderTarget & target, sf::RenderStates states) const
 {
-   for (Sprite s : sprites) {
+   for (Sprite s : previous) {
       target.draw(s);
    }
 }
 
 void State::clear() {
-   sprites.clear();
+   current.clear();
 }
 
-void State::add(Sprite s)
+void State::add(Sprite * s)
 {
-   sprites.push_back(s);
+   current.push_back(s);
+   previous.push_back(*s);
 }
 
-State State::operator*(float alphaNum)
+void State::save() {
+   previous.clear();
+   for (Sprite * s : current) {
+      previous.push_back(*s);
+    }
+}
+
+void State::interpolate(float alphaNum)
 {
-   State temp(*this);
-   for (int i = 0; i < temp.sprites.size(); i++) {
-      temp.sprites.at(i).setPosition(temp.sprites.at(i).getPosition() * alphaNum);
+   for (int i = 0; i < previous.size(); i++) {
+      previous.at(i).setPosition(
+         (current.at(i)->getPosition() * alphaNum) +
+         (previous.at(i).getPosition() * (1.0f - alphaNum)));
    }
-   return temp;
-}
-
-State State::operator+(State otherState)
-{
-   State temp(*this);
-   for (int i = 0; i < temp.sprites.size(); i++) {
-      temp.sprites.at(i).move(otherState.sprites.at(i).getPosition());
-   }
-   return temp;
 }

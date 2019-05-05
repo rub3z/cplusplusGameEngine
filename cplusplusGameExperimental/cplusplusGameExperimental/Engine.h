@@ -45,8 +45,7 @@ private:
    Enemy enemy;
    Enemy enemies[MAX_ENEMY1];
 
-   State previousState;
-   State currentState;
+   State gameState;
 
    Int64 dtAsSeconds;
    Int64 frameTime;

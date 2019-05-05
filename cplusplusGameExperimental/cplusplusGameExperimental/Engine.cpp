@@ -29,25 +29,21 @@ Engine::Engine()
 
    // Associate the sprite with the texture.
    m_BackgroundSprite.setTexture(m_BackgroundTexture);
-
    
-   currentState.add(player0);
+   gameState.add(&player0);
 
-   for (Projectile p : bullets) {
-      currentState.add(p);
+   for (Projectile & p : bullets) {
+      gameState.add(&p);
    }
 
    enemy = Enemy();
-   currentState.add(enemy);
+   gameState.add(&enemy);
 
    for (int i = 0; i < MAX_ENEMY1; i++) {
       enemies[i] = Enemy(2);
       enemies[i].setPosition(i*10, 0);
-      currentState.add(enemies[i]);
+      gameState.add(&enemies[i]);
    }
-   
-   previousState = currentState;
-
 
 }
 
@@ -85,8 +81,7 @@ void Engine::start()
 
       while (accumulator >= tickRate) {
 
-         // Save the current state into previous and update
-         previousState = currentState;
+         gameState.save();
          fireRateDeltaPlayer0 += tickFloat;
          input();
          update(tickFloat);
@@ -95,11 +90,9 @@ void Engine::start()
       }
       alpha = (float)accumulator / tickRate;
 
-      // Interpolate between previous and current states
-      State interpolate = (currentState  * alpha) +
-                       (previousState * (1.0f - alpha));
-      
-      draw(interpolate);      
+      gameState.interpolate(alpha);
+
+      draw(gameState);      
    }
 }
 
