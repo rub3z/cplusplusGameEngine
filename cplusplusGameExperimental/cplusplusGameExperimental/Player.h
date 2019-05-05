@@ -11,6 +11,8 @@ class Player : public Sprite { // I like Sprite. Caffeine-free.
    float pMoveX, pMoveY;
    
 public:
+   CircleShape circle;
+
    Player(int playerNum);
    
    void movement(float const &valX, float const &valY);

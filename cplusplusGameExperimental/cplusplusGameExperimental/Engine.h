@@ -8,6 +8,7 @@
 #include "Player.h"
 #include "Projectile.h"
 #include "Enemy.h"
+#include "Enemies.h"
 #include "ConstantsNStuff.h"
 #include "RectangularBoundaryCollision.h"
 #include <SFML/Graphics.hpp>
@@ -43,7 +44,9 @@ private:
    Projectile bullets[MAX_BULLETS];
 
    Enemy enemy;
-   Enemy enemies[MAX_ENEMY1];
+   //Enemy enemies[MAX_ENEMY1];
+   
+   Enemies enemies;
 
    State gameState;
 

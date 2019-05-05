@@ -39,9 +39,14 @@ Engine::Engine()
    enemy = Enemy();
    gameState.add(&enemy);
 
+   //for (int i = 0; i < MAX_ENEMY1; i++) {
+   //   enemies[i] = Enemy(2);
+   //   enemies[i].setPosition(i*10, 0);
+   //   gameState.add(&enemies[i]);
+   //}
+
+   enemies = Enemies(1);
    for (int i = 0; i < MAX_ENEMY1; i++) {
-      enemies[i] = Enemy(2);
-      enemies[i].setPosition(i*10, 0);
       gameState.add(&enemies[i]);
    }
 

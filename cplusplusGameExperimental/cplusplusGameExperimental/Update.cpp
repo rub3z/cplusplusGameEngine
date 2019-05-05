@@ -15,8 +15,9 @@ void Engine::update(float& dtAsSeconds)
    enemy.update(dtAsSeconds, player0.getPosition());
    if (areColliding(enemy, player0)) enemy.hit();
    
-   for (Enemy& e : enemies) {
-      e.update(dtAsSeconds, player0.getPosition());
-      if (areColliding(e, player0)) e.hit();
-   }
+   enemies.update(dtAsSeconds, player0.getPosition());
+   //for (Enemy& e : enemies) {
+   //   e.update(dtAsSeconds, player0.getPosition());
+   //   if (areColliding(e, player0)) e.hit();
+   //}
 }
