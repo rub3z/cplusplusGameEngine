@@ -7,6 +7,7 @@
 #include "State.h"
 #include "Player.h"
 #include "Projectile.h"
+#include "Projectiles.h"
 #include "Enemy.h"
 #include "Enemies.h"
 #include "ConstantsNStuff.h"
@@ -41,8 +42,10 @@ private:
    float fireRateDeltaPlayer1;
    float fireRateDeltaPlayer2;
    float fireRateDeltaPlayer3;
-   Projectile bullets[MAX_BULLETS];
+
+   Projectiles bullets;
    
+   Enemy enemy;
    Enemies enemies;
 
    State gameState;
@@ -54,6 +57,9 @@ private:
    void input();
    void update(float& dtAsSeconds);
    void draw(State & drawState);
+
+   // Input method to make testing new inputs and controls easier.
+   void input(int test);
 
 public:
    // The Engine constructor.

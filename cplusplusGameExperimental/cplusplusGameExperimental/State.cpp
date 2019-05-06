@@ -20,10 +20,7 @@ void State::add(Sprite * s)
 }
 
 void State::save() {
-   previous.clear();
-   for (Sprite * s : current) {
-      previous.push_back(*s);
-    }
+   *previous.data() = **current.data();
 }
 
 void State::interpolate(float alphaNum)

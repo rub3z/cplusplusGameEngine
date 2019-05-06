@@ -19,9 +19,10 @@ Enemies::Enemies()
    pAccX = 0;
    pAccY = 0;
 
-   vel.assign(MAX_ENEMY1, Vector2f(0, 0));
-   pVelX = 0;
-   pVelY = 0;
+   vel.assign(MAX_ENEMY1, Vector2f(0, 0)); 
+   for (int i = 0; i < MAX_ENEMY1; i++) {
+      this->at(i).setPosition(i * 10.0f, 0.0f);
+   }
 }
 
 Enemies::Enemies(int type)
@@ -39,11 +40,14 @@ Enemies::Enemies(int type)
    pAccX = 0;
    pAccY = 0;
 
+   for (int i = 0; i < MAX_BULLETS; i++)
+   {
+      velX[i] = 0; velY[i] = 0;
+   }
+
    vel.assign(MAX_ENEMY1, Vector2f(0, 0));
-   pVelX = 0;
-   pVelY = 0;
    for (int i = 0; i < MAX_ENEMY1; i++) {
-      this->at(i).setPosition(i * 10, 0);
+      this->at(i).setPosition(i * 10.0f, 0.0);
    }
 }
 
@@ -68,54 +72,54 @@ void Enemies::update(float & elapsedTime, const Vector2f & playerPos)
       pAccY = 0;
       switch (enemyType) {
       case 0:
-         vel[i].x = (ENEMY1_SPEED / distance) * (distanceX)* elapsedTime + pAccX;
-         vel[i].y = (ENEMY1_SPEED / distance) * (distanceY)* elapsedTime + pAccY;
+         velX[i] = (ENEMY1_SPEED / distance) * (distanceX)* elapsedTime + pAccX;
+         velY[i] = (ENEMY1_SPEED / distance) * (distanceY)* elapsedTime + pAccY;
 
-         this->at(i).move(vel[i]);
+         this->at(i).move(velX[i], velY[i]);
          break;
       case 1:
          if (distance < 400 ) {
             pAccX = (ENEMY1_ACCEL / distance) * (distanceX)* elapsedTime;
             pAccY = (ENEMY1_ACCEL / distance) * (distanceY)* elapsedTime;
-            vel[i].x += pAccX;
-            vel[i].y += pAccY;
+            velX[i] += pAccX;
+            velY[i] += pAccY;
          }
          else {
-            vel[i].x = (ENEMY1_SPEED / distance) * (distanceX)* elapsedTime + pAccX;
-            vel[i].y = (ENEMY1_SPEED / distance) * (distanceY)* elapsedTime + pAccY;
+            velX[i] = (ENEMY1_SPEED / distance) * (distanceX)* elapsedTime + pAccX;
+            velY[i] = (ENEMY1_SPEED / distance) * (distanceY)* elapsedTime + pAccY;
          }
-         this->at(i).move(vel[i]);
+         this->at(i).move(velX[i], velY[i]);
 
          break;
       case 2:
          if (distance < 400) {
             pAccX = (ENEMY1_ACCEL / distance) * (distanceX)* elapsedTime;
             pAccY = (ENEMY1_ACCEL / distance) * (distanceY)* elapsedTime;
-            vel[i].x += pAccX;
-            vel[i].y += pAccY;
+            velX[i] += pAccX;
+            velY[i] += pAccY;
          }
          else {
-            vel[i].x = (ENEMY1_SPEED / distance) * (distanceX)* elapsedTime + pAccX;
-            vel[i].y = (ENEMY1_SPEED / distance) * (distanceY)* elapsedTime + pAccY;
+            velX[i] = (ENEMY1_SPEED / distance) * (distanceX)* elapsedTime + pAccX;
+            velY[i] = (ENEMY1_SPEED / distance) * (distanceY)* elapsedTime + pAccY;
          }
-         this->at(i).move(vel[i].x + (((float)rand() / RAND_MAX) * ENEMY1_RANDOM) - (ENEMY1_RANDOM / 2),
-            vel[i].y + (((float)rand() / RAND_MAX) * ENEMY1_RANDOM) - (ENEMY1_RANDOM / 2));
+         this->at(i).move(velX[i] + (((float)rand() / RAND_MAX) * ENEMY1_RANDOM) - (ENEMY1_RANDOM / 2),
+            velY[i] + (((float)rand() / RAND_MAX) * ENEMY1_RANDOM) - (ENEMY1_RANDOM / 2));
 
          break;
       case 3:
          pAccX = (ENEMY1_ACCEL / distance) * (distanceX)* elapsedTime;
          pAccY = (ENEMY1_ACCEL / distance) * (distanceY)* elapsedTime;
-         vel[i].x += pAccX;
-         vel[i].y += pAccY;
-         this->at(i).move(vel[i]);
+         velX[i] += pAccX;
+         velY[i] += pAccY;
+         this->at(i).move(velX[i], velY[i]);
          break;
       case 4:
          pAccX = (ENEMY1_ACCEL / distance) * (distanceX)* elapsedTime;
          pAccY = (ENEMY1_ACCEL / distance) * (distanceY)* elapsedTime;
-         vel[i].x += pAccX;
-         vel[i].y += pAccY;
-         this->at(i).move(vel[i].x + (((float)rand() / RAND_MAX) * ENEMY1_RANDOM) - (ENEMY1_RANDOM / 2),
-            vel[i].y + (((float)rand() / RAND_MAX) * ENEMY1_RANDOM) - (ENEMY1_RANDOM / 2));
+         velX[i] += pAccX;
+         velY[i] += pAccY;
+         this->at(i).move(velX[i] + (((float)rand() / RAND_MAX) * ENEMY1_RANDOM) - (ENEMY1_RANDOM / 2),
+            velY[i] + (((float)rand() / RAND_MAX) * ENEMY1_RANDOM) - (ENEMY1_RANDOM / 2));
          break;
       default:
          break;
