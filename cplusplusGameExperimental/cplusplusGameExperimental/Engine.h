@@ -45,7 +45,6 @@ private:
 
    Projectiles bullets;
    
-   Enemy enemy;
    Enemies enemies;
 
    State gameState;

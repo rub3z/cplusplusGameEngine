@@ -31,7 +31,6 @@ Engine::Engine()
    m_BackgroundSprite.setTexture(m_BackgroundTexture);
    
    gameState.add(&player0);
-   //gameState.add(&enemy);
    for (int i = 0; i < MAX_BULLETS; i++) {
       gameState.add(&bullets.at(i));
    }
@@ -88,15 +87,13 @@ void Engine::start()
       accumulator += frameTime;
 
       while (accumulator >= tickRate) {
-         
+         // PERFORMANCE CLOCK RESET
+         perfClock.restart();
+
          gameState.save();
 
          fireRateDeltaPlayer0 += tickFloat;
          input(0);
-
-         // PERFORMANCE CLOCK RESET
-         perfClock.restart();
-
          update(tickFloat);
          
          accumulator -= tickRate;

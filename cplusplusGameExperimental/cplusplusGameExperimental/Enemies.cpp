@@ -2,7 +2,6 @@
 #include "Enemies.h"
 #include "stdafx.h"
 #include "Enemies.h"
-#include "ConstantsNStuff.h"
 
 Enemies::Enemies()
 {
@@ -40,7 +39,7 @@ Enemies::Enemies(int type)
    pAccX = 0;
    pAccY = 0;
 
-   for (int i = 0; i < MAX_BULLETS; i++)
+   for (int i = 0; i < MAX_ENEMY1; i++)
    {
       velX[i] = 0; velY[i] = 0;
    }
