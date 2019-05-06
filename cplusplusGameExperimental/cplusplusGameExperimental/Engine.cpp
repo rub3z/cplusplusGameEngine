@@ -31,16 +31,15 @@ Engine::Engine()
    m_BackgroundSprite.setTexture(m_BackgroundTexture);
    
    gameState.add(&player0);
-
-   for (Projectile & p : bullets) {
-      gameState.add(&p);
+   //gameState.add(&enemy);
+   for (int i = 0; i < MAX_BULLETS; i++) {
+      gameState.add(&bullets.at(i));
    }
    
    enemies = Enemies(2);
    for (int i = 0; i < MAX_ENEMY1; i++) {
-      gameState.add(&enemies[i]);
+      gameState.add(&enemies.at(i));
    }
-
 }
 
 void Engine::start()
@@ -62,6 +61,19 @@ void Engine::start()
    Clock clock;
    Time dt;
 
+   // Performance Logging
+   Clock perfClock;
+   Time rec;
+   int sumTime = 0;
+   int second = 0;
+   int updateTimes[11];
+   int updates = 0;
+
+   int drawSumTime = 0;
+   int drawTimes[11];
+   updateTimes[0] = 0;
+   drawTimes[0] = 0;
+   int draws = 0;
    
    while (m_Window.isOpen())
    {
@@ -76,19 +88,66 @@ void Engine::start()
       accumulator += frameTime;
 
       while (accumulator >= tickRate) {
-
+         
          gameState.save();
+
          fireRateDeltaPlayer0 += tickFloat;
-         input();
+         input(0);
+
+         // PERFORMANCE CLOCK RESET
+         perfClock.restart();
+
          update(tickFloat);
          
          accumulator -= tickRate;
+
+         // PERFORMANCE CLOCK CHECK
+         rec = perfClock.getElapsedTime();
+         sumTime += rec.asMicroseconds();
+         updates++;
       }
+      // PERFORMANCE CLOCK RESET
+      perfClock.restart();
+
       alpha = (float)accumulator / tickRate;
 
       gameState.interpolate(alpha);
 
       draw(gameState);      
+
+      // PERFORMANCE CLOCK CHECK
+      rec = perfClock.getElapsedTime();
+      drawSumTime += rec.asMicroseconds();
+      draws++;
+
+      if (updates == 60) {
+         second++;
+         if (second < 11) {
+            updateTimes[second] = sumTime / updates;
+            drawTimes[second] = drawSumTime / draws;
+         }
+         sumTime = 0; drawSumTime = 0;
+         if (second == 11) {
+            for (int i = 1; i < 11; i++) {
+               cout << "Avg Update Time " << i << ": "
+                  << updateTimes[i];
+               cout << " - Avg Draw Time " << i << ": "
+                  << drawTimes[i] << " - Draws: " << draws << "\n";
+            }
+
+            int ua = 0; int da = 0;
+            for (int i = 1; i < 11; i++) {
+               ua += updateTimes[i]; da += drawTimes[i];
+            }
+            ua /= 10; da /= 10;
+            cout << "AVG UPDATE 10s: " << ua << " - ";
+            cout << "AVG DRAW 10s: " << da << "\n\n";
+
+            second = 0;
+         }
+         updates = 0;
+         draws = 0;
+      }
    }
 }
 

@@ -16,7 +16,8 @@ class Enemies : public vector<Sprite> {
 
    int enemyType;
    vector<Vector2f> vel;
-   float pVelX, pVelY;
+   float velX[MAX_ENEMY1];
+   float velY[MAX_ENEMY1];
    float pAccX, pAccY;
    float distance;
    float distanceX;
