@@ -58,7 +58,7 @@ private:
    void draw(State & drawState);
 
    // Input method to make testing new inputs and controls easier.
-   void input(int test);
+   void input(float& dtAsSeconds);
 
 public:
    // The Engine constructor.

@@ -1,7 +1,5 @@
 #include "stdafx.h"
 #include "Enemies.h"
-#include "stdafx.h"
-#include "Enemies.h"
 
 Enemies::Enemies()
 {

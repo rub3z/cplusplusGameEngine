@@ -1,7 +1,10 @@
 #include "stdafx.h"
 #include "Engine.h"
 
-void Engine::input(int test) {
+void Engine::input(float& dtAsSeconds) {
+   // Fire rate updates.
+   fireRateDeltaPlayer0 += dtAsSeconds;
+
    // Get the latest state of keyboard input.
    KEY_W = Keyboard::isKeyPressed(Keyboard::W);
    KEY_A = Keyboard::isKeyPressed(Keyboard::A);
@@ -36,26 +39,30 @@ void Engine::input(int test) {
          player0.movement(LSTICK_X_0, LSTICK_Y_0);
 
       // Rapid fire with RB.
+      // Credit to Tommy So for fixing this.
       if (BUTTON_RB_0) {
          if (fireRateDeltaPlayer0 >= RAPID_FIRE_RATE) {
+            fireRateDeltaPlayer0 = RAPID_FIRE_RATE;
             if (RSTICK_X_0 > 10 || RSTICK_X_0 < -10 ||
                RSTICK_Y_0 > 10 || RSTICK_Y_0 < -10) {
                bullets.shootStraight(player0.getPosition(),
                   RSTICK_X_0, RSTICK_Y_0);
+               fireRateDeltaPlayer0 -= RAPID_FIRE_RATE;
             }
-            fireRateDeltaPlayer0 -= RAPID_FIRE_RATE;
          }
       }
       // Spread fire with LB.
+      // Credit to Tommy So for fixing this.
       if (BUTTON_LB_0) {
          if (fireRateDeltaPlayer0 >= SPREAD_FIRE_RATE) {
+            fireRateDeltaPlayer0 = SPREAD_FIRE_RATE;
             if (RSTICK_X_0 > 10 || RSTICK_X_0 < -10 ||
                RSTICK_Y_0 > 10 || RSTICK_Y_0 < -10) {
                bullets.shootSpread(player0.getPosition(),
                      RSTICK_X_0, RSTICK_Y_0);
+               fireRateDeltaPlayer0 -= SPREAD_FIRE_RATE;
             }
          }
-         fireRateDeltaPlayer0 -= SPREAD_FIRE_RATE;
       }
    }
    Joystick::update();
