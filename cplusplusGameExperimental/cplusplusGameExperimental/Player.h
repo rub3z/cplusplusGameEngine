@@ -1,11 +1,12 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "GameObject.h"
 
 using namespace sf;
 using namespace std;
 
-class Player : public Sprite { // I like Sprite. Caffeine-free.
+class Player : public GameObject {
    Texture pTexture;
    // Movement components in x and y directions.
    float pMoveX, pMoveY;

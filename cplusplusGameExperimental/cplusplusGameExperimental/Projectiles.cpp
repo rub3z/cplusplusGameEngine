@@ -26,9 +26,13 @@ Projectiles::Projectiles()
 }
 
 // Credit to Tommy So for fixing shoot methods.
-void Projectiles::shootStraight(const Vector2f & pos, float & vX, float & vY)
+void Projectiles::shootStraight(float& posX, float& posY, float & vX, float & vY)
 {
-   this->at(pIterator).setPosition(pos);
+   //this->at(pIterator).setPosition(pos);
+   this->at(pIterator).posX = posX;
+   this->at(pIterator).posY = posY;
+
+
    moveX[pIterator] = (vX / sqrtf(pow(vX, 2) + pow(vY, 2))) * 100;
    moveY[pIterator] = (vY / sqrtf(pow(vX, 2) + pow(vY, 2))) * 100;
    lifeTimeCounter[pIterator] = 0;
@@ -36,10 +40,13 @@ void Projectiles::shootStraight(const Vector2f & pos, float & vX, float & vY)
    if (pIterator == MAX_BULLETS) pIterator = 0;
 }
 
-void Projectiles::shootSpread(const Vector2f & pos, float & vX, float & vY)
+void Projectiles::shootSpread(float& posX, float& posY, float & vX, float & vY)
 {
    for (int i = 0; i < SPREAD_BULLETS; i++) {
-      this->at(pIterator).setPosition(pos);
+      //this->at(pIterator).setPosition(pos);
+      this->at(pIterator).posX = posX;
+      this->at(pIterator).posY = posY;
+
       moveX[pIterator] = (vX / (sqrtf(pow(vX, 2) + pow(vY, 2)))) * 100 +
          (((float)rand() / RAND_MAX) * BULLET_SPREAD) - (BULLET_SPREAD / 2);
       moveY[pIterator] = (vY / (sqrtf(pow(vX, 2) + pow(vY, 2)))) * 100 +
@@ -58,8 +65,10 @@ void Projectiles::collisionCheck(Sprite & other)
 void Projectiles::update(float & elapsedTime)
 {
    for (int i = 0; i < MAX_BULLETS; i++) {
-      this->at(i).move(moveX[i] * BULLET_SPEED * elapsedTime,
-                       moveY[i] * BULLET_SPEED * elapsedTime);
+      //this->at(i).move(moveX[i] * BULLET_SPEED * elapsedTime,
+      //   moveY[i] * BULLET_SPEED * elapsedTime);
+      this->at(i).posX += moveX[i] * BULLET_SPEED * elapsedTime;
+      this->at(i).posY += moveY[i] * BULLET_SPEED * elapsedTime;
       lifeTimeCounter[i] += elapsedTime;
       if (lifeTimeCounter[i] > BULLET_LIFETIME) {
          moveX[i] = 0; 
@@ -67,7 +76,9 @@ void Projectiles::update(float & elapsedTime)
          lifeTimeCounter[i] = 0;
       }
       if (moveX[i] == 0 && moveY[i] == 0) {
-         this->at(i).setPosition(-1337, -1337);
+         //this->at(i).setPosition(-1337, -1337);
+         this->at(i).posX = -1337;
+         this->at(i).posY = -1337;
       }
    }
 }

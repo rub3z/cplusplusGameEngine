@@ -5,18 +5,18 @@
 #include <vector>
 #include "ConstantsNStuff.h"
 #include "RectangularBoundaryCollision.h"
+#include "GameObject.h"
 
 
 using namespace sf;
 using namespace std;
 using namespace collision;
 
-class Enemies : public vector<Sprite> {
-   Sprite baseSprite;
+class Enemies : public vector<GameObject> {
+   GameObject baseSprite;
    Texture pTexture;
 
    int enemyType;
-   vector<Vector2f> vel;
    float velX[MAX_ENEMY1];
    float velY[MAX_ENEMY1];
    float pAccX, pAccY;
@@ -28,5 +28,5 @@ public:
    Enemies();
    Enemies(int type);
    void collisionCheck(Sprite& other);
-   void update(float & elapsedTime, const Vector2f& playerPos);
+   void update(float & elapsedTime, float& playerPosX, float& playerPosY);
 };

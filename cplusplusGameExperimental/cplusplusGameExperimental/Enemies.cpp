@@ -16,9 +16,11 @@ Enemies::Enemies()
    pAccX = 0;
    pAccY = 0;
 
-   vel.assign(MAX_ENEMY1, Vector2f(0, 0)); 
    for (int i = 0; i < MAX_ENEMY1; i++) {
-      this->at(i).setPosition(i * 10.0f, 0.0f);
+      //this->at(i).setPosition(i * 10.0f, 0.0f);
+      this->at(i).posX = i * 10.0f;
+      this->at(i).posY = 0.0f;
+
    }
 }
 
@@ -42,9 +44,10 @@ Enemies::Enemies(int type)
       velX[i] = 0; velY[i] = 0;
    }
 
-   vel.assign(MAX_ENEMY1, Vector2f(0, 0));
    for (int i = 0; i < MAX_ENEMY1; i++) {
-      this->at(i).setPosition(i * 10.0f, 0.0);
+      //this->at(i).setPosition(i * 10.0f, 0.0f);
+      this->at(i).posX = i * 10.0f;
+      this->at(i).posY = 0.0f;
    }
 }
 
@@ -52,18 +55,20 @@ void Enemies::collisionCheck(Sprite & other)
 {
    for (int i = 0; i < MAX_ENEMY1; i++) {
       if (areColliding(this->at(i), other)) {
-         this->at(i).setPosition((((float)rand() / RAND_MAX) * 1920),
-                                 (((float)rand() / RAND_MAX) * 1080));
+         //this->at(i).setPosition((((float)rand() / RAND_MAX) * 1920),
+         //   (((float)rand() / RAND_MAX) * 1080));
+         this->at(i).posX = (((float)rand() / RAND_MAX) * 1920);
+         this->at(i).posY = (((float)rand() / RAND_MAX) * 1080);
       }
    }
 }
 
-void Enemies::update(float & elapsedTime, const Vector2f & playerPos)
+void Enemies::update(float & elapsedTime, float& playerPosX, float& playerPosY)
 {
    // Credit to Tommy So for fixing this.
    for (int i = 0; i < MAX_ENEMY1; i++) {
-      distanceX = playerPos.x - this->at(i).getPosition().x;
-      distanceY = playerPos.y - this->at(i).getPosition().y;
+      distanceX = playerPosX - this->at(i).posX;
+      distanceY = playerPosY - this->at(i).posY;
       distance = sqrt(pow(distanceX, 2) + pow(distanceY, 2));
       pAccX = 0;
       pAccY = 0;
@@ -72,7 +77,10 @@ void Enemies::update(float & elapsedTime, const Vector2f & playerPos)
          velX[i] = (ENEMY1_SPEED / distance) * (distanceX)* elapsedTime + pAccX;
          velY[i] = (ENEMY1_SPEED / distance) * (distanceY)* elapsedTime + pAccY;
 
-         this->at(i).move(velX[i], velY[i]);
+         //this->at(i).move(velX[i], velY[i]);
+         this->at(i).posX += velX[i];
+         this->at(i).posY += velY[i];
+
          break;
       case 1:
          if (distance < 400 ) {
@@ -85,7 +93,8 @@ void Enemies::update(float & elapsedTime, const Vector2f & playerPos)
             velX[i] = (ENEMY1_SPEED / distance) * (distanceX)* elapsedTime + pAccX;
             velY[i] = (ENEMY1_SPEED / distance) * (distanceY)* elapsedTime + pAccY;
          }
-         this->at(i).move(velX[i], velY[i]);
+         this->at(i).posX += velX[i];
+         this->at(i).posY += velY[i];
 
          break;
       case 2:
@@ -99,8 +108,10 @@ void Enemies::update(float & elapsedTime, const Vector2f & playerPos)
             velX[i] = (ENEMY1_SPEED / distance) * (distanceX)* elapsedTime + pAccX;
             velY[i] = (ENEMY1_SPEED / distance) * (distanceY)* elapsedTime + pAccY;
          }
-         this->at(i).move(velX[i] + (((float)rand() / RAND_MAX) * ENEMY1_RANDOM) - (ENEMY1_RANDOM / 2),
-            velY[i] + (((float)rand() / RAND_MAX) * ENEMY1_RANDOM) - (ENEMY1_RANDOM / 2));
+         //this->at(i).move(velX[i] + (((float)rand() / RAND_MAX) * ENEMY1_RANDOM) - (ENEMY1_RANDOM / 2),
+         //   velY[i] + (((float)rand() / RAND_MAX) * ENEMY1_RANDOM) - (ENEMY1_RANDOM / 2));
+         this->at(i).posX += velX[i] + (((float)rand() / RAND_MAX) * ENEMY1_RANDOM) - (ENEMY1_RANDOM / 2);
+         this->at(i).posY += velY[i] + (((float)rand() / RAND_MAX) * ENEMY1_RANDOM) - (ENEMY1_RANDOM / 2);
 
          break;
       case 3:
@@ -108,15 +119,18 @@ void Enemies::update(float & elapsedTime, const Vector2f & playerPos)
          pAccY = (ENEMY1_ACCEL / distance) * (distanceY)* elapsedTime;
          velX[i] += pAccX;
          velY[i] += pAccY;
-         this->at(i).move(velX[i], velY[i]);
+         this->at(i).posX += velX[i];
+         this->at(i).posY += velY[i];
          break;
       case 4:
          pAccX = (ENEMY1_ACCEL / distance) * (distanceX)* elapsedTime;
          pAccY = (ENEMY1_ACCEL / distance) * (distanceY)* elapsedTime;
          velX[i] += pAccX;
          velY[i] += pAccY;
-         this->at(i).move(velX[i] + (((float)rand() / RAND_MAX) * ENEMY1_RANDOM) - (ENEMY1_RANDOM / 2),
-            velY[i] + (((float)rand() / RAND_MAX) * ENEMY1_RANDOM) - (ENEMY1_RANDOM / 2));
+         //this->at(i).move(velX[i] + (((float)rand() / RAND_MAX) * ENEMY1_RANDOM) - (ENEMY1_RANDOM / 2),
+         //   velY[i] + (((float)rand() / RAND_MAX) * ENEMY1_RANDOM) - (ENEMY1_RANDOM / 2));
+         this->at(i).posX += velX[i] + (((float)rand() / RAND_MAX) * ENEMY1_RANDOM) - (ENEMY1_RANDOM / 2);
+         this->at(i).posY += velY[i] + (((float)rand() / RAND_MAX) * ENEMY1_RANDOM) - (ENEMY1_RANDOM / 2);
          break;
       default:
          break;
