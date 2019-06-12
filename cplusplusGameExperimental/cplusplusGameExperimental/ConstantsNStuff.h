@@ -1,7 +1,7 @@
 #pragma once
 const float PLAYER_SPEED = 10;
 
-const int   MAX_BULLETS = 600;
+const int   MAX_BULLETS = 200;
 const float BULLET_SPEED = 10;
 const int   BULLET_SPREAD = 24;
 const float BULLET_LIFETIME = 2.0f;
@@ -12,7 +12,7 @@ const float RAPID_FIRE_RATE = 0.05f;
 const float SPREAD_FIRE_RATE = 0.15f;
 const int   SPREAD_BULLETS = 15;
 
-const int MAX_ENEMY1 = 200;
+const int MAX_ENEMY1 = 2000;
 const float ENEMY1_SPEED = 600;
 const float ENEMY1_ACCEL = 50.0f;
 const float ENEMY1_RANDOM = 10;

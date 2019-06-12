@@ -43,6 +43,8 @@ Engine::Engine()
 
 void Engine::start()
 {
+   cout << "Number of objects in simulation: " << gameState.size() << "\n";
+   
    // Timing
    dtAsSeconds = 0;
    frameTime = 0;
@@ -62,17 +64,29 @@ void Engine::start()
 
    // Performance Logging
    Clock perfClock;
-   Time rec;
    int sumTime = 0;
+   int saveSumTime = 0;
+   int inputSumTime = 0;
+   int updateSumTime = 0;
+
    int second = 0;
+   int updateLoopTimes[11];
+   int saveTimes[11];
+   int inputTimes[11];
    int updateTimes[11];
+
    int updates = 0;
 
    int drawSumTime = 0;
    int drawTimes[11];
+   updateLoopTimes[0] = 0;
+   saveTimes[0] = 0;
+   inputTimes[0] = 0;
    updateTimes[0] = 0;
+
    drawTimes[0] = 0;
    int draws = 0;
+   int numDraws[11];
    
    while (m_Window.isOpen())
    {
@@ -90,17 +104,22 @@ void Engine::start()
          // PERFORMANCE CLOCK RESET
          perfClock.restart();
 
+         // Save the current game state into the previous one.
          gameState.save();
+         saveSumTime += perfClock.getElapsedTime().asMicroseconds();
 
-         fireRateDeltaPlayer0 += tickFloat;
-         input(0);
+         // Input. Have to increment fireRateDelta time.
+         input(tickFloat);
+         inputSumTime += perfClock.getElapsedTime().asMicroseconds();
+
+         // Step the game state forward.
          update(tickFloat);
-         
+         updateSumTime += perfClock.getElapsedTime().asMicroseconds();
+
          accumulator -= tickRate;
 
          // PERFORMANCE CLOCK CHECK
-         rec = perfClock.getElapsedTime();
-         sumTime += rec.asMicroseconds();
+         sumTime += perfClock.getElapsedTime().asMicroseconds();
          updates++;
       }
       // PERFORMANCE CLOCK RESET
@@ -113,32 +132,53 @@ void Engine::start()
       draw(gameState);      
 
       // PERFORMANCE CLOCK CHECK
-      rec = perfClock.getElapsedTime();
-      drawSumTime += rec.asMicroseconds();
+      drawSumTime += perfClock.getElapsedTime().asMicroseconds();
       draws++;
 
       if (updates == 60) {
          second++;
          if (second < 11) {
-            updateTimes[second] = sumTime / updates;
+            updateSumTime -= inputSumTime;
+            inputSumTime -= saveSumTime;
+            saveTimes[second] = saveSumTime / updates;
+            inputTimes[second] = inputSumTime / updates;
+            updateTimes[second] = updateSumTime / updates;
+            updateLoopTimes[second] = sumTime / updates;
             drawTimes[second] = drawSumTime / draws;
+            numDraws[second] = draws;
          }
-         sumTime = 0; drawSumTime = 0;
+         sumTime = 0; saveSumTime = 0; inputSumTime = 0; updateSumTime = 0;
+         drawSumTime = 0; draws = 0;
          if (second == 11) {
             for (int i = 1; i < 11; i++) {
-               cout << "Avg Update Time " << i << ": "
-                  << updateTimes[i];
+               cout << "Avg Save " << i << ": "
+                  << saveTimes[i] << " - ";
+               cout << "Avg Input " << i << ": "
+                  << inputTimes[i] << " - ";
+               cout << "Avg Update " << i << ": "
+                  << updateTimes[i] << "\n   ";
+               cout << "Avg Update Loop " << i << ": "
+                  << updateLoopTimes[i];
                cout << " - Avg Draw Time " << i << ": "
-                  << drawTimes[i] << " - Draws: " << draws << "\n";
+                  << drawTimes[i] << " - Draws: " << numDraws[i] << "\n";
             }
 
-            int ua = 0; int da = 0;
+            int sa = 0, ia = 0, ua = 0, ula = 0, da = 0, ad = 0;
             for (int i = 1; i < 11; i++) {
-               ua += updateTimes[i]; da += drawTimes[i];
+               sa += saveTimes[i];
+               ia += inputTimes[i];
+               ua += updateTimes[i];
+               ula += updateLoopTimes[i]; 
+               da += drawTimes[i];
+               ad += numDraws[i];
             }
-            ua /= 10; da /= 10;
-            cout << "AVG UPDATE 10s: " << ua << " - ";
-            cout << "AVG DRAW 10s: " << da << "\n\n";
+            sa /= 10; ia /= 10; ua /= 10; ula /= 10; da /= 10; ad /= 10;
+            cout << "AVG SAVE 10s: " << sa << " - ";
+            cout << "AVG INPUT 10s: " << ia << " - ";
+            cout << "AVG UPDATE 10s: " << ua << "\n  ";
+            cout << "AVG UPDATE LOOP 10s: " << ula << " - ";
+            cout << "AVG DRAW 10s: " << da << " - ";
+            cout << "AVG DRAWS 10s: " << ad << "\n\n";
 
             second = 0;
          }

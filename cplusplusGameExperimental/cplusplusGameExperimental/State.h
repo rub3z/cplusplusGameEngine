@@ -14,11 +14,13 @@ private:
    vector<Sprite *> current;
    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
+   int keepSize;
+
 public:
    void clear();
    void interpolate(float alphaNum);
+   void interpolateI(float alphaNum, int begin, int end);
    void add(Sprite * s);
    void save();
-   State operator*(float alphaNum);
-   State operator+(State otherState);
+   int size();
 };

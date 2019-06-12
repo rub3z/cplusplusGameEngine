@@ -17,8 +17,8 @@ Player::Player(int playerNum) {
    
    switch (playerNum) {
    case 0:
-      circle.setPosition(800, 800);
-      this->setPosition(800, 800);
+      circle.setPosition(960, 540);
+      this->setPosition(960, 540);
       this->setColor(Color::Red);
       break;
    case 1:

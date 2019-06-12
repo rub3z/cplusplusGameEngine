@@ -25,6 +25,7 @@ Projectiles::Projectiles()
    
 }
 
+// Credit to Tommy So for fixing shoot methods.
 void Projectiles::shootStraight(const Vector2f & pos, float & vX, float & vY)
 {
    this->at(pIterator).setPosition(pos);
