@@ -18,6 +18,8 @@ Enemy::Enemy() {
    pVelY = 0;
 
    this->setPosition(0, 0);
+   this->posX = 0;
+   this->posY = 0;
 }
 
 Enemy::Enemy(int type) {
@@ -36,6 +38,8 @@ Enemy::Enemy(int type) {
    pVelY = 0;
 
    this->setPosition(0, 0);
+   this->posX = 0;
+   this->posY = 0;
 }
 
 void Enemy::hit(FloatRect& other) {
@@ -48,9 +52,9 @@ void Enemy::hit()
                      (((float)rand() / RAND_MAX) * 1080));
 }
 
-void Enemy::update(float& elapsedTime, const Vector2f& playerPos) {
-   distanceX = playerPos.x - this->getPosition().x;
-   distanceY = playerPos.y - this->getPosition().y;
+void Enemy::update(float& elapsedTime, float& playerPosX, float& playerPosY) {
+   distanceX = playerPosX - this->posX;
+   distanceY = playerPosY - this->posY;
    distance = sqrt(pow(distanceX, 2) + pow(distanceY, 2));
    pAccX = 0;
    pAccY = 0;
@@ -59,6 +63,8 @@ void Enemy::update(float& elapsedTime, const Vector2f& playerPos) {
       pVelX = (ENEMY1_SPEED / distance) * (distanceX) * elapsedTime + pAccX;
       pVelY = (ENEMY1_SPEED / distance) * (distanceY) * elapsedTime + pAccY;
       this->move(pVelX, pVelY);
+      this->posX += pVelX;
+      this->posY += pVelY;
       break;
    case 1:
       if (distance < 400) {

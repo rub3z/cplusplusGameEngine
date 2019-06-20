@@ -5,14 +5,14 @@
 #include <vector>
 #include "ConstantsNStuff.h"
 #include "RectangularBoundaryCollision.h"
-
+#include "GameObject.h"
 
 using namespace sf;
 using namespace std;
 using namespace collision;
 
-class Projectiles : public vector<Sprite> {
-   Sprite baseSprite;
+class Projectiles : public vector<GameObject> {
+   GameObject baseSprite;
    Texture pTexture;
 
    int pIterator;
@@ -23,8 +23,8 @@ class Projectiles : public vector<Sprite> {
 
 public:
    Projectiles();
-   void shootStraight(const Vector2f& pos, float& vX, float& vY);
-   void shootSpread(const Vector2f& pos, float& vX, float& vY);
+   void shootStraight(float& posX, float& posY, float& vX, float& vY);
+   void shootSpread(float& posX, float& posY, float& vX, float& vY);
    void collisionCheck(Sprite& other);
    void update(float & elapsedTime);
 };

@@ -35,6 +35,7 @@ private:
    Player player1 = Player(1);
    Player player2 = Player(2);
    Projectile bullet;
+   Enemy enemy = Enemy();
 
    int bulletCounter;
    int spreadBulletCounter;

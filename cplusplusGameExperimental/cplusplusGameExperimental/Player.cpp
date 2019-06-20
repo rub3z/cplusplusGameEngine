@@ -4,12 +4,12 @@
 
 Player::Player(int playerNum) {
    pTexture.loadFromFile("Player.png");
-   circle = CircleShape(400);
-   circle.setOutlineColor(Color::Red);
-   circle.setFillColor(Color::Transparent);
-   circle.setOutlineThickness(3.0f);
-   //circle.setOrigin(282.84f, 282.84f);
-   circle.setOrigin(400, 400);
+   //circle = CircleShape(400);
+   //circle.setOutlineColor(Color::Red);
+   //circle.setFillColor(Color::Transparent);
+   //circle.setOutlineThickness(3.0f);
+   ////circle.setOrigin(282.84f, 282.84f);
+   //circle.setOrigin(400, 400);
 
    this->setTexture(pTexture);
    this->setOrigin(5, 5);
@@ -17,8 +17,10 @@ Player::Player(int playerNum) {
    
    switch (playerNum) {
    case 0:
-      circle.setPosition(960, 540);
-      this->setPosition(960, 540);
+      //circle.setPosition(960, 540);
+      //this->setPosition(960, 540);
+      this->posX = 960;
+      this->posY = 540;
       this->setColor(Color::Red);
       break;
    case 1:
@@ -43,8 +45,13 @@ void Player::movement(float const &valX, float const &valY) {
 }
 
 void Player::update(float& elapsedTime) {
-   this->move(pMoveX * PLAYER_SPEED * elapsedTime,
+   /*this->move(pMoveX * PLAYER_SPEED * elapsedTime,
               pMoveY * PLAYER_SPEED * elapsedTime);
+   */
+   this->posX += pMoveX * PLAYER_SPEED * elapsedTime;
+   this->posY += pMoveY * PLAYER_SPEED * elapsedTime;
+
    circle.move(pMoveX * PLAYER_SPEED * elapsedTime,
                pMoveY * PLAYER_SPEED * elapsedTime);
+
 }
