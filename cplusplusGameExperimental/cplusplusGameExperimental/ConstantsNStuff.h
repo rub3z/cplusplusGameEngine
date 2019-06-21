@@ -12,8 +12,8 @@ const float RAPID_FIRE_RATE = 0.05f;
 const float SPREAD_FIRE_RATE = 0.15f;
 const int   SPREAD_BULLETS = 15;
 
-const int MAX_ENEMY1 = 2000;
-const float ENEMY1_SPEED = 600;
+const int MAX_ENEMY1 = 10000;
+const float ENEMY1_SPEED = 30;
 const float ENEMY1_ACCEL = 50.0f;
 const float ENEMY1_RANDOM = 10;
 

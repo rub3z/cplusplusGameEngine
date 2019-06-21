@@ -31,7 +31,7 @@ Engine::Engine()
    m_BackgroundSprite.setTexture(m_BackgroundTexture);
    
    gameState.add(&player0);
-   gameState.add(&enemy);
+   /*gameState.add(&enemy);
    for (int i = 0; i < MAX_BULLETS; i++) {
       gameState.add(&bullets.at(i));
    }
@@ -39,7 +39,7 @@ Engine::Engine()
    enemies = Enemies(2);
    for (int i = 0; i < MAX_ENEMY1; i++) {
       gameState.add(&enemies.at(i));
-   }
+   }*/
 }
 
 void Engine::start()

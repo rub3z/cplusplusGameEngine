@@ -21,7 +21,6 @@ void State::add(GameObject * s)
 }
 
 void State::save() {
-   //*previous.data() = **current.data();
    for (int i = 0; i < keepSize; i++) {
       previous[i] = *current[i];
    }

@@ -14,6 +14,7 @@
 #include "RectangularBoundaryCollision.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "ParticleSystem.h"
 
 using namespace std;
 using namespace sf;
@@ -43,6 +44,8 @@ private:
    float fireRateDeltaPlayer1;
    float fireRateDeltaPlayer2;
    float fireRateDeltaPlayer3;
+
+   ParticleSystem particles = ParticleSystem();
 
    Projectiles bullets;
    
