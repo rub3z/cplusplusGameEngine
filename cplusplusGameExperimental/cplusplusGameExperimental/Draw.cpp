@@ -10,8 +10,6 @@ void Engine::draw(State & drawState)
    m_Window.draw(m_BackgroundSprite);
 
    // Draw sprites
-   //m_Window.draw(player0.circle);
-   m_Window.draw(particles);
    m_Window.draw(drawState);
    
    m_Window.display();

@@ -9,6 +9,7 @@
 #include "Projectile.h"
 #include "Projectiles.h"
 #include "Enemy.h"
+#include "EnemiesOld.h"
 #include "Enemies.h"
 #include "ConstantsNStuff.h"
 #include "RectangularBoundaryCollision.h"
@@ -45,11 +46,9 @@ private:
    float fireRateDeltaPlayer2;
    float fireRateDeltaPlayer3;
 
-   ParticleSystem particles = ParticleSystem();
-
    Projectiles bullets;
-   
-   Enemies enemies;
+
+   Enemies enemies = Enemies();
 
    State gameState;
 

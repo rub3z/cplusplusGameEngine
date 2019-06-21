@@ -3,40 +3,86 @@
 #include "ConstantsNStuff.h"
 
 Player::Player(int playerNum) {
-   pTexture.loadFromFile("Player.png");
-   //circle = CircleShape(400);
-   //circle.setOutlineColor(Color::Red);
-   //circle.setFillColor(Color::Transparent);
-   //circle.setOutlineThickness(3.0f);
-   ////circle.setOrigin(282.84f, 282.84f);
-   //circle.setOrigin(400, 400);
+   this->assign(4, VertexInfo());
+   VertexInfo* vertices = &this->at(0);
+   width = 30.0f;
+   height = 30.0f;
 
-   this->setTexture(pTexture);
-   this->setOrigin(5, 5);
-   this->scale(6, 6);
-   
    switch (playerNum) {
    case 0:
-      //circle.setPosition(960, 540);
-      //this->setPosition(960, 540);
-      this->posX = 960;
-      this->posY = 540;
-      this->setColor(Color::Red);
+      vertices[0].posX = 960;
+      vertices[0].posY = 540;
+      vertices[1].posX = vertices[0].posX + width;
+      vertices[1].posY = vertices[0].posY;
+      vertices[2].posX = vertices[0].posX + width;
+      vertices[2].posY = vertices[0].posY + height;
+      vertices[3].posX = vertices[0].posX;
+      vertices[3].posY = vertices[0].posY + height;
+
+      vertices[0].r = 255;
+      vertices[1].g = 255;
+      vertices[2].b = 255;
+      vertices[3].r = 255;
       break;
    case 1:
-      this->setPosition(850, 800);
-      this->setColor(Color::Blue);
+      vertices[0].posX = 1000;
+      vertices[0].posY = 540;
+      vertices[1].posX = vertices[0].posX + width;
+      vertices[1].posY = vertices[0].posY;
+      vertices[2].posX = vertices[0].posX + width;
+      vertices[2].posY = vertices[0].posY + height;
+      vertices[3].posX = vertices[0].posX;
+      vertices[3].posY = vertices[0].posY + height;
+
+      vertices[0].b = 255;
+      vertices[1].b = 255;
+      vertices[2].b = 255;
+      vertices[3].b = 255;
       break;
    case 2:
-      this->setPosition(900, 800);
-      this->setColor(Color::Green);
+      vertices[0].posX = 1040;
+      vertices[0].posY = 540;
+      vertices[1].posX = vertices[0].posX + width;
+      vertices[1].posY = vertices[0].posY;
+      vertices[2].posX = vertices[0].posX + width;
+      vertices[2].posY = vertices[0].posY + height;
+      vertices[3].posX = vertices[0].posX;
+      vertices[3].posY = vertices[0].posY + height;
+
+      vertices[0].r = 255;
+      vertices[1].r = 255;
+      vertices[2].r = 255;
+      vertices[3].r = 255;
+
+      vertices[0].g = 255;
+      vertices[1].g = 255;
+      vertices[2].g = 255;
+      vertices[3].g = 255;
+
+
       break;
    case 3:
-      this->setPosition(950, 800);
-      this->setColor(Color::Yellow);
-      break;
+      vertices[0].posX = 1080;
+      vertices[0].posY = 540;
+      vertices[1].posX = vertices[0].posX + width;
+      vertices[1].posY = vertices[0].posY;
+      vertices[2].posX = vertices[0].posX + width;
+      vertices[2].posY = vertices[0].posY + height;
+      vertices[3].posX = vertices[0].posX;
+      vertices[3].posY = vertices[0].posY + height;
 
+      vertices[0].g = 255;
+      vertices[1].g = 255;
+      vertices[2].g = 255;
+      vertices[3].g = 255;
+      break;
+   default:
+      break;
    }
+
+   centerX = vertices[0].posX + (width / 2);
+   centerY = vertices[0].posY + (height / 2);
+
 }
 
 void Player::movement(float const &valX, float const &valY) {
@@ -45,13 +91,26 @@ void Player::movement(float const &valX, float const &valY) {
 }
 
 void Player::update(float& elapsedTime) {
-   /*this->move(pMoveX * PLAYER_SPEED * elapsedTime,
-              pMoveY * PLAYER_SPEED * elapsedTime);
-   */
-   this->posX += pMoveX * PLAYER_SPEED * elapsedTime;
-   this->posY += pMoveY * PLAYER_SPEED * elapsedTime;
+   VertexInfo* corners = &this->at(0);
 
-   circle.move(pMoveX * PLAYER_SPEED * elapsedTime,
-               pMoveY * PLAYER_SPEED * elapsedTime);
+   corners[0].posX += pMoveX * PLAYER_SPEED * elapsedTime;
+   corners[0].posY += pMoveY * PLAYER_SPEED * elapsedTime;
+   corners[1].posX += pMoveX * PLAYER_SPEED * elapsedTime;
+   corners[1].posY += pMoveY * PLAYER_SPEED * elapsedTime;
+   corners[2].posX += pMoveX * PLAYER_SPEED * elapsedTime;
+   corners[2].posY += pMoveY * PLAYER_SPEED * elapsedTime;
+   corners[3].posX += pMoveX * PLAYER_SPEED * elapsedTime;
+   corners[3].posY += pMoveY * PLAYER_SPEED * elapsedTime;
+
+   centerX += pMoveX * PLAYER_SPEED * elapsedTime;
+   centerY += pMoveY * PLAYER_SPEED * elapsedTime;
+
+   if (centerX > 1200.0f) {
+      corners[0].r = 255;
+      corners[1].r = 255;
+      corners[2].r = 255;
+      corners[3].r = 255;
+
+   }
 
 }

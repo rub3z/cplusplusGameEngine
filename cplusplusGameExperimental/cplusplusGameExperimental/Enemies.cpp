@@ -1,139 +1,61 @@
+// Adapted from code used in this tutorial:
+// https://www.sfml-dev.org/tutorials/2.5/graphics-vertex-array.php
+#pragma once
 #include "stdafx.h"
 #include "Enemies.h"
 
 Enemies::Enemies()
 {
-   pTexture.loadFromFile("Player.png");
-   baseSprite.setTexture(pTexture);
-   baseSprite.setPosition(0, 0);
-   baseSprite.setOrigin(5, 5);
-   baseSprite.setScale(15.0f, 15.0f);
-   baseSprite.setColor(Color(255, rand() % 128, rand() % 128, 255));
-
-   this->assign(MAX_ENEMY1, baseSprite);
-   enemyType = 0;
-
-   pAccX = 0;
-   pAccY = 0;
-
-   for (int i = 0; i < MAX_ENEMY1; i++) {
-      //this->at(i).setPosition(i * 10.0f, 0.0f);
-      this->at(i).posX = i * 10.0f;
-      this->at(i).posY = 0.0f;
-
-   }
-}
-
-Enemies::Enemies(int type)
-{
-   pTexture.loadFromFile("Player.png");
-   baseSprite.setTexture(pTexture);
-   baseSprite.setPosition(0, 0);
-   baseSprite.setOrigin(5, 5);
-   baseSprite.setColor(Color(255, rand() % 128, rand() % 128, 255));
-   baseSprite.setScale(3, 3);
    
-   this->assign(MAX_ENEMY1, baseSprite);
+   this->assign(MAX_ENEMY1 * 4, VertexInfo());
+   for (int i = 0; i < MAX_ENEMY1; i++) {
+      int j = i * 4;
+      this->at(j).g = 255;
+      this->at(j+1).g = 255;
+      this->at(j+2).g = 255;
+      this->at(j+3).g = 255;
+
+   }
    
-   enemyType = type;
-   pAccX = 0;
-   pAccY = 0;
-
-   for (int i = 0; i < MAX_ENEMY1; i++)
-   {
-      velX[i] = 0; velY[i] = 0;
-   }
+   
+   quadInfo.resize(MAX_ENEMY1);
 
    for (int i = 0; i < MAX_ENEMY1; i++) {
-      //this->at(i).setPosition(i * 10.0f, 0.0f);
-      this->at(i).posX = i * 10.0f;
-      this->at(i).posY = 0.0f;
+      quadInfo[i].index = i * 4;
    }
-}
 
-void Enemies::collisionCheck(Sprite & other)
-{
-   for (int i = 0; i < MAX_ENEMY1; i++) {
-      if (areColliding(this->at(i), other)) {
-         //this->at(i).setPosition((((float)rand() / RAND_MAX) * 1920),
-         //   (((float)rand() / RAND_MAX) * 1080));
-         this->at(i).posX = (((float)rand() / RAND_MAX) * 1920);
-         this->at(i).posY = (((float)rand() / RAND_MAX) * 1080);
+   for (int i = 0; i < 200; i++) {
+      for (int j = 0; j < 200; j++) {
+         int k = (i + j * 200) * 4;
+         this->at(k).posX = i * 10; this->at(k).posY = j * 10;
+         this->at(k+1).posX = i * 10 + 5; this->at(k+1).posY = j * 10;
+         this->at(k+2).posX = i * 10 + 5; this->at(k+2).posY = j * 10 + 5;
+         this->at(k+3).posX = i * 10; this->at(k+3).posY = j * 10 + 5;
       }
    }
 }
 
-void Enemies::update(float & elapsedTime, float& playerPosX, float& playerPosY)
+void Enemies::update(float& elapsedTime, float& playerPosX, float& playerPosY)
 {
-   // Credit to Tommy So for fixing this.
-   for (int i = 0; i < MAX_ENEMY1; i++) {
-      distanceX = playerPosX - this->at(i).posX;
-      distanceY = playerPosY - this->at(i).posY;
-      distance = sqrt(pow(distanceX, 2) + pow(distanceY, 2));
-      pAccX = 0;
-      pAccY = 0;
-      switch (enemyType) {
-      case 0:
-         velX[i] = (ENEMY1_SPEED / distance) * (distanceX)* elapsedTime + pAccX;
-         velY[i] = (ENEMY1_SPEED / distance) * (distanceY)* elapsedTime + pAccY;
+   transform(std::execution::par,
+      quadInfo.begin(), quadInfo.end(),
+      quadInfo.begin(), [&](Info i) {
+         VertexInfo* quad = &this->at(i.index);
 
-         //this->at(i).move(velX[i], velY[i]);
-         this->at(i).posX += velX[i];
-         this->at(i).posY += velY[i];
+         i.distanceX = playerPosX - quad[0].posX;
+         i.distanceY = playerPosY - quad[0].posY;
+         i.distance = sqrt(pow(i.distanceX, 2) + pow(i.distanceY, 2));
 
-         break;
-      case 1:
-         if (distance < 400 ) {
-            pAccX = (ENEMY1_ACCEL / distance) * (distanceX)* elapsedTime;
-            pAccY = (ENEMY1_ACCEL / distance) * (distanceY)* elapsedTime;
-            velX[i] += pAccX;
-            velY[i] += pAccY;
-         }
-         else {
-            velX[i] = (ENEMY1_SPEED / distance) * (distanceX)* elapsedTime + pAccX;
-            velY[i] = (ENEMY1_SPEED / distance) * (distanceY)* elapsedTime + pAccY;
-         }
-         this->at(i).posX += velX[i];
-         this->at(i).posY += velY[i];
+         quad[0].posX += (ENEMY1_SPEED / i.distance) * (i.distanceX) * elapsedTime;
+         quad[1].posX += (ENEMY1_SPEED / i.distance) * (i.distanceX) * elapsedTime;
+         quad[2].posX += (ENEMY1_SPEED / i.distance) * (i.distanceX) * elapsedTime;
+         quad[3].posX += (ENEMY1_SPEED / i.distance) * (i.distanceX) * elapsedTime;
 
-         break;
-      case 2:
-         if (distance < 400) {
-            pAccX = (ENEMY1_ACCEL / distance) * (distanceX)* elapsedTime;
-            pAccY = (ENEMY1_ACCEL / distance) * (distanceY)* elapsedTime;
-            velX[i] += pAccX;
-            velY[i] += pAccY;
-         }
-         else {
-            velX[i] = (ENEMY1_SPEED / distance) * (distanceX)* elapsedTime + pAccX;
-            velY[i] = (ENEMY1_SPEED / distance) * (distanceY)* elapsedTime + pAccY;
-         }
-         //this->at(i).move(velX[i] + (((float)rand() / RAND_MAX) * ENEMY1_RANDOM) - (ENEMY1_RANDOM / 2),
-         //   velY[i] + (((float)rand() / RAND_MAX) * ENEMY1_RANDOM) - (ENEMY1_RANDOM / 2));
-         this->at(i).posX += velX[i] + (((float)rand() / RAND_MAX) * ENEMY1_RANDOM) - (ENEMY1_RANDOM / 2);
-         this->at(i).posY += velY[i] + (((float)rand() / RAND_MAX) * ENEMY1_RANDOM) - (ENEMY1_RANDOM / 2);
+         quad[0].posY += (ENEMY1_SPEED / i.distance) * (i.distanceY) * elapsedTime;
+         quad[1].posY += (ENEMY1_SPEED / i.distance) * (i.distanceY) * elapsedTime;
+         quad[2].posY += (ENEMY1_SPEED / i.distance) * (i.distanceY) * elapsedTime;
+         quad[3].posY += (ENEMY1_SPEED / i.distance) * (i.distanceY) * elapsedTime;
 
-         break;
-      case 3:
-         pAccX = (ENEMY1_ACCEL / distance) * (distanceX)* elapsedTime;
-         pAccY = (ENEMY1_ACCEL / distance) * (distanceY)* elapsedTime;
-         velX[i] += pAccX;
-         velY[i] += pAccY;
-         this->at(i).posX += velX[i];
-         this->at(i).posY += velY[i];
-         break;
-      case 4:
-         pAccX = (ENEMY1_ACCEL / distance) * (distanceX)* elapsedTime;
-         pAccY = (ENEMY1_ACCEL / distance) * (distanceY)* elapsedTime;
-         velX[i] += pAccX;
-         velY[i] += pAccY;
-         //this->at(i).move(velX[i] + (((float)rand() / RAND_MAX) * ENEMY1_RANDOM) - (ENEMY1_RANDOM / 2),
-         //   velY[i] + (((float)rand() / RAND_MAX) * ENEMY1_RANDOM) - (ENEMY1_RANDOM / 2));
-         this->at(i).posX += velX[i] + (((float)rand() / RAND_MAX) * ENEMY1_RANDOM) - (ENEMY1_RANDOM / 2);
-         this->at(i).posY += velY[i] + (((float)rand() / RAND_MAX) * ENEMY1_RANDOM) - (ENEMY1_RANDOM / 2);
-         break;
-      default:
-         break;
-      }
-   }
+         return i;
+      });
 }

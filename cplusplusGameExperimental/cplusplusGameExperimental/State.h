@@ -3,7 +3,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
+#include <execution>
 #include "GameObject.h"
+#include "VertexInfo.h"
 
 
 using namespace std;
@@ -12,8 +14,9 @@ using namespace sf;
 class State : public Drawable {
 private:
    friend class State;
-   vector<GameObject> previous;
-   vector<GameObject *> current;
+   vector<Vertex> toDraw;
+   vector<VertexInfo> previous;
+   vector<VertexInfo * > current;
    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
    int keepSize;
@@ -21,8 +24,7 @@ private:
 public:
    void clear();
    void interpolate(float alphaNum);
-   //void interpolateI(float alphaNum, int begin, int end);
-   void add(GameObject * s);
+   void add(vector<VertexInfo> & vecInfo);
    void save();
    int size();
 };

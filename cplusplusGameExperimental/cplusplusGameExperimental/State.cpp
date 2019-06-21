@@ -4,26 +4,26 @@
 
 void State::draw(sf::RenderTarget & target, sf::RenderStates states) const
 {
-   for (GameObject s : previous) {
-      target.draw(s);
-   }
+   target.draw(&toDraw[0], toDraw.size(), Quads, states);
 }
 
 void State::clear() {
    current.clear();
 }
 
-void State::add(GameObject * s)
+void State::add(vector<VertexInfo> & v)
 {
-   current.push_back(s);
-   previous.push_back(*s);
-   keepSize = current.size();
+   for (int i = 0; i < v.size(); i++) {
+      current.push_back(&v[i]);
+      previous.push_back(v[i]);
+      toDraw.push_back(Vertex(sf::Vector2f(v[i].posX, v[i].posX), 
+         Color::Color(v[i].r, v[i].g, v[i].b, 255)));
+      keepSize = current.size();
+   }
 }
 
 void State::save() {
-   for (int i = 0; i < keepSize; i++) {
-      previous[i] = *current[i];
-   }
+   *previous.data() = **current.data();
 }
 
 int State::size()
@@ -33,20 +33,31 @@ int State::size()
 
 void State::interpolate(float alphaNum)
 {
-   for (int i = 0; i < previous.size(); i++) {
-      previous.at(i).setPosition(
-         (current.at(i)->posX * alphaNum) +
-         (previous.at(i).posX * (1.0f - alphaNum)),
-         (current.at(i)->posY * alphaNum) +
-         (previous.at(i).posY * (1.0f - alphaNum)));
-   }
-}
+   transform(std::execution::par,
+      previous.begin(), previous.end(),
+      current.begin(), previous.begin(),
+      [&](VertexInfo p, VertexInfo* c) {
+         p.posX = (c->posX * alphaNum) +
+            (p.posX * (1.0f - alphaNum));
+         p.posY = (c->posY * alphaNum) +
+            (p.posY * (1.0f - alphaNum));
+         p.r = c->r;
+         p.g = c->g;
+         p.b = c->b;
 
-//void State::interpolateI(float alphaNum, int begin, int end)
-//{
-//   for (int i = begin; i < end; i++) {
-//      previous.at(i).setPosition(
-//         (current.at(i)->getPosition() * alphaNum) +
-//         (previous.at(i).getPosition() * (1.0f - alphaNum)));
-//   }
-//}
+         return p;
+      });
+
+   transform(std::execution::par,
+      toDraw.begin(), toDraw.end(),
+      previous.begin(), toDraw.begin(),
+      [&](Vertex v, VertexInfo p) {
+         v.position.x = p.posX;
+         v.position.y = p.posY;
+         v.color.r = p.r;
+         v.color.g = p.g;
+         v.color.b = p.b;
+         return v;
+      });
+
+}

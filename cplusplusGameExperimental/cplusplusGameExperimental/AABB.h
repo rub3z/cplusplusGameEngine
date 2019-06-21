@@ -2,7 +2,6 @@
 #include <SFML/Graphics.hpp>
 #include <stdio.h>
 #include <stdlib.h>
-//#include "AABBTree.h"
 #include "ConstantsNStuff.h"
 #include "RectangularBoundaryCollision.h"
 
