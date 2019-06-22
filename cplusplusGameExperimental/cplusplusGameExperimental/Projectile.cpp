@@ -10,8 +10,6 @@ Projectile::Projectile() {
    this->setTexture(pTexture);
    this->setOrigin(5, 5);
    this->scale(6, 6);
-   //this->scale(2.0f, 2.0f);
-   //this->setColor(Color(255, 128, 0, 255));
    lifeTimeCounter = 0.0;
 }
 

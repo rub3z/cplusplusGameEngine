@@ -3,24 +3,33 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
+#include <execution>
 #include "ConstantsNStuff.h"
 #include "RectangularBoundaryCollision.h"
 #include "GameObject.h"
+#include "VertexInfo.h"
 
 using namespace sf;
 using namespace std;
 using namespace collision;
 
-class Projectiles : public vector<GameObject> {
-   GameObject baseSprite;
-   Texture pTexture;
-
-   int pIterator;
-   float moveX[MAX_BULLETS];
-   float moveY[MAX_BULLETS];
-   float lifeTimeCounter[MAX_BULLETS];
+class Projectiles : public vector<VertexInfo> {
    
+   int pIterator;
+   int width, height;
 
+private:
+   struct Info {
+      int index;
+      float distanceX, distanceY;
+      float moveX, moveY;
+      float pAccX, pAccY;
+      float distance;
+      float lifetime;
+   };
+
+   std::vector<Info> quadInfo;
+   
 public:
    Projectiles();
    void shootStraight(float& posX, float& posY, float& vX, float& vY);

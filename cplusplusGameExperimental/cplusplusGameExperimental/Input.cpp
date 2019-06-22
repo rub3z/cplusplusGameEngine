@@ -45,7 +45,7 @@ void Engine::input(float& dtAsSeconds) {
             fireRateDeltaPlayer0 = RAPID_FIRE_RATE;
             if (RSTICK_X_0 > 10 || RSTICK_X_0 < -10 ||
                RSTICK_Y_0 > 10 || RSTICK_Y_0 < -10) {
-               bullets.shootStraight(player0.posX, player0.posY,
+               bullets.shootStraight(player0.centerX, player0.centerY,
                   RSTICK_X_0, RSTICK_Y_0);
                fireRateDeltaPlayer0 -= RAPID_FIRE_RATE;
             }
@@ -58,7 +58,7 @@ void Engine::input(float& dtAsSeconds) {
             fireRateDeltaPlayer0 = SPREAD_FIRE_RATE;
             if (RSTICK_X_0 > 10 || RSTICK_X_0 < -10 ||
                RSTICK_Y_0 > 10 || RSTICK_Y_0 < -10) {
-               bullets.shootSpread(player0.posX, player0.posY,
+               bullets.shootSpread(player0.centerX, player0.centerY,
                      RSTICK_X_0, RSTICK_Y_0);
                fireRateDeltaPlayer0 -= SPREAD_FIRE_RATE;
             }

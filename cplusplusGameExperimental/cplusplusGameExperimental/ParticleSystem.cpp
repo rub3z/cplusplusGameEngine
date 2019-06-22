@@ -26,7 +26,7 @@ ParticleSystem::ParticleSystem()
 
 void ParticleSystem::update(float& elapsedTime, float& playerPosX, float& playerPosY)
 {
-   transform(std::execution::par,
+   transform(std::execution::par_unseq,
       quadInfo.begin(), quadInfo.end(),
       quadInfo.begin(), [&](Info i) {
          Vertex* quad = &vertices[i.index];
@@ -52,8 +52,8 @@ void ParticleSystem::update(float& elapsedTime, float& playerPosX, float& player
 void ParticleSystem::draw(RenderTarget& target, RenderStates states) const
 {
    // apply the transform
-   states.transform *= getTransform();
+   //states.transform *= getTransform();
 
    // draw the vertex array
-   target.draw(&vertices[0], vertices.size(), Quads, states);
+   target.draw(&vertices[0], vertices.size(), Quads);
 }

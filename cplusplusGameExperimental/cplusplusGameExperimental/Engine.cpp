@@ -4,7 +4,7 @@
 Engine::Engine()
 {
    // Get the screen resolution and create an SFML window and View
-   Vector2f resolution;
+   Vector2u resolution;
    resolution.x = 1920;
    resolution.y = 1080;
    bulletCounter = 0;
@@ -13,7 +13,6 @@ Engine::Engine()
    fireRateDeltaPlayer1 = 0;
    fireRateDeltaPlayer2 = 0;
    fireRateDeltaPlayer3 = 0;
-
 
    m_Window.create(VideoMode(resolution.x, resolution.y),
       "MY SHOOTER GAME WOO"
@@ -29,21 +28,15 @@ Engine::Engine()
 
    // Associate the sprite with the texture.
    m_BackgroundSprite.setTexture(m_BackgroundTexture);
-   
-   gameState.add(&player0);
-   /*gameState.add(&enemy);
-   for (int i = 0; i < MAX_BULLETS; i++) {
-      gameState.add(&bullets.at(i));
-   }
 
-   enemies = Enemies(2);
-   for (int i = 0; i < MAX_ENEMY1; i++) {
-      gameState.add(&enemies.at(i));
-   }*/
+   gameState.add(player0);
+   gameState.add(bullets);
+   gameState.add(enemies);
 }
 
 void Engine::start()
 {
+   cout << VertexBuffer::isAvailable() << "\n";
    cout << "Number of objects in simulation: " << gameState.size() << "\n";
    
    // Timing
@@ -136,6 +129,7 @@ void Engine::start()
       drawSumTime += perfClock.getElapsedTime().asMicroseconds();
       draws++;
 
+      
       if (updates == 60) {
          second++;
          if (second < 11) {
