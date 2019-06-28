@@ -17,7 +17,6 @@ Enemies::Enemies()
 
    }
    
-   
    quadInfo.resize(MAX_ENEMY1);
 
    for (int i = 0; i < MAX_ENEMY1; i++) {
@@ -25,7 +24,7 @@ Enemies::Enemies()
    }
 
    for (int i = 0; i < 200; i++) {
-      for (int j = 0; j < 200; j++) {
+      for (int j = 0; j < 1; j++) {
          int k = (i + j * 200) * 4;
          this->at(k).posX = i * 10; this->at(k).posY = j * 10;
          this->at(k+1).posX = i * 10 + 5; this->at(k+1).posY = j * 10;

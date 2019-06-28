@@ -1,8 +1,5 @@
 #include "stdafx.h"
 #include "Projectiles.h"
-#include "stdafx.h"
-#include "Projectiles.h"
-#include "ConstantsNStuff.h"
 #include <iostream>
 
 using namespace std;
@@ -40,7 +37,7 @@ Projectiles::Projectiles()
 }
 
 // Credit to Tommy So for fixing shoot methods.
-void Projectiles::shootStraight(float& playerPosX, float& playerPosY, 
+VertexInfo & Projectiles::shootStraight(float& playerPosX, float& playerPosY, 
                                 float & vX, float & vY)
 {
    VertexInfo* b = &this->at(quadInfo[pIterator].index);
@@ -66,37 +63,37 @@ void Projectiles::shootStraight(float& playerPosX, float& playerPosY,
    
    pIterator++;
    if (pIterator == MAX_BULLETS) pIterator = 0;
+   return *b;
 }
 
-void Projectiles::shootSpread(float& playerPosX, float& playerPosY,
+VertexInfo& Projectiles::shootSpread(float& playerPosX, float& playerPosY,
    float& vX, float& vY)
 {
-   for (int i = 0; i < SPREAD_BULLETS; i++) {
-      VertexInfo* b = &this->at(quadInfo[pIterator].index);
+   VertexInfo* b = &this->at(quadInfo[pIterator].index);
 
-      b[0].posX = playerPosX;
-      b[0].posY = playerPosY;
-      b[1].posX = playerPosX + width;
-      b[1].posY = playerPosY;
-      b[2].posX = playerPosX + width;
-      b[2].posY = playerPosY + height;
-      b[3].posX = playerPosX;
-      b[3].posY = playerPosY + height;
+   b[0].posX = playerPosX;
+   b[0].posY = playerPosY;
+   b[1].posX = playerPosX + width;
+   b[1].posY = playerPosY;
+   b[2].posX = playerPosX + width;
+   b[2].posY = playerPosY + height;
+   b[3].posX = playerPosX;
+   b[3].posY = playerPosY + height;
 
-      b[0].b = 255;
-      b[1].b = 255;
-      b[2].b = 255;
-      b[3].b = 255;
+   b[0].b = 255;
+   b[1].b = 255;
+   b[2].b = 255;
+   b[3].b = 255;
 
-      quadInfo[pIterator].moveX = (vX / (sqrtf(pow(vX, 2) + pow(vY, 2)))) * 100 +
-         (((float)rand() / RAND_MAX) * BULLET_SPREAD) - (BULLET_SPREAD / 2);
-      quadInfo[pIterator].moveY = (vY / (sqrtf(pow(vX, 2) + pow(vY, 2)))) * 100 +
-         (((float)rand() / RAND_MAX) * BULLET_SPREAD) - (BULLET_SPREAD / 2);
-      quadInfo[pIterator].lifetime = 0;
+   quadInfo[pIterator].moveX = (vX / (sqrtf(pow(vX, 2) + pow(vY, 2)))) * 100 +
+      (((float)rand() / RAND_MAX) * BULLET_SPREAD) - (BULLET_SPREAD / 2);
+   quadInfo[pIterator].moveY = (vY / (sqrtf(pow(vX, 2) + pow(vY, 2)))) * 100 +
+      (((float)rand() / RAND_MAX) * BULLET_SPREAD) - (BULLET_SPREAD / 2);
+   quadInfo[pIterator].lifetime = 0;
 
-      pIterator++;
-      if (pIterator == MAX_BULLETS) pIterator = 0;
-   }
+   pIterator++;
+   if (pIterator == MAX_BULLETS) pIterator = 0;
+   return *b;
 }
 
 void Projectiles::collisionCheck(Sprite & other)

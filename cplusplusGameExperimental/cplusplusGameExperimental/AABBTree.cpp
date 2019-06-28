@@ -9,14 +9,14 @@ void AABBTree::syncHierarchy(int index)
 {
    while (index != Null)
    {
-      int left = this->at(index).left;
-      int right = this->at(index).right;
+      int left = nodes[index].left;
+      int right = nodes[index].right;
 
-      this->at(index).height = 1 + 
-         max(this->at(left).height, this->at(right).height);
-      //this->at(index) = Combine(this->at(left), this->at(right));
+      nodes[index].height = 1 + 
+         max(nodes[left].height, nodes[right].height);
+      //nodes[index].aabb = Combine(this->at(left), this->at(right));
 
-      index = this->at(index).parent;
+      index = nodes[index].parent;
    }
    
 }

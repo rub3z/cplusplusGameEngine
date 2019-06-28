@@ -3,48 +3,31 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "ConstantsNStuff.h"
+#include "VertexInfo.h"
 #include "RectangularBoundaryCollision.h"
 
 
 using namespace sf;
 using namespace std;
-using namespace collision;
 
-class AABB : public Sprite {
+class AABB : public RectangleShape {
    friend class AABBTree;
-   bool IsLeaf(void) const
-   {
-      // The right leaf does not use the same memory as the userdata,
-      // and will always be Null (no children)
-      return right == Null;
-   }
 
-   union
-   {
-      int parent;
-      int next; // free list
-   };
+   float centerX;
+   float centerY;
+   float radiusX;
+   float radiusY;
 
-   union
-   {
-      // Child indices
-      struct
-      {
-         int left;
-         int right;
-      };
-      
-      // Since only leaf nodes hold userdata, we can use the
-      // same memory used for left/right indices to store
-      // the userdata void pointer
-      void *userData;
-   };
-
-   // leaf = 0, free nodes = -1
-   int height;
-   static const int Null = -1;
-
-
+   VertexInfo* obj;
+   
 public:
+   AABB() : centerX(), centerY(), radiusX(), radiusY() {}
+
+   AABB(const float& cX, const float& cY,
+      const float& rX, const float& rY)
+      : centerX(cX), centerY(cY)
+      , radiusX(rX), radiusY(rY)
+   {}
+   AABB(VertexInfo & objVertex);
    void update();
 };

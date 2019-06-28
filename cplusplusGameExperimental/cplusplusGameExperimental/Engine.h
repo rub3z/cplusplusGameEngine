@@ -11,6 +11,7 @@
 #include "Enemy.h"
 #include "EnemiesOld.h"
 #include "Enemies.h"
+#include "AABB.h"
 #include "ConstantsNStuff.h"
 #include "RectangularBoundaryCollision.h"
 #include <SFML/Graphics.hpp>
@@ -38,6 +39,9 @@ private:
    Player player2 = Player(2);
    Projectile bullet;
    Enemy enemy = Enemy();
+
+   AABB playerAABB;
+   vector<AABB> bulletAABBs;
 
    int bulletCounter;
    int spreadBulletCounter;

@@ -104,13 +104,4 @@ void Player::update(float& elapsedTime) {
 
    centerX += pMoveX * PLAYER_SPEED * elapsedTime;
    centerY += pMoveY * PLAYER_SPEED * elapsedTime;
-
-   if (centerX > 1200.0f) {
-      corners[0].r = 255;
-      corners[1].r = 255;
-      corners[2].r = 255;
-      corners[3].r = 255;
-
-   }
-
 }

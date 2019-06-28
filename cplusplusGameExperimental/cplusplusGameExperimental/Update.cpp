@@ -8,4 +8,8 @@ void Engine::update(float& dtAsSeconds)
    player0.update(dtAsSeconds);
    bullets.update(dtAsSeconds);
    enemies.update(dtAsSeconds, player0.centerX, player0.centerY);
+   playerAABB.update();
+   for (int i = 0; i < bulletAABBs.size(); i++) {
+      bulletAABBs[i].update();
+   }
 }
