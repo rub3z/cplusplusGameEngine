@@ -11,6 +11,10 @@ void Engine::draw(State & drawState)
 
    // Draw sprites
    m_Window.draw(drawState);
+   m_Window.draw(playerAABB);
+   for (int i = 0; i < bulletAABBs.size(); i++) {
+      m_Window.draw(bulletAABBs[i]);
+   }
    
    m_Window.display();
 }

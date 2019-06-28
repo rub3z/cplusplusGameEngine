@@ -5,7 +5,6 @@
 #include <vector>
 #include <execution>
 #include "ConstantsNStuff.h"
-#include "RectangularBoundaryCollision.h"
 #include "GameObject.h"
 #include "VertexInfo.h"
 
@@ -32,8 +31,8 @@ private:
    
 public:
    Projectiles();
-   void shootStraight(float& posX, float& posY, float& vX, float& vY);
-   void shootSpread(float& posX, float& posY, float& vX, float& vY);
+   VertexInfo & shootStraight(float& posX, float& posY, float& vX, float& vY);
+   VertexInfo & shootSpread(float& posX, float& posY, float& vX, float& vY);
    void collisionCheck(Sprite& other);
    void update(float & elapsedTime);
 };
