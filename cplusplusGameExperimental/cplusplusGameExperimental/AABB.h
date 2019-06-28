@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "ConstantsNStuff.h"
-#include "VertexInfo.h"
+#include "ObjectInfo.h"
 #include "RectangularBoundaryCollision.h"
 
 
@@ -18,7 +18,7 @@ class AABB : public RectangleShape {
    float radiusX;
    float radiusY;
 
-   VertexInfo* obj;
+   ObjectInfo* obj;
    
 public:
    AABB() : centerX(), centerY(), radiusX(), radiusY() {}
@@ -28,6 +28,6 @@ public:
       : centerX(cX), centerY(cY)
       , radiusX(rX), radiusY(rY)
    {}
-   AABB(VertexInfo & objVertex);
+   AABB(ObjectInfo & objVertex);
    void update();
 };

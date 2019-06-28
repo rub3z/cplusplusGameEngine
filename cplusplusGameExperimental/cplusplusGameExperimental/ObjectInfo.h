@@ -3,6 +3,8 @@ class ObjectInfo {
    friend class State;
 public:
    float posX, posY;
+   float width, height;
+   int drawIndex;
    int r, g, b;
 
    ObjectInfo() {
@@ -12,5 +14,4 @@ public:
       g = 0;
       b = 0;
    }
-
 };

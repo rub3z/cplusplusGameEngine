@@ -3,12 +3,33 @@
 #include "ConstantsNStuff.h"
 
 Player::Player(int playerNum) {
-   this->assign(4, VertexInfo());
-   VertexInfo* vertices = &this->at(0);
+   //this->assign(4, ObjectInfo());
+   //ObjectInfo* vertices = &this->at(0);
    width = 30.0f;
    height = 30.0f;
 
    switch (playerNum) {
+   case 0:
+      posX = 960; posY = 540;
+      r = 255; g = 255; b = 255;
+      break;
+   case 1:
+      posX = 1000; posY = 540;
+      r = 255; g = 255; b = 255;
+      break;
+   case 2:
+      posX = 1040; posY = 540;
+      r = 255; g = 255; b = 255;
+      break;
+   case 3:
+      posX = 1080; posY = 540;
+      r = 255; g = 255; b = 255;
+      break;
+   default:
+      break;
+   }
+
+   /*switch (playerNum) {
    case 0:
       vertices[0].posX = 960;
       vertices[0].posY = 540;
@@ -78,10 +99,10 @@ Player::Player(int playerNum) {
       break;
    default:
       break;
-   }
+   }*/
 
-   centerX = vertices[0].posX + (width / 2);
-   centerY = vertices[0].posY + (height / 2);
+   centerX = posX + (width / 2);
+   centerY = posY + (height / 2);
 
 }
 
@@ -91,7 +112,12 @@ void Player::movement(float const &valX, float const &valY) {
 }
 
 void Player::update(float& elapsedTime) {
-   VertexInfo* corners = &this->at(0);
+   posX += pMoveX * PLAYER_SPEED * elapsedTime;
+   posY += pMoveY * PLAYER_SPEED * elapsedTime;
+
+   centerX += pMoveX * PLAYER_SPEED * elapsedTime;
+   centerY += pMoveY * PLAYER_SPEED * elapsedTime;
+   /*ObjectInfo* corners = &this->at(0);
 
    corners[0].posX += pMoveX * PLAYER_SPEED * elapsedTime;
    corners[0].posY += pMoveY * PLAYER_SPEED * elapsedTime;
@@ -103,5 +129,5 @@ void Player::update(float& elapsedTime) {
    corners[3].posY += pMoveY * PLAYER_SPEED * elapsedTime;
 
    centerX += pMoveX * PLAYER_SPEED * elapsedTime;
-   centerY += pMoveY * PLAYER_SPEED * elapsedTime;
+   centerY += pMoveY * PLAYER_SPEED * elapsedTime;*/
 }
