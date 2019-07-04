@@ -6,13 +6,13 @@
 #include <execution>
 #include "ConstantsNStuff.h"
 #include "GameObject.h"
-#include "VertexInfo.h"
+#include "ObjectInfo.h"
 
 using namespace sf;
 using namespace std;
 using namespace collision;
 
-class Projectiles : public vector<VertexInfo> {
+class Projectiles : public vector<ObjectInfo> {
    
    int pIterator;
    int width, height;
@@ -31,8 +31,8 @@ private:
    
 public:
    Projectiles();
-   VertexInfo & shootStraight(float& posX, float& posY, float& vX, float& vY);
-   VertexInfo & shootSpread(float& posX, float& posY, float& vX, float& vY);
+   ObjectInfo & shootStraight(float& posX, float& posY, float& vX, float& vY);
+   ObjectInfo & shootSpread(float& posX, float& posY, float& vX, float& vY);
    void collisionCheck(Sprite& other);
    void update(float & elapsedTime);
 };

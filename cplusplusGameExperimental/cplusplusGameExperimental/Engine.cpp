@@ -29,7 +29,7 @@ Engine::Engine()
    // Associate the sprite with the texture.
    m_BackgroundSprite.setTexture(m_BackgroundTexture);
 
-   playerAABB = AABB(player0[0]);
+   //playerAABB = AABB(player0);
 
    gameState.add(player0);
    gameState.add(bullets);
@@ -124,13 +124,12 @@ void Engine::start()
       alpha = (float)accumulator / tickRate;
 
       gameState.interpolate(alpha);
-
-      draw(gameState);      
-
       // PERFORMANCE CLOCK CHECK
       drawSumTime += perfClock.getElapsedTime().asMicroseconds();
       draws++;
 
+
+      draw(gameState);      
       
       if (updates == 60) {
          second++;
@@ -147,7 +146,7 @@ void Engine::start()
          sumTime = 0; saveSumTime = 0; inputSumTime = 0; updateSumTime = 0;
          drawSumTime = 0; draws = 0;
          if (second == 11) {
-            cout << bulletAABBs.size() << "\n";
+            //cout << bulletAABBs.size() << "\n";
             for (int i = 1; i < 11; i++) {
                cout << "Avg Save " << i << ": "
                   << saveTimes[i] << " - ";

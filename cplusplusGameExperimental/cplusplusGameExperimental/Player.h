@@ -2,15 +2,15 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "GameObject.h"
-#include "VertexInfo.h"
+#include "ObjectInfo.h"
 
 using namespace sf;
 using namespace std;
 
-class Player : public vector<VertexInfo> {
+class Player : public ObjectInfo {
    // Movement components in x and y directions.
    float pMoveX, pMoveY;
-   int width, height;
+   //int width, height;
    
 public:
    float centerX, centerY;

@@ -4,19 +4,19 @@
 #include "stdafx.h"
 #include <vector>
 #include <execution>
-#include "VertexInfo.h"
+#include "ObjectInfo.h"
 #include "ConstantsNStuff.h"
 
 using namespace sf;
 
-class Enemies : public std::vector<VertexInfo> {
+class Enemies : public std::vector<ObjectInfo> {
    int enemyType;
 
 public:
 
    Enemies::Enemies();
    void update(float& elapsedTime, float& playerPosX, float& playerPosY);
-   std::vector<VertexInfo> vInfo;
+   std::vector<ObjectInfo> vInfo;
 
 private:
    struct Info {

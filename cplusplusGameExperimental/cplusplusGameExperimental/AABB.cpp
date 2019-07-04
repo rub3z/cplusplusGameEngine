@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "AABB.h"
 
-AABB::AABB(VertexInfo & objVertex) {
+AABB::AABB(ObjectInfo & objVertex) {
    obj = &objVertex;
    this->setOutlineColor(Color::Blue);
    this->setOutlineThickness(2);
