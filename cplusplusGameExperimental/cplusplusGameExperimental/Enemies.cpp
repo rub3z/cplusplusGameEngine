@@ -18,14 +18,15 @@ Enemies::Enemies()
       quadInfo[i].index = i;
    }
 
-   int space = 10;
-   int width = 5;
+   int space = 30;
+   int width = 20;
+   int height = 20;
 
-   for (int i = 0; i < 200; i++) {
-      for (int j = 0; j < 200; j++) {
-         int k = (i + j * 200);
+   for (int i = 0; i < 100; i++) {
+      for (int j = 0; j < 100; j++) {
+         int k = (i + j * 100);
          this->at(k).posX = i * space; this->at(k).posY = j * space;
-         this->at(k).width = width; this->at(k).height = width;
+         this->at(k).width = width; this->at(k).height = height;
       }
    }
 }

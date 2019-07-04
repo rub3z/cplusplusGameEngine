@@ -74,7 +74,7 @@ void Projectiles::collisionCheck(Sprite& other)
 
 void Projectiles::update(float& elapsedTime)
 {
-   transform(std::execution::par,
+   transform(std::execution::seq,
       quadInfo.begin(), quadInfo.end(),
       quadInfo.begin(), [&](Info i) {
          ObjectInfo* b = &this->at(i.index);
@@ -90,11 +90,6 @@ void Projectiles::update(float& elapsedTime)
             b->posY = 10;
             b->r = 0; b->g = 0; b->b = 0;
          }
-
-         /*if (i.moveX == 0 && i.moveY == 0) {
-            
-         }*/
-
          return i;
       });
 }

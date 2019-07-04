@@ -122,15 +122,13 @@ void Engine::start()
       perfClock.restart();
 
       alpha = (float)accumulator / tickRate;
-
       gameState.interpolate(alpha);
+      draw(gameState);      
+
       // PERFORMANCE CLOCK CHECK
       drawSumTime += perfClock.getElapsedTime().asMicroseconds();
       draws++;
 
-
-      draw(gameState);      
-      
       if (updates == 60) {
          second++;
          if (second < 11) {
