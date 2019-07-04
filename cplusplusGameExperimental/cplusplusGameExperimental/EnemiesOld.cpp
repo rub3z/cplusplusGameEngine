@@ -53,14 +53,14 @@ EnemiesOld::EnemiesOld(int type)
 
 void EnemiesOld::collisionCheck(Sprite & other)
 {
-   for (int i = 0; i < MAX_ENEMY1; i++) {
-      if (areColliding(this->at(i), other)) {
+   //for (int i = 0; i < MAX_ENEMY1; i++) {
+      //if (areColliding(this->at(i), other)) {
          //this->at(i).setPosition((((float)rand() / RAND_MAX) * 1920),
          //   (((float)rand() / RAND_MAX) * 1080));
-         this->at(i).posX = (((float)rand() / RAND_MAX) * 1920);
-         this->at(i).posY = (((float)rand() / RAND_MAX) * 1080);
-      }
-   }
+         //this->at(i).posX = (((float)rand() / RAND_MAX) * 1920);
+         //this->at(i).posY = (((float)rand() / RAND_MAX) * 1080);
+      //}
+   //}
 }
 
 void EnemiesOld::update(float & elapsedTime, float& playerPosX, float& playerPosY)

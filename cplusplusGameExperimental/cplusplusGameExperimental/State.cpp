@@ -25,7 +25,7 @@ void State::add(ObjectInfo & o)
 
 void State::add(vector<ObjectInfo> & v)
 {
-   for (int i = 0; i < v.size(); i++) {
+   for (int i = 0; i < (int) v.size(); i++) {
       v[i].drawIndex = current.size() * 4;
       current.push_back(&v[i]);
       previous.push_back(v[i]);

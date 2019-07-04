@@ -1,67 +1,144 @@
 #pragma once
-#include <SFML/Graphics.hpp>
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
-//#include "AABB.h"
+#include <cassert>
 #include "Enemy.h"
-#include "ConstantsNStuff.h"
-#include "RectangularBoundaryCollision.h"
+#include "AABB.h"
 
 using namespace sf;
 using namespace std;
-using namespace collision;
 
 static const int Null = -1;
-
-class AABBTree {//: public vector<Node> {
-
-   struct AABB {
-      friend class AABBTree;
-
-      AABB() : centerX(), centerY(), radiusX(), radiusY() {}
-
-      AABB(const float& cX, const float& cY,
-         const float& rX, const float& rY)
-         : centerX(cX), centerY(cY)
-         , radiusX(rX), radiusY(rY)
-      {}
-
-      float centerX;
-      float centerY;
-      float radiusX;
-      float radiusY;
-   };
-
+static const AABB NULL_AABB = AABB(1, 1, 1, 1);
+ 
+class AABBTree : public Drawable {
    struct Node {
       bool IsLeaf(void) const
       {
-         // The right leaf does not use the same memory as the userdata,
-         // and will always be Null (no children)
          return right == Null;
-      }
-
-      AABB aabb;
+      };
 
       int parent;
-      int next; // free list
       
-
       // Child indices
       int left;
       int right;
       
-      void* userData;
+      int next; // free list
+      //void* userData;
       
       // leaf = 0, free nodes = -1
       int height;
-      static const int Null = -1;
+      
+      AABB aabb;
+
+      Node() {
+         this->aabb = NULL_AABB;
+         parent = Null;
+         next = Null;
+         left = Null;
+         right = Null;
+         height = 0;
+      }
+
+      Node(int id) {
+         this->aabb = NULL_AABB;
+         parent = Null;
+         next = id;
+         left = Null;
+         right = Null;
+         height = 0;
+      }
+
+      Node(AABB& newAABB) {
+         this->aabb = newAABB;
+         parent = Null;
+         next = Null;
+         left = Null;
+         right = Null;
+         height = 0;
+      };
    };
 
+   int root;
+   int free;
+   int numNodes;
+   int maxNodes;
    vector<Node> nodes;
+   vector<ObjectInfo*> addStack;
+   vector<int> removeStack;
+
+   virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+
+   int allocNode();
+   void freeNode(int index);
+
+   void insertLeaf(ObjectInfo& objInfo);
+   void removeLeaf(int index);
+   void syncHierarchy(int index);
+   int balance(int index);
+   bool testOverLap(AABB& a, AABB& b);
+   AABB combine(AABB& a, AABB& b);
 
 public:
    AABBTree();
-   void syncHierarchy(int index);
+   void add(ObjectInfo& objInfo);
+   void remove(int index);
+   void update();
+   int getSize();
+   int getCapacity();
+   
+   inline void GrowFreeList(int index);
+
+   template <typename T>
+   inline void Query(T* cb, const AABB& aabb) const;
 
 };
+
+// Adapted from code used here:
+// https://www.randygaul.net/2013/08/06/dynamic-aabb-tree/
+inline void AABBTree::GrowFreeList(int index)
+{
+   maxNodes *= 2;
+   nodes.resize(maxNodes);
+   for (int i = index; i < maxNodes - 1; ++i)
+   {
+      nodes[i].next = i + 1;
+      nodes[i].height = Null;
+   }
+
+   nodes[maxNodes - 1].next = Null;
+   nodes[maxNodes - 1].height = Null;
+   free = index;
+}
+
+// Adapted from code used here:
+// https://www.randygaul.net/2013/08/06/dynamic-aabb-tree/
+template<typename T>
+inline void AABBTree::Query(T* cb, const AABB& aabb) const
+{
+   int stackCapacity = 256;
+   int stack[stackCapacity];
+   int sp = 1;
+
+   *stack = root;
+
+   while (sp) {
+      assert(sp < stackCapacity); // stack capacity too small!
+      int id = stack[--sp];
+
+      const Node* n = nodes[0] + id;
+      if (testOverLap(aabb, n->aabb)) {
+         if (n->IsLeaf()) {
+            // Report, via callback, a collision with leaf
+            if (!cb->TreeCallBack(id))
+               return;
+         }
+         else {
+            stack[sp++] = n->left;
+            stack[sp++] = n->right;
+         }
+      }
+   }
+}

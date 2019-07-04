@@ -1,16 +1,12 @@
 #pragma once
-#include <SFML/Graphics.hpp>
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
-#include "ConstantsNStuff.h"
-#include "RectangularBoundaryCollision.h"
 #include "GameObject.h"
 
 
 using namespace sf;
 using namespace std;
-using namespace collision;
 
 class EnemiesOld : public vector<GameObject> {
    GameObject baseSprite;

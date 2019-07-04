@@ -5,7 +5,6 @@
 #include <vector>
 #include <execution>
 #include "ObjectInfo.h"
-#include "ConstantsNStuff.h"
 
 using namespace sf;
 
@@ -16,8 +15,7 @@ public:
 
    Enemies::Enemies();
    void update(float& elapsedTime, float& playerPosX, float& playerPosY);
-   std::vector<ObjectInfo> vInfo;
-
+   
 private:
    struct Info {
       int index;
@@ -26,5 +24,5 @@ private:
       float distance;
    };
 
-   std::vector<Info> quadInfo;
+   std::vector<Info> info;
 };

@@ -3,7 +3,6 @@
 #pragma once
 #include "stdafx.h"
 #include <execution>
-#include "ConstantsNStuff.h"
 
 using namespace sf;
 

@@ -13,7 +13,7 @@ ParticleSystem::ParticleSystem()
       quadInfo[i].index = i * 4;
    }
    
-   for (int i = 0; i < 100; i++) {
+   /*for (int i = 0; i < 100; i++) {
       for (int j = 0; j < 100; j++) {
          int k = (i + j * 100) * 4;
          vertices[k].position = Vector2f(i * 20, j * 20);
@@ -21,7 +21,7 @@ ParticleSystem::ParticleSystem()
          vertices[k + 2].position = Vector2f(i * 20 + 15, j * 20 + 15);
          vertices[k + 3].position = Vector2f(i * 20, j * 20 + 15);
       }
-   }
+   }*/
 }
 
 void ParticleSystem::update(float& elapsedTime, float& playerPosX, float& playerPosY)

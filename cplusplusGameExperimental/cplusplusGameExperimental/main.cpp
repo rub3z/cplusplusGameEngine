@@ -10,7 +10,8 @@ using namespace std;
 int main()
 {
    Engine engine;
-   engine.start();
+   //engine.start();
+   engine.startWithLogs();
    return 0;
 }
 

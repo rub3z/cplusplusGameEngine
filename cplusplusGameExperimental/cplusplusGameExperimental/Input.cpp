@@ -10,6 +10,11 @@ void Engine::input(float& dtAsSeconds) {
    KEY_A = Keyboard::isKeyPressed(Keyboard::A);
    KEY_S = Keyboard::isKeyPressed(Keyboard::S);
    KEY_D = Keyboard::isKeyPressed(Keyboard::D);
+   KEY_LEFT  = Keyboard::isKeyPressed(Keyboard::Left);
+   KEY_DOWN  = Keyboard::isKeyPressed(Keyboard::Down);
+   KEY_RIGHT = Keyboard::isKeyPressed(Keyboard::Right);
+   KEY_UP    = Keyboard::isKeyPressed(Keyboard::Up);
+
    KEY_ESC = Keyboard::isKeyPressed(Keyboard::Escape);
 
    // Get the latest state of gamepad input.
@@ -27,11 +32,23 @@ void Engine::input(float& dtAsSeconds) {
    // Keyboard movement.
    // Also, input into .movement has to be reset to 0.
    // For some reason.
-   player0.movement(KEY_A && !KEY_D ? -INPUT_MAX :
+   player0.movement(
+      KEY_A && !KEY_D ? -INPUT_MAX :
       !KEY_A && KEY_D ? INPUT_MAX : 0.0f,
       KEY_W && !KEY_S ? -INPUT_MAX :
       !KEY_W && KEY_S ? INPUT_MAX : 0.0f);
-   
+
+   // Keyboard shooting with arrow keys.
+   if (KEY_UP || KEY_DOWN || KEY_LEFT || KEY_RIGHT)
+      if (fireRateDeltaPlayer0 >= RAPID_FIRE_RATE) {
+         fireRateDeltaPlayer0 = RAPID_FIRE_RATE;
+         aabbTree.add(
+          bullets.shootStraight(player0.centerX, player0.centerY,
+           KEY_LEFT && !KEY_RIGHT ? -INPUT_MAX :
+           !KEY_LEFT && KEY_RIGHT ? INPUT_MAX : 0.0f,
+           KEY_UP && !KEY_DOWN ? -INPUT_MAX :
+           !KEY_UP && KEY_DOWN ? INPUT_MAX : 0.0f));
+   }
    // Gamepad movement (which is obviously much better).
    if (Joystick::isConnected(0)) {
       if (LSTICK_X_0 > INNER_DEADZONE || LSTICK_X_0 < -INNER_DEADZONE ||
@@ -45,11 +62,9 @@ void Engine::input(float& dtAsSeconds) {
             fireRateDeltaPlayer0 = RAPID_FIRE_RATE;
             if (RSTICK_X_0 > 10 || RSTICK_X_0 < -10 ||
                RSTICK_Y_0 > 10 || RSTICK_Y_0 < -10) {
-               //bulletAABBs.emplace_back(
-               bullets.shootStraight(player0.centerX, player0.centerY,
-                  RSTICK_X_0, RSTICK_Y_0)
-               //)
-                  ;
+               aabbTree.add(
+                bullets.shootStraight(player0.centerX, player0.centerY,
+                 RSTICK_X_0, RSTICK_Y_0));
                fireRateDeltaPlayer0 -= RAPID_FIRE_RATE;
             }
          }
@@ -62,11 +77,9 @@ void Engine::input(float& dtAsSeconds) {
             if (RSTICK_X_0 > 10 || RSTICK_X_0 < -10 ||
                RSTICK_Y_0 > 10 || RSTICK_Y_0 < -10) {
                for (int i = 0; i < SPREAD_BULLETS; i++) {
-                  //bulletAABBs.emplace_back(
-                  bullets.shootSpread(player0.centerX, player0.centerY,
-                     RSTICK_X_0, RSTICK_Y_0)
-                  //)
-                     ;
+                  aabbTree.add(
+                   bullets.shootSpread(player0.centerX, player0.centerY,
+                    RSTICK_X_0, RSTICK_Y_0));
                }
                fireRateDeltaPlayer0 -= SPREAD_FIRE_RATE;
             }
@@ -74,7 +87,6 @@ void Engine::input(float& dtAsSeconds) {
       }
    }
    Joystick::update();
-
 }
 
 void Engine::input()
