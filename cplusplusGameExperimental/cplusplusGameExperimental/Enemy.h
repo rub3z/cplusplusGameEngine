@@ -1,13 +1,10 @@
 #pragma once
-#include <SFML/Graphics.hpp>
-#include "GameObject.h"
+#include "ObjectInfo.h"
 
 using namespace sf;
 
 
-class Enemy : public GameObject {
-   Texture pTexture;
-
+class Enemy : public ObjectInfo {
    int enemyType;
    float pVelX, pVelY;
    float pAccX, pAccY;
@@ -18,7 +15,6 @@ class Enemy : public GameObject {
 public:
    Enemy();
    Enemy(int type);
-   void hit(FloatRect& other);
    void hit();
    void update(float& elapsedTime, float& playerPosX, float& playerPosY);
 };

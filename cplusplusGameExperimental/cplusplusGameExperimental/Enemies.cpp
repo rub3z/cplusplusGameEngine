@@ -12,20 +12,27 @@ Enemies::Enemies()
       this->at(i).g = 255;
    }
    
-   quadInfo.resize(MAX_ENEMY1);
+   info.resize(MAX_ENEMY1);
 
    for (int i = 0; i < MAX_ENEMY1; i++) {
-      quadInfo[i].index = i;
+      info[i].index = i;
    }
 
-   int space = 30;
-   int width = 20;
-   int height = 20;
+   int space = 20;
+   float width = 15.0f;
+   float height = 15.0f;
+
+   //for (int i = 0; i < 100; i++) {
+   //   this->at(i).posX = (float)(i * space);
+   //   this->at(i).posY = 100;
+   //   this->at(i).width = width; this->at(i).height = height;
+   //}
 
    for (int i = 0; i < 100; i++) {
-      for (int j = 0; j < 100; j++) {
+      for (int j = 0; j < 10; j++) {
          int k = (i + j * 100);
-         this->at(k).posX = i * space; this->at(k).posY = j * space;
+         this->at(k).posX = (float) (i * space); 
+         this->at(k).posY = (float) (j * space);
          this->at(k).width = width; this->at(k).height = height;
       }
    }
@@ -34,8 +41,8 @@ Enemies::Enemies()
 void Enemies::update(float& elapsedTime, float& playerPosX, float& playerPosY)
 {
    transform(std::execution::par,
-      quadInfo.begin(), quadInfo.end(),
-      quadInfo.begin(), [&](Info i) {
+      info.begin(), info.end(),
+      info.begin(), [&](Info i) {
          ObjectInfo* o = &this->at(i.index);
 
          i.distanceX = playerPosX - o->posX;

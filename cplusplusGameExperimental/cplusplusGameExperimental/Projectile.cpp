@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "Projectile.h"
-#include "ConstantsNStuff.h"
 #include <iostream>
 
 using namespace std;

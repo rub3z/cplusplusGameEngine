@@ -9,18 +9,14 @@
 #include "Projectile.h"
 #include "Projectiles.h"
 #include "Enemy.h"
-#include "EnemiesOld.h"
 #include "Enemies.h"
 #include "AABB.h"
-#include "ConstantsNStuff.h"
-#include "RectangularBoundaryCollision.h"
-#include <SFML/Graphics.hpp>
+#include "AABBTree.h"
 #include <iostream>
-#include "ParticleSystem.h"
+//#include "ParticleSystem.h"
 
 using namespace std;
 using namespace sf;
-using namespace collision;
 
 class Engine
 {
@@ -38,11 +34,10 @@ private:
    Player player1 = Player(1);
    Player player2 = Player(2);
    Projectile bullet;
-   Enemy enemy = Enemy();
-
-   AABB playerAABB;
-   vector<AABB> bulletAABBs;
-
+   Enemy enemy0 = Enemy(0);
+   Enemy enemy1 = Enemy(1);
+   Enemy enemy2 = Enemy(2);
+  
    int bulletCounter;
    int spreadBulletCounter;
    float fireRateDeltaPlayer0;
@@ -55,6 +50,7 @@ private:
    Enemies enemies = Enemies();
 
    State gameState;
+   AABBTree aabbTree;
 
    Int64 dtAsSeconds;
    Int64 frameTime;
@@ -73,5 +69,8 @@ public:
 
    // start will call all the private functions.
    void start();
+
+   // This will execute with print outs to the console every ten seconds.
+   void startWithLogs();
 
 };
