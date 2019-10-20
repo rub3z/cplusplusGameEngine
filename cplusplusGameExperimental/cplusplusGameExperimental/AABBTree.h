@@ -12,7 +12,7 @@ using namespace std;
 static const int Null = -1;
 static const AABB NULL_AABB = AABB(1, 1, 1, 1);
  
-class AABBTree : public Drawable {
+class AABBTree : public sf::Drawable {
    struct Node {
       bool IsLeaf(void) const
       {
@@ -65,9 +65,10 @@ class AABBTree : public Drawable {
    int free;
    int numNodes;
    int maxNodes;
-   vector<Node> nodes;
-   vector<ObjectInfo*> addStack;
-   vector<int> removeStack;
+   std::vector<Node> nodes;
+   std::vector<ObjectInfo*> addStack;
+   std::vector<int> removeStack;
+   std::vector<int> leaves;
 
    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
@@ -81,6 +82,28 @@ class AABBTree : public Drawable {
    bool testOverLap(AABB& a, AABB& b);
    AABB combine(AABB& a, AABB& b);
 
+   struct Collision {
+      int idA; int idB;
+
+      Collision(int idX, int idY) {
+         idA = idX; idB = idY;
+      }
+   };
+
+   int numPairs;
+   int maxPairs;
+   std::vector<Collision> pairs;
+
+   inline void GrowFreeList(int index);
+
+   //template <typename T>
+   //inline 
+   void Query(AABB& aabb); //const;
+
+   void GetCollisionPairs();
+   bool TreeCallBack(int idA, int idB);
+   void resolveCollisions();
+
 public:
    AABBTree();
    void add(ObjectInfo& objInfo);
@@ -88,12 +111,6 @@ public:
    void update();
    int getSize();
    int getCapacity();
-   
-   inline void GrowFreeList(int index);
-
-   template <typename T>
-   inline void Query(T* cb, const AABB& aabb) const;
-
 };
 
 // Adapted from code used here:
@@ -115,10 +132,11 @@ inline void AABBTree::GrowFreeList(int index)
 
 // Adapted from code used here:
 // https://www.randygaul.net/2013/08/06/dynamic-aabb-tree/
-template<typename T>
-inline void AABBTree::Query(T* cb, const AABB& aabb) const
+//template<typename T>
+//inline 
+inline void AABBTree::Query(AABB& aabb)// const
 {
-   int stackCapacity = 256;
+   const int stackCapacity = 256;
    int stack[stackCapacity];
    int sp = 1;
 
@@ -128,11 +146,11 @@ inline void AABBTree::Query(T* cb, const AABB& aabb) const
       assert(sp < stackCapacity); // stack capacity too small!
       int id = stack[--sp];
 
-      const Node* n = nodes[0] + id;
+      Node* n = nodes.data() + id;
       if (testOverLap(aabb, n->aabb)) {
          if (n->IsLeaf()) {
             // Report, via callback, a collision with leaf
-            if (!cb->TreeCallBack(id))
+            if (!TreeCallBack(aabb.objectPtr->collisionIndex, id))
                return;
          }
          else {

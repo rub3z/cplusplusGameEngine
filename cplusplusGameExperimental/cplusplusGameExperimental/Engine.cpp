@@ -4,7 +4,7 @@
 Engine::Engine()
 {
    // Get the screen resolution and create an SFML window and View
-   Vector2u resolution;
+   sf::Vector2u resolution;
    resolution.x = 1920;
    resolution.y = 1080;
    bulletCounter = 0;
@@ -14,7 +14,7 @@ Engine::Engine()
    fireRateDeltaPlayer2 = 0;
    fireRateDeltaPlayer3 = 0;
 
-   m_Window.create(VideoMode(resolution.x, resolution.y),
+   m_Window.create(sf::VideoMode(resolution.x, resolution.y),
       "MY SHOOTER GAME WOO"
       // Comment/uncomment this line to change between
       // windowed or fullscreen mode.
@@ -50,14 +50,14 @@ void Engine::start()
    // Timing
    dtAsSeconds = 0;
    frameTime = 0;
-   Int64 deltaTime = 0;
-   Int64 tickRate = 16666; // 60 updates per second
+   sf::Int64 deltaTime = 0;
+   sf::Int64 tickRate = 16666; // 60 updates per second
    float tickFloat = (float)tickRate / 1000000;
    float alpha = 0;
-   Int64 accumulator = 0;
+   sf::Int64 accumulator = 0;
 
-   Clock clock;
-   Time dt;
+   sf::Clock clock;
+   sf::Time dt;
 
    while (m_Window.isOpen())
    {
@@ -94,14 +94,14 @@ void Engine::start()
 
 void Engine::startWithLogs()
 {
-   cout << VertexBuffer::isAvailable() << "\n";
+   cout << sf::VertexBuffer::isAvailable() << "\n";
    cout << "Number of objects in simulation: " << gameState.size() << "\n";
 
    // Timing
    dtAsSeconds = 0;
    frameTime = 0;
-   Int64 deltaTime = 0;
-   Int64 tickRate =
+   sf::Int64 deltaTime = 0;
+   sf::Int64 tickRate =
       //8333;  // 120 ticks per second
       //10000; // 100 per second
       16666; // 60 per second
@@ -109,13 +109,13 @@ void Engine::startWithLogs()
       //0.0333333f; // 30 per second
    float tickFloat = (float)tickRate / 1000000;
    float alpha = 0;
-   Int64 accumulator = 0;
+   sf::Int64 accumulator = 0;
 
-   Clock clock;
-   Time dt;
+   sf::Clock clock;
+   sf::Time dt;
 
    // Performance Logging
-   Clock perfClock;
+   sf::Clock perfClock;
    int sumTime = 0;
    int saveSumTime = 0;
    int inputSumTime = 0;

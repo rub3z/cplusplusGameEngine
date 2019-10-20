@@ -1,4 +1,3 @@
-#pragma once
 // This code is modified from a gamecodeschool.com tutorial:
 // http://gamecodeschool.com/sfml/building-a-simple-game-engine-in-c-plus-plus/
 // Thanks to John Horton on getting me started.
@@ -6,34 +5,28 @@
 #pragma once
 #include "State.h"
 #include "Player.h"
-#include "Projectile.h"
 #include "Projectiles.h"
 #include "Enemy.h"
 #include "Enemies.h"
 #include "AABB.h"
 #include "AABBTree.h"
 #include <iostream>
-//#include "ParticleSystem.h"
-
-using namespace std;
-using namespace sf;
 
 class Engine
 {
 private:
 
    // A regular RenderWindow.
-   RenderWindow m_Window;
+   sf::RenderWindow m_Window;
 
    // Declare a sprite and a Texture for the background.
-   Sprite m_BackgroundSprite;
-   Texture m_BackgroundTexture;
+   sf::Sprite m_BackgroundSprite;
+   sf::Texture m_BackgroundTexture;
 
    // An instance of Player.
    Player player0 = Player(0);
    Player player1 = Player(1);
    Player player2 = Player(2);
-   Projectile bullet;
    Enemy enemy0 = Enemy(0);
    Enemy enemy1 = Enemy(1);
    Enemy enemy2 = Enemy(2);
@@ -52,8 +45,8 @@ private:
    State gameState;
    AABBTree aabbTree;
 
-   Int64 dtAsSeconds;
-   Int64 frameTime;
+   sf::Int64 dtAsSeconds;
+   sf::Int64 frameTime;
 
    // Private functions for internal use only.
    void input();

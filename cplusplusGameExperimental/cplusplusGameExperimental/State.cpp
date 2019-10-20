@@ -4,7 +4,7 @@
 
 void State::draw(sf::RenderTarget & target, sf::RenderStates states) const
 {
-   target.draw(&toDraw[0], toDraw.size(), Quads, states);
+   target.draw(&toDraw[0], toDraw.size(), sf::Quads, states);
 }
 
 void State::clear() {
@@ -16,23 +16,23 @@ void State::add(ObjectInfo & o)
    o.drawIndex = current.size() * 4;
    current.push_back(&o);
    previous.push_back(o);
-   toDraw.push_back(Vertex(sf::Vector2f(o.posX, o.posY)));
-   toDraw.push_back(Vertex(sf::Vector2f(o.posX + o.width, o.posY)));
-   toDraw.push_back(Vertex(sf::Vector2f(o.posX + o.width, o.posY + o.height)));
-   toDraw.push_back(Vertex(sf::Vector2f(o.posX, o.posY + o.height)));
+   toDraw.push_back(sf::Vertex(sf::Vector2f(o.posX, o.posY)));
+   toDraw.push_back(sf::Vertex(sf::Vector2f(o.posX + o.width, o.posY)));
+   toDraw.push_back(sf::Vertex(sf::Vector2f(o.posX + o.width, o.posY + o.height)));
+   toDraw.push_back(sf::Vertex(sf::Vector2f(o.posX, o.posY + o.height)));
 
 }
 
-void State::add(vector<ObjectInfo> & v)
+void State::add(std::vector<ObjectInfo> & v)
 {
    for (int i = 0; i < (int) v.size(); i++) {
       v[i].drawIndex = current.size() * 4;
       current.push_back(&v[i]);
       previous.push_back(v[i]);
-      toDraw.push_back(Vertex(sf::Vector2f(v[i].posX, v[i].posY)));
-      toDraw.push_back(Vertex(sf::Vector2f(v[i].posX + v[i].width, v[i].posY)));
-      toDraw.push_back(Vertex(sf::Vector2f(v[i].posX + v[i].width, v[i].posY + v[i].height)));
-      toDraw.push_back(Vertex(sf::Vector2f(v[i].posX, v[i].posY + v[i].height)));
+      toDraw.push_back(sf::Vertex(sf::Vector2f(v[i].posX, v[i].posY)));
+      toDraw.push_back(sf::Vertex(sf::Vector2f(v[i].posX + v[i].width, v[i].posY)));
+      toDraw.push_back(sf::Vertex(sf::Vector2f(v[i].posX + v[i].width, v[i].posY + v[i].height)));
+      toDraw.push_back(sf::Vertex(sf::Vector2f(v[i].posX, v[i].posY + v[i].height)));
 
       keepSize = current.size();
    }
@@ -71,7 +71,7 @@ void State::interpolate(float alphaNum)
    transform(std::execution::par,
       previous.begin(), previous.end(),
       previous.begin(), [&](ObjectInfo p) {
-         Vertex* quad = &toDraw[p.drawIndex];
+         sf::Vertex* quad = &toDraw[p.drawIndex];
 
          quad[0].position.x = p.posX;
          quad[0].position.y = p.posY;

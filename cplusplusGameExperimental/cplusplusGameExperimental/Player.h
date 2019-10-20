@@ -1,13 +1,11 @@
 #pragma once
-#include <iostream>
 #include "ObjectInfo.h"
-
-using namespace sf;
-using namespace std;
 
 class Player : public ObjectInfo {
    // Movement components in x and y directions.
    float pMoveX, pMoveY;
+
+   void * vT[1];
    
 public:
    float centerX, centerY;
@@ -17,4 +15,7 @@ public:
    void movement(float const &valX, float const &valY);
 
    void update(float& elapsedTime);
+
+//   virtual void hit();
+
 };

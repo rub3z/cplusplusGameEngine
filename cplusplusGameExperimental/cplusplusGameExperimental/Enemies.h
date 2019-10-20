@@ -6,8 +6,6 @@
 #include <execution>
 #include "ObjectInfo.h"
 
-using namespace sf;
-
 class Enemies : public std::vector<ObjectInfo> {
    int enemyType;
 
@@ -25,4 +23,9 @@ private:
    };
 
    std::vector<Info> info;
+
+   void * vT[1];
+
+   //void hitThis();
+   //void hitThat();
 };

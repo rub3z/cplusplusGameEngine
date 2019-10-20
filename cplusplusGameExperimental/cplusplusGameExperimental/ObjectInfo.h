@@ -1,5 +1,7 @@
 #pragma once
+#include <iostream>
 class ObjectInfo {
+   friend class AABBTree;
    friend class State;
 public:
    float posX, posY;
@@ -7,6 +9,9 @@ public:
    int collisionIndex;
    int drawIndex;
    int r, g, b;
+   int type;
+
+   void** vTable;
 
    ObjectInfo() {
       posX = 0.0f; posY = 0.0f;
@@ -15,4 +20,8 @@ public:
       drawIndex = 0;
       r = 0; g = 0; b = 0;
    }
+
+   virtual void hit(ObjectInfo * that) {
+      ((void(*)(ObjectInfo*, ObjectInfo*))this->vTable[0])(this,that);
+   };
 };
