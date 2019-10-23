@@ -13,7 +13,8 @@ public:
 
    Enemies::Enemies();
    void update(float& elapsedTime, float& playerPosX, float& playerPosY);
-   
+   std::vector<ObjectInfo> toAdd;
+
 private:
    struct Info {
       int index;
@@ -25,7 +26,4 @@ private:
    std::vector<Info> info;
 
    void * vT[1];
-
-   //void hitThis();
-   //void hitThat();
 };

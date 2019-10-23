@@ -6,7 +6,6 @@
 #include "Enemy.h"
 #include "AABB.h"
 
-using namespace sf;
 using namespace std;
 
 static const int Null = -1;

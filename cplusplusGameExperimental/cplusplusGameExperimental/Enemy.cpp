@@ -4,7 +4,7 @@
 void hitEnemy1(ObjectInfo * o, ObjectInfo * that) {
    if (that->type < 2) {
       o->r = 0; o->g = 0; o->b = 0;
-      o->posX = 0; o->posY = 0;
+      o->posX = -100; o->posY = -100;
       o->collisionIndex = -1;
    }
 }
@@ -71,56 +71,52 @@ Enemy::Enemy(int type) {
 }
 
 void Enemy::update(float& elapsedTime, float& playerPosX, float& playerPosY) {
-   distanceX = playerPosX - posX;
-   distanceY = playerPosY - posY;
-   distance = sqrt(pow(distanceX, 2) + pow(distanceY, 2));
-   pAccX = 0;
-   pAccY = 0;
-   switch (enemyType) {
-   case 0:
-      pVelX = (ENEMY1_SPEED / distance) * (distanceX) * elapsedTime + pAccX;
-      pVelY = (ENEMY1_SPEED / distance) * (distanceY) * elapsedTime + pAccY;
-      posX += pVelX;
-      posY += pVelY;
-      break;
-   case 1:
-      if (distance < 400) {
-         pAccX = (ENEMY1_ACCEL / distance) * (distanceX) * elapsedTime;
-         pAccY = (ENEMY1_ACCEL / distance) * (distanceY) * elapsedTime;
-         pVelX += pAccX;
-         pVelY += pAccY;
-      }
-      else {
-         pVelX = (ENEMY1_SPEED / distance) * (distanceX) * elapsedTime + pAccX;
-         pVelY = (ENEMY1_SPEED / distance) * (distanceY) * elapsedTime + pAccY;
-      }
-      posX += pVelX;
-      posY += pVelY;
+   if (collisionIndex != -1) {
+      distanceX = playerPosX - posX;
+      distanceY = playerPosY - posY;
+      distance = sqrt(pow(distanceX, 2) + pow(distanceY, 2));
+      pAccX = 0;
+      pAccY = 0;
+      switch (enemyType) {
+      case 0:
+         pVelX = (ENEMY1_SPEED / distance) * (distanceX)* elapsedTime + pAccX;
+         pVelY = (ENEMY1_SPEED / distance) * (distanceY)* elapsedTime + pAccY;
+         posX += pVelX;
+         posY += pVelY;
+         break;
+      case 1:
+         if (distance < 400) {
+            pAccX = (ENEMY1_ACCEL / distance) * (distanceX)* elapsedTime;
+            pAccY = (ENEMY1_ACCEL / distance) * (distanceY)* elapsedTime;
+            pVelX += pAccX;
+            pVelY += pAccY;
+         }
+         else {
+            pVelX = (ENEMY1_SPEED / distance) * (distanceX)* elapsedTime + pAccX;
+            pVelY = (ENEMY1_SPEED / distance) * (distanceY)* elapsedTime + pAccY;
+         }
+         posX += pVelX;
+         posY += pVelY;
 
-      break;
-   case 2:
-      if (distance < 400) {
-         pAccX = (ENEMY1_ACCEL / distance) * (distanceX) * elapsedTime;
-         pAccY = (ENEMY1_ACCEL / distance) * (distanceY) * elapsedTime;
-         pVelX += pAccX;
-         pVelY += pAccY;
-      }
-      else {
-         pVelX = (ENEMY1_SPEED / distance) * (distanceX) * elapsedTime + pAccX;
-         pVelY = (ENEMY1_SPEED / distance) * (distanceY) * elapsedTime + pAccY;
-      }
+         break;
+      case 2:
+         if (distance < 400) {
+            pAccX = (ENEMY1_ACCEL / distance) * (distanceX)* elapsedTime;
+            pAccY = (ENEMY1_ACCEL / distance) * (distanceY)* elapsedTime;
+            pVelX += pAccX;
+            pVelY += pAccY;
+         }
+         else {
+            pVelX = (ENEMY1_SPEED / distance) * (distanceX)* elapsedTime + pAccX;
+            pVelY = (ENEMY1_SPEED / distance) * (distanceY)* elapsedTime + pAccY;
+         }
 
-      posX += pVelX + (((float)rand() / RAND_MAX) * ENEMY1_RANDOM) - (ENEMY1_RANDOM / 2);
-      posY += pVelY + (((float)rand() / RAND_MAX) * ENEMY1_RANDOM) - (ENEMY1_RANDOM / 2);
+         posX += pVelX + (((float)rand() / RAND_MAX) * ENEMY1_RANDOM) - (ENEMY1_RANDOM / 2);
+         posY += pVelY + (((float)rand() / RAND_MAX) * ENEMY1_RANDOM) - (ENEMY1_RANDOM / 2);
 
-      break;
-   default:
-      break;
+         break;
+      default:
+         break;
+      }
    }
 }
-
-//void Enemy::hit() {
-//   r = 0; g = 0; b = 0;
-//   collisionIndex = -1;
-//   std::cout << "guess I'll die now" << std::endl;
-//}

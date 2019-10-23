@@ -4,9 +4,8 @@
 void hitBullet(ObjectInfo * o, ObjectInfo * that) {
    if (that->type > 1) {
       o->r = 0; o->g = 0; o->b = 0;
-      o->posX = 0; o->posY = 0;
+      o->posX = -128; o->posY = -128;
       o->collisionIndex = -1;
-//      std::cout << "GOTCHA BITCH" << std::endl;
    }
 }
 
@@ -26,8 +25,8 @@ Projectiles::Projectiles()
 
    for (int i = 0; i < MAX_BULLETS; i++) {
       this->at(i).r = 255;
-      this->at(i).posX = -69;
-      this->at(i).posY = -69;
+      this->at(i).posX = -128;
+      this->at(i).posY = -128;
       this->at(i).width = width;
       this->at(i).height = height;
       this->at(i).vTable = vT;

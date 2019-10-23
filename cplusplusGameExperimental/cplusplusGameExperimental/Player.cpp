@@ -4,7 +4,6 @@
 void hitPlayer(ObjectInfo * o, ObjectInfo * that) {
    if (that->type > 1) {
       o->r = 0; o->g = 0; o->b = 0;
-      o->posX = 0; o->posY = 0;
       o->collisionIndex = -1;
    }
 }

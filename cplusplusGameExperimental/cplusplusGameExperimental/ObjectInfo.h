@@ -21,7 +21,7 @@ public:
       r = 0; g = 0; b = 0;
    }
 
-   virtual void hit(ObjectInfo * that) {
+   void hit(ObjectInfo * that) {
       ((void(*)(ObjectInfo*, ObjectInfo*))this->vTable[0])(this,that);
    };
 };
