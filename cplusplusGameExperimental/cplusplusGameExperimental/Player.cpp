@@ -1,6 +1,14 @@
 #include "stdafx.h"
 #include "Player.h"
 
+void hitPlayer(ObjectInfo * o, ObjectInfo * that) {
+   if (that->type > 1) {
+      o->r = 0; o->g = 0; o->b = 0;
+      o->posX = 0; o->posY = 0;
+      o->collisionIndex = -1;
+   }
+}
+
 Player::Player(int playerNum) {
    width = 30.0f;
    height = 30.0f;
@@ -32,11 +40,14 @@ Player::Player(int playerNum) {
    centerX = posX + (width / 2);
    centerY = posY + (height / 2);
 
+   vT[0] = hitPlayer;
+
+   vTable = vT;
+
+   type = 0;
 }
 
 void Player::movement(float const &valX, float const &valY) {
-   //pMoveX = valX; 
-   //pMoveY = valY;
    pMoveX = valX == 0.0 ?
       0.0f :
       valX / sqrtf(pow(valX, 2) + pow(valY, 2)) * 100;
@@ -49,6 +60,6 @@ void Player::update(float& elapsedTime) {
    posX += pMoveX * PLAYER_SPEED * elapsedTime;
    posY += pMoveY * PLAYER_SPEED * elapsedTime;
 
-   centerX += pMoveX * PLAYER_SPEED * elapsedTime;
-   centerY += pMoveY * PLAYER_SPEED * elapsedTime;
+   centerX = posX + (width / 2);
+   centerY = posY + (height / 2);
 }

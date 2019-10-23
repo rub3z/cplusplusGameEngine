@@ -1,6 +1,14 @@
 #include "stdafx.h"
 #include "Enemy.h"
 
+void hitEnemy1(ObjectInfo * o, ObjectInfo * that) {
+   if (that->type < 2) {
+      o->r = 0; o->g = 0; o->b = 0;
+      o->posX = 0; o->posY = 0;
+      o->collisionIndex = -1;
+   }
+}
+
 Enemy::Enemy() {
    posX = 0;
    posY = 0;
@@ -16,6 +24,11 @@ Enemy::Enemy() {
 
    distanceX = 0.0f; distanceY = 0.0f;
    distance = 0.0f;
+
+   vT[0] = hitEnemy1;
+   vTable = vT;
+
+   type = 3;
 }
 
 Enemy::Enemy(int type) {
@@ -50,12 +63,11 @@ Enemy::Enemy(int type) {
 
    distanceX = 0.0f; distanceY = 0.0f;
    distance = 0.0f;
-}
 
-void Enemy::hit()
-{
-   //this->setPosition((((float)rand() / RAND_MAX) * 1920), 
-   //                  (((float)rand() / RAND_MAX) * 1080));
+   vT[0] = hitEnemy1;
+   vTable = vT;
+
+   this->type = 3;
 }
 
 void Enemy::update(float& elapsedTime, float& playerPosX, float& playerPosY) {
@@ -106,3 +118,9 @@ void Enemy::update(float& elapsedTime, float& playerPosX, float& playerPosY) {
       break;
    }
 }
+
+//void Enemy::hit() {
+//   r = 0; g = 0; b = 0;
+//   collisionIndex = -1;
+//   std::cout << "guess I'll die now" << std::endl;
+//}

@@ -4,7 +4,7 @@
 void Engine::draw(State & drawState)
 {
    // Rub out the last frame
-   m_Window.clear(Color::White);
+   m_Window.clear(sf::Color::White);
 
    // Draw the background
    m_Window.draw(m_BackgroundSprite);

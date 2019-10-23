@@ -4,9 +4,16 @@
 #include "stdafx.h"
 #include "Enemies.h"
 
+void hitEnemy2(ObjectInfo * o, ObjectInfo * that) {
+   if (that->type < 2) {
+      o->r = 0; o->g = 0; o->b = 0;
+      o->posX = 0; o->posY = 0;
+      o->collisionIndex = -1;
+   }
+}
+
 Enemies::Enemies()
 {
-   
    this->assign(MAX_ENEMY1, ObjectInfo());
    for (int i = 0; i < MAX_ENEMY1; i++) {
       this->at(i).g = 255;
@@ -18,23 +25,27 @@ Enemies::Enemies()
       info[i].index = i;
    }
 
-   int space = 20;
+   float space = 20.0f;
    float width = 15.0f;
    float height = 15.0f;
 
-   //for (int i = 0; i < 100; i++) {
-   //   this->at(i).posX = (float)(i * space);
-   //   this->at(i).posY = 100;
-   //   this->at(i).width = width; this->at(i).height = height;
-   //}
+   float px = 0.0f; float py = 0.0f;
 
-   for (int i = 0; i < 100; i++) {
-      for (int j = 0; j < 10; j++) {
-         int k = (i + j * 100);
-         this->at(k).posX = (float) (i * space); 
-         this->at(k).posY = (float) (j * space);
-         this->at(k).width = width; this->at(k).height = height;
+   for (int i = 0; i < MAX_ENEMY1; i++) {
+      this->at(i).posX = px;
+      this->at(i).posY = py;
+      px += space;
+      if (px >= 1900.0f) {
+         px = 0.0f; py += space;
       }
+      this->at(i).width = width; this->at(i).height = height;
+   }
+
+   vT[0] = hitEnemy2;
+
+   for (int i = 0; i < MAX_ENEMY1; i++) {
+      this->at(i).vTable = vT;
+      this->at(i).type = 3;
    }
 }
 
@@ -51,7 +62,7 @@ void Enemies::update(float& elapsedTime, float& playerPosX, float& playerPosY)
 
          o->posX += (ENEMY1_SPEED / i.distance) * (i.distanceX) * elapsedTime;
          o->posY += (ENEMY1_SPEED / i.distance) * (i.distanceY) * elapsedTime;
-         
+
          return i;
       });
 }

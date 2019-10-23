@@ -1,9 +1,6 @@
 #pragma once
 #include "ObjectInfo.h"
 
-using namespace sf;
-
-
 class Enemy : public ObjectInfo {
    int enemyType;
    float pVelX, pVelY;
@@ -12,9 +9,10 @@ class Enemy : public ObjectInfo {
    float distanceX;
    float distanceY;
 
+   void * vT[1];
+
 public:
    Enemy();
    Enemy(int type);
-   void hit();
    void update(float& elapsedTime, float& playerPosX, float& playerPosY);
 };

@@ -4,9 +4,7 @@
 #include "stdafx.h"
 #include <execution>
 
-using namespace sf;
-
-class ParticleSystem : public Drawable, public Transformable
+class ParticleSystem : public sf::Drawable, public sf::Transformable
 {
    int enemyType;
    
@@ -16,7 +14,7 @@ public:
    void update(float& elapsedTime, float& playerPosX, float& playerPosY);
 
 private:
-   virtual void draw(RenderTarget& target, RenderStates states) const;
+   virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
    
    struct Info {
       int index;
@@ -26,5 +24,5 @@ private:
    };
    
    std::vector<Info> quadInfo;
-   std::vector<Vertex> vertices;
+   std::vector<sf::Vertex> vertices;
 };

@@ -8,9 +8,9 @@ const float BULLET_LIFETIME = 1.0f;
 
 const float INNER_DEADZONE = 25.0f;
 const float INPUT_MAX = 100.0f;
-const float RAPID_FIRE_RATE = 0.1f;
+const float RAPID_FIRE_RATE = 0.05f;
 const float SPREAD_FIRE_RATE = 0.3f;
-const int   SPREAD_BULLETS = 5;
+const int   SPREAD_BULLETS = 7;
 
 const int MAX_ENEMY1 = 1000;
 const float ENEMY1_SPEED = 60.0f;

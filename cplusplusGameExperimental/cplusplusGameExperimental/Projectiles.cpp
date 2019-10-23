@@ -1,8 +1,14 @@
 #include "stdafx.h"
 #include "Projectiles.h"
-#include <iostream>
 
-using namespace std;
+void hitBullet(ObjectInfo * o, ObjectInfo * that) {
+   if (that->type > 1) {
+      o->r = 0; o->g = 0; o->b = 0;
+      o->posX = 0; o->posY = 0;
+      o->collisionIndex = -1;
+//      std::cout << "GOTCHA BITCH" << std::endl;
+   }
+}
 
 Projectiles::Projectiles()
 {
@@ -11,6 +17,8 @@ Projectiles::Projectiles()
    this->assign(MAX_BULLETS, ObjectInfo());
    info.resize(MAX_BULLETS);
 
+   vT[0] = hitBullet;
+
    for (int i = 0; i < MAX_BULLETS; i++) {
       info[i].index = i;
       info[i].shot = false;
@@ -18,10 +26,12 @@ Projectiles::Projectiles()
 
    for (int i = 0; i < MAX_BULLETS; i++) {
       this->at(i).r = 255;
-      this->at(i).posX = 10;
-      this->at(i).posY = 10;
+      this->at(i).posX = -69;
+      this->at(i).posY = -69;
       this->at(i).width = width;
       this->at(i).height = height;
+      this->at(i).vTable = vT;
+      this->at(i).type = 1;
    }
 
    pIterator = 0;
@@ -70,11 +80,6 @@ ObjectInfo& Projectiles::shootSpread(float& playerPosX, float& playerPosY,
    return *b;
 }
 
-void Projectiles::collisionCheck(Sprite& other)
-{
-
-}
-
 void Projectiles::update(float& elapsedTime)
 {
    transform(std::execution::par,
@@ -90,8 +95,8 @@ void Projectiles::update(float& elapsedTime)
                i.shot = false;
                i.moveX = 0;
                i.moveY = 0;
-               b->posX = 10;
-               b->posY = 10;
+               b->posX = 0;
+               b->posY = 0;
                b->r = 0; b->g = 0; b->b = 0;
                b->collisionIndex = -1;
             }

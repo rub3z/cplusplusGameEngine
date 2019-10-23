@@ -55,12 +55,14 @@ void AABBTree::insertLeaf(ObjectInfo& objInfo) {
       root = allocNode();
       nodes[root].aabb = AABB(objInfo);
       objInfo.collisionIndex = root;
+      leaves.push_back(root);
       return;
    }
    
    int leaf = allocNode();
    nodes[leaf].aabb = AABB(objInfo);
    objInfo.collisionIndex = leaf;
+   leaves.push_back(leaf);
    
    AABB newAABB = nodes[leaf].aabb;
    int index = root;
@@ -205,6 +207,8 @@ void AABBTree::update() {
       if (nodes[i].aabb.objectPtr) {
          if (nodes[i].aabb.objectCollisionRemoved()) {
              remove(i);
+             leaves.erase(
+                std::remove(leaves.begin(), leaves.end(), i), leaves.end());
          }
          else {
             nodes[i].aabb.update();
@@ -216,6 +220,30 @@ void AABBTree::update() {
          if (nodes[i].height >= 0) {
             nodes[i].aabb = combine(nodes[left].aabb, nodes[right].aabb);
          }
+      }
+   }
+
+   GetCollisionPairs();
+   resolveCollisions();
+}
+
+void AABBTree::GetCollisionPairs() {
+   pairs.clear();
+   for (int i : leaves) {
+      Query(nodes[i].aabb);
+   }
+}
+
+bool AABBTree::TreeCallBack(int idA, int idB) {
+   if (idA == idB) return true;
+   pairs.emplace_back(idA, idB);
+   return true;
+}
+
+void AABBTree::resolveCollisions() {
+   if (pairs.size() > 0) {
+      for (Collision c : pairs) {
+         nodes[c.idA].aabb.objectPtr->hit(nodes[c.idB].aabb.objectPtr);
       }
    }
 }
