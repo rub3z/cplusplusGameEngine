@@ -1,7 +1,7 @@
 #pragma once
-#include "ObjectInfo.h"
+#include "GameObject.h"
 
-class Player : public ObjectInfo {
+class Player : public GameObject {
    // Movement components in x and y directions.
    float pMoveX, pMoveY;
 

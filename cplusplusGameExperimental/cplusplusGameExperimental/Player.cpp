@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Player.h"
 
-void hitPlayer(ObjectInfo * o, ObjectInfo * that) {
+void hitPlayer(GameObject * o, GameObject * that) {
    if (that->type > 1) {
       o->r = 0; o->g = 0; o->b = 0;
       o->collisionIndex = -1;

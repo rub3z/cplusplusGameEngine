@@ -3,14 +3,14 @@
 #include <stdlib.h>
 #include <vector>
 #include <execution>
-#include "ObjectInfo.h"
+#include "GameObject.h"
 
 class State : public sf::Drawable {
 private:
    friend class State;
    std::vector<sf::Vertex> toDraw;
-   std::vector<ObjectInfo> previous;
-   std::vector<ObjectInfo * > current;
+   std::vector<GameObject> previous;
+   std::vector<GameObject * > current;
    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
    int keepSize;
@@ -18,8 +18,8 @@ private:
 public:
    void clear();
    void interpolate(float alphaNum);
-   void add(ObjectInfo & o);
-   void add(std::vector<ObjectInfo> & vecInfo);
+   void add(GameObject & o);
+   void add(std::vector<GameObject> & vecInfo);
    void save();
    int size();
 };

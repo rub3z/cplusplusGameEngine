@@ -16,7 +16,7 @@ AABBTree::AABBTree()
    GrowFreeList(0);
 }
 
-void AABBTree::add(ObjectInfo& objInfo) {
+void AABBTree::add(GameObject& objInfo) {
    addStack.push_back(&objInfo);
 }
 
@@ -50,7 +50,7 @@ void AABBTree::freeNode(int index) {
 // This code is modified code from Erin Catto's Box2D code, line 176
 // of /Collision/b2DynamicTree.cpp as of 7/9/2019:
 // https://github.com/erincatto/Box2D/blob/master/Box2D/Collision/b2DynamicTree.cpp
-void AABBTree::insertLeaf(ObjectInfo& objInfo) {
+void AABBTree::insertLeaf(GameObject& objInfo) {
    if (root == Null) {
       root = allocNode();
       nodes[root].aabb = AABB(objInfo);
@@ -190,25 +190,12 @@ bool AABBTree::testOverLap(AABB& a, AABB& b)
 }
 
 void AABBTree::update() {
-   for (int i = 0; i < addStack.size(); i++) {
-      insertLeaf(*addStack[i]);
-   }
-   
-   for (int i = 0; i < removeStack.size(); i++) {
-      assert(nodes[removeStack[i]].IsLeaf());
-      removeLeaf(removeStack[i]);
-      freeNode(removeStack[i]);
-   }
-
-   addStack.clear();
-   removeStack.clear();
-
    for (int i = 0; i < nodes.size(); i++) {
       if (nodes[i].aabb.objectPtr) {
          if (nodes[i].aabb.objectCollisionRemoved()) {
-             remove(i);
-             leaves.erase(
-                std::remove(leaves.begin(), leaves.end(), i), leaves.end());
+            remove(i);
+            leaves.erase(
+               std::remove(leaves.begin(), leaves.end(), i), leaves.end());
          }
          else {
             nodes[i].aabb.update();
@@ -225,6 +212,20 @@ void AABBTree::update() {
 
    GetCollisionPairs();
    resolveCollisions();
+
+   for (int i = 0; i < removeStack.size(); i++) {
+      assert(nodes[removeStack[i]].IsLeaf());
+      removeLeaf(removeStack[i]);
+      freeNode(removeStack[i]);
+   }
+
+   for (int i = 0; i < addStack.size(); i++) {
+      insertLeaf(*addStack[i]);
+   }
+
+   addStack.clear();
+   removeStack.clear();
+
 }
 
 void AABBTree::GetCollisionPairs() {

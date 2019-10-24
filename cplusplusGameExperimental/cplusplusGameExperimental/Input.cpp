@@ -42,12 +42,11 @@ void Engine::input(float& dtAsSeconds) {
    if (KEY_UP || KEY_DOWN || KEY_LEFT || KEY_RIGHT)
       if (fireRateDeltaPlayer0 >= RAPID_FIRE_RATE) {
          fireRateDeltaPlayer0 = RAPID_FIRE_RATE;
-         aabbTree.add(
           bullets.shootStraight(player0.centerX, player0.centerY,
            KEY_LEFT && !KEY_RIGHT ? -INPUT_MAX :
            !KEY_LEFT && KEY_RIGHT ? INPUT_MAX : 0.0f,
            KEY_UP && !KEY_DOWN ? -INPUT_MAX :
-           !KEY_UP && KEY_DOWN ? INPUT_MAX : 0.0f));
+           !KEY_UP && KEY_DOWN ? INPUT_MAX : 0.0f);
          fireRateDeltaPlayer0 -= RAPID_FIRE_RATE;
    }
    // Gamepad movement (which is obviously much better).
@@ -63,9 +62,8 @@ void Engine::input(float& dtAsSeconds) {
             fireRateDeltaPlayer0 = RAPID_FIRE_RATE;
             if (RSTICK_X_0 > 10 || RSTICK_X_0 < -10 ||
                RSTICK_Y_0 > 10 || RSTICK_Y_0 < -10) {
-               aabbTree.add(
                 bullets.shootStraight(player0.centerX, player0.centerY,
-                 RSTICK_X_0, RSTICK_Y_0));
+                 RSTICK_X_0, RSTICK_Y_0);
                fireRateDeltaPlayer0 -= RAPID_FIRE_RATE;
             }
          }
@@ -78,9 +76,8 @@ void Engine::input(float& dtAsSeconds) {
             if (RSTICK_X_0 > 10 || RSTICK_X_0 < -10 ||
                RSTICK_Y_0 > 10 || RSTICK_Y_0 < -10) {
                for (int i = 0; i < SPREAD_BULLETS; i++) {
-                  aabbTree.add(
-                   bullets.shootSpread(player0.centerX, player0.centerY,
-                    RSTICK_X_0, RSTICK_Y_0));
+                  bullets.shootSpread(player0.centerX, player0.centerY,
+                    RSTICK_X_0, RSTICK_Y_0);
                }
                fireRateDeltaPlayer0 -= SPREAD_FIRE_RATE;
             }
