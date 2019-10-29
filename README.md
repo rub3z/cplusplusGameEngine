@@ -1,24 +1,25 @@
-# cplusplusGameExperimental
+# C++ Game Engine Project
 Experimenting with OO vs. Data-Oriented design; Broadphase Collision; Runtime Polymorphism; and maybe some other things.
 
+## Setting Up
 To run this and see it actually work; follow this tutorial to set up SFML in Visual Studio:
 http://gamecodeschool.com/sfml/building-your-first-sfml-game-project/
 
 SFML is really great for starting off in C++ game code; as it provides you with tools that will make a window for your game that you can draw stuff in; and methods for taking in input from a keyboard or joystick... things that just *work*.
 
-Highlights of this ongoing project include:
+## Highlights
 
-*1. Achieving variable framerate.*
+### 1. Achieving variable framerate.
 
-  Related files: Engine.cpp, State.cpp, Input.cpp, Update.cpp, Draw.cpp, Engine.h, State.h
+  Related files: [Engine.cpp](./Engine.cpp) [State.cpp](./State.cpp) [Input.cpp](./Input.cpp) [Update.cpp](./Update.cpp) [Draw.cpp](./Draw.cpp) [Engine.h](./Engine.h) [State.h](./State.h)
   
   I learned about the idea of doing this from Glenn Fiedler's legendary piece on it which *would be* on gafferongames.com... but unfortunately it seems to have been shut down. Fortunately, it's archived here! http://vodacek.zvb.cz/archiv/681.html
   
 I highly recommend it for anyone trying to make a game or game engine completely from scratch. I would even say it is essential.
 
-*2. Broadphase collision using an AABBTree (binary tree) data structure.*
+### 2. Broadphase collision using an AABBTree (binary tree) data structure.
 
-  Related files: AABB.cpp, AABBTree.cpp, AABB.h, AABBTree.h
+  Related files: [AABBTree.cpp](./AABBTree.cpp) [AABB.cpp](./AABB.cpp) [AABBTree.h](./AABBTree.h) [AABB.h](./AABB.h) 
   
   There are tons of resources and articles on this you can find by googling AABBTree or broadphase collision; but I'll list the best ones I've found...
   
@@ -42,8 +43,8 @@ I highly recommend it for anyone trying to make a game or game engine completely
   
   https://github.com/lohedges/aabbcc/tree/master/src
   
-*3. Runtime Polymorphism Using Double Indirection / Function Pointers for Generic Game Objects.*
+### 3. Runtime Polymorphism Using Double Indirection / Function Pointers for Generic Game Objects.
 
-  Related files: GameObject.h, Enemies.cpp, Player.cpp, Projectiles.cpp
+  Related files: [GameObject.h](./GameObject.h) [Enemies.cpp](./Enemies.cpp) [Player.cpp](./Player.cpp) [Projectiles.cpp](./Projectiles.cpp)
   
   This is something I actually came up with myself. Kind of a mouthful, isn't it? I'm not sure how to put it, exactly. I'll explain this later (:
