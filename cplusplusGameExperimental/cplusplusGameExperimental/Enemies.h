@@ -4,16 +4,16 @@
 #include "stdafx.h"
 #include <vector>
 #include <execution>
-#include "ObjectInfo.h"
+#include "GameObject.h"
 
-class Enemies : public std::vector<ObjectInfo> {
+class Enemies : public std::vector<GameObject> {
    int enemyType;
-
+   
 public:
 
    Enemies::Enemies();
    void update(float& elapsedTime, float& playerPosX, float& playerPosY);
-   std::vector<ObjectInfo> toAdd;
+   std::vector<GameObject*> flagged;
 
 private:
    struct Info {

@@ -65,7 +65,7 @@ class AABBTree : public sf::Drawable {
    int numNodes;
    int maxNodes;
    std::vector<Node> nodes;
-   std::vector<ObjectInfo*> addStack;
+   std::vector<GameObject*> addStack;
    std::vector<int> removeStack;
    std::vector<int> leaves;
 
@@ -74,7 +74,7 @@ class AABBTree : public sf::Drawable {
    int allocNode();
    void freeNode(int index);
 
-   void insertLeaf(ObjectInfo& objInfo);
+   void insertLeaf(GameObject& objInfo);
    void removeLeaf(int index);
    void syncHierarchy(int index);
    int balance(int index);
@@ -105,7 +105,7 @@ class AABBTree : public sf::Drawable {
 
 public:
    AABBTree();
-   void add(ObjectInfo& objInfo);
+   void add(GameObject& objInfo);
    void remove(int index);
    void update();
    int getSize();

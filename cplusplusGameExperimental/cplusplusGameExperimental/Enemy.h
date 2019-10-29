@@ -1,7 +1,7 @@
 #pragma once
-#include "ObjectInfo.h"
+#include "GameObject.h"
 
-class Enemy : public ObjectInfo {
+class Enemy : public GameObject {
    int enemyType;
    float pVelX, pVelY;
    float pAccX, pAccY;

@@ -11,7 +11,7 @@ void State::clear() {
    current.clear();
 }
 
-void State::add(ObjectInfo & o)
+void State::add(GameObject & o)
 {
    o.drawIndex = current.size() * 4;
    current.push_back(&o);
@@ -23,7 +23,7 @@ void State::add(ObjectInfo & o)
 
 }
 
-void State::add(std::vector<ObjectInfo> & v)
+void State::add(std::vector<GameObject> & v)
 {
    for (int i = 0; i < (int) v.size(); i++) {
       v[i].drawIndex = current.size() * 4;
@@ -42,7 +42,7 @@ void State::save() {
    transform(std::execution::par,
       previous.begin(), previous.end(),
       current.begin(), previous.begin(),
-      [&](ObjectInfo p, ObjectInfo* c) {
+      [&](GameObject p, GameObject* c) {
          p = *c;
          return p;
       });
@@ -58,7 +58,7 @@ void State::interpolate(float alphaNum)
    transform(std::execution::par,
       previous.begin(), previous.end(),
       current.begin(), previous.begin(),
-      [&](ObjectInfo p, ObjectInfo* c) {
+      [&](GameObject p, GameObject* c) {
          p.posX = (c->posX * alphaNum) +
             (p.posX * (1.0f - alphaNum));
          p.posY = (c->posY * alphaNum) +
@@ -70,7 +70,7 @@ void State::interpolate(float alphaNum)
 
    transform(std::execution::par,
       previous.begin(), previous.end(),
-      previous.begin(), [&](ObjectInfo p) {
+      previous.begin(), [&](GameObject p) {
          sf::Vertex* quad = &toDraw[p.drawIndex];
 
          quad[0].position.x = p.posX;

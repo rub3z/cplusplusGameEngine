@@ -1,7 +1,7 @@
 #pragma once
 #include <stdio.h>
 #include <stdlib.h>
-#include "ObjectInfo.h"
+#include "GameObject.h"
 
 using namespace sf;
 using namespace std;
@@ -14,14 +14,14 @@ private:
    float radiusX;
    float radiusY;
 
-   ObjectInfo* objectPtr;
+   GameObject* objectPtr;
    
 public:
    AABB() : centerX(), centerY(), radiusX(), radiusY() {}
 
    AABB(const float& cX, const float& cY,
       const float& rX, const float& rY);
-   AABB(ObjectInfo & objVertex);
+   AABB(GameObject & objVertex);
    float getPerimeter();
    void update();
    bool objectCollisionRemoved();
@@ -32,8 +32,8 @@ inline float AABB::getPerimeter() {
 };
 
 inline void AABB::update() {
-   centerX = objectPtr->posX - 5 + radiusX;
-   centerY = objectPtr->posY - 5 + radiusY;
+   centerX = objectPtr->posX - 1 + radiusX;
+   centerY = objectPtr->posY - 1 + radiusY;
    //this->setPosition(objectPtr->posX - 5, objectPtr->posY - 5);
 };
 

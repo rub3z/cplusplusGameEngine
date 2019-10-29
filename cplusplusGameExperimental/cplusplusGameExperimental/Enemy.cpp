@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Enemy.h"
 
-void hitEnemy1(ObjectInfo * o, ObjectInfo * that) {
+void hitEnemy1(GameObject * o, GameObject * that) {
    if (that->type < 2) {
       o->r = 0; o->g = 0; o->b = 0;
       o->posX = -100; o->posY = -100;

@@ -3,9 +3,9 @@
 #include <stdlib.h>
 #include <vector>
 #include <execution>
-#include "ObjectInfo.h"
+#include "GameObject.h"
  
-class Projectiles : public std::vector<ObjectInfo> {
+class Projectiles : public std::vector<GameObject> {
    
    int pIterator;
    float width, height;
@@ -27,7 +27,8 @@ private:
    
 public:
    Projectiles();
-   ObjectInfo & shootStraight(float& posX, float& posY, const float& vX, const float& vY);
-   ObjectInfo & shootSpread(float& posX, float& posY, float& vX, float& vY);
+   GameObject & shootStraight(float& posX, float& posY, const float& vX, const float& vY);
+   GameObject & shootSpread(float& posX, float& posY, float& vX, float& vY);
    void update(float & elapsedTime);
+   std::vector<GameObject*> flagged;
 };

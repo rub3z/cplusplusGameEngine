@@ -1,22 +1,21 @@
 #pragma once
-const float PLAYER_SPEED = 10.0f;
+const float PLAYER_SPEED = 5.0f;
 
-const int   MAX_BULLETS = 100;
+const int   MAX_BULLETS = 200;
 const float BULLET_SPEED = 10.0f;
-const int   BULLET_SPREAD = 24;
+const int   BULLET_SPREAD = 32;
 const float BULLET_LIFETIME = 1.0f;
 
 const float INNER_DEADZONE = 25.0f;
 const float INPUT_MAX = 100.0f;
-const float RAPID_FIRE_RATE = 0.05f;
-const float SPREAD_FIRE_RATE = 0.3f;
+const float RAPID_FIRE_RATE = 0.02f;
+const float SPREAD_FIRE_RATE = 0.12f;
 const int   SPREAD_BULLETS = 7;
 
-const int MAX_ENEMY1 = 1000;
+const int MAX_ENEMY1 = 500;
 const float ENEMY1_SPEED = 60.0f;
 const float ENEMY1_ACCEL = 50.0f;
 const float ENEMY1_RANDOM = 10.0f;
-
 
 const float INPUT_RESET = 0.0f;
 static bool KEY_W, KEY_A, KEY_S, KEY_D, KEY_ESC;
