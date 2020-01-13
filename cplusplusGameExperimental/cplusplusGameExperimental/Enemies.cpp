@@ -40,6 +40,16 @@ void hitEnemy2(GameObject * o, GameObject * that) {
    
 }
 
+void hitEnemy3(GameObject * o, GameObject * that) {
+   if (that->type < 2) {
+      o->r = 255; o->g = 0; o->b = 128;
+   }
+}
+
+void Enemies::doit() {
+   vT[0] = hitEnemy3;
+}
+
 Enemies::Enemies()
 {
    this->assign(MAX_ENEMY1, GameObject());

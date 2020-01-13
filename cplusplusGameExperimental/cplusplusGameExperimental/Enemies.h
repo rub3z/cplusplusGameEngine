@@ -13,6 +13,7 @@ public:
 
    Enemies::Enemies();
    void update(float& elapsedTime, float& playerPosX, float& playerPosY);
+   void doit();
    std::vector<GameObject*> flagged;
 
 private:

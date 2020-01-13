@@ -30,6 +30,7 @@ Engine::Engine()
    m_BackgroundSprite.setTexture(m_BackgroundTexture);
 
    aabbTree.add(player0);
+   aabbTree.add(player1);
    //aabbTree.add(enemy0);
    //aabbTree.add(enemy1);
    //aabbTree.add(enemy2);
@@ -38,6 +39,7 @@ Engine::Engine()
    //}
 
    gameState.add(player0);
+   gameState.add(player1);
    //gameState.add(enemy0);
    //gameState.add(enemy1);
    //gameState.add(enemy2);

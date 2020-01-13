@@ -18,11 +18,11 @@ Player::Player(int playerNum) {
    switch (playerNum) {
    case 0:
       posX = 960; posY = 540;
-      r = 255; g = 255; b = 255;
+      r = 255; g = 0; b = 0;
       break;
    case 1:
       posX = 1000; posY = 540;
-      r = 255; g = 255; b = 255;
+      r = 0; g = 0; b = 255;
       break;
    case 2:
       posX = 1040; posY = 540;

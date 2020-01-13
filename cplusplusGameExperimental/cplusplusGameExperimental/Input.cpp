@@ -4,6 +4,7 @@
 void Engine::input(float& dtAsSeconds) {
    // Fire rate updates.
    fireRateDeltaPlayer0 += dtAsSeconds;
+   fireRateDeltaPlayer1 += dtAsSeconds;
 
    // Get the latest state of sf::Keyboard input.
    KEY_W = sf::Keyboard::isKeyPressed(sf::Keyboard::W);
@@ -26,6 +27,16 @@ void Engine::input(float& dtAsSeconds) {
    BUTTON_LB_0 = sf::Joystick::isButtonPressed(0, 4);
    BUTTON_B_0 = sf::Joystick::isButtonPressed(0, 1);
 
+   // Get the latest state of gamepad input.
+   LSTICK_X_1 = sf::Joystick::getAxisPosition(1, sf::Joystick::X);
+   LSTICK_Y_1 = sf::Joystick::getAxisPosition(1, sf::Joystick::Y);
+   RSTICK_X_1 = sf::Joystick::getAxisPosition(1, sf::Joystick::U);
+   RSTICK_Y_1 = sf::Joystick::getAxisPosition(1, sf::Joystick::V);
+   BUTTON_RB_1 = sf::Joystick::isButtonPressed(1, 5);
+   BUTTON_LB_1 = sf::Joystick::isButtonPressed(1, 4);
+   BUTTON_B_1 = sf::Joystick::isButtonPressed(1, 1);
+
+
    // Player can quit by pressing ESC or B button on pad.
    if (KEY_ESC || BUTTON_B_0) m_Window.close();
 
@@ -37,6 +48,7 @@ void Engine::input(float& dtAsSeconds) {
       !KEY_A && KEY_D ? INPUT_MAX : 0.0f,
       KEY_W && !KEY_S ? -INPUT_MAX :
       !KEY_W && KEY_S ? INPUT_MAX : 0.0f);
+   player1.movement(0.0f, 0.0f);
 
    // Keyboard shooting with arrow keys.
    if (KEY_UP || KEY_DOWN || KEY_LEFT || KEY_RIGHT)
@@ -84,6 +96,42 @@ void Engine::input(float& dtAsSeconds) {
          }
       }
    }
+
+   if (sf::Joystick::isConnected(1)) {
+      if (LSTICK_X_1 > INNER_DEADZONE || LSTICK_X_1 < -INNER_DEADZONE ||
+         LSTICK_Y_1 > INNER_DEADZONE || LSTICK_Y_1 < -INNER_DEADZONE)
+         player1.movement(LSTICK_X_1, LSTICK_Y_1);
+
+      // Rapid fire with RB.
+      // Credit to Tommy So for fixing this.
+      if (BUTTON_RB_1) {
+         if (fireRateDeltaPlayer1 >= RAPID_FIRE_RATE) {
+            fireRateDeltaPlayer1 = RAPID_FIRE_RATE;
+            if (RSTICK_X_1 > 10 || RSTICK_X_1 < -10 ||
+               RSTICK_Y_1 > 10 || RSTICK_Y_1 < -10) {
+               bullets.shootStraight(player1.centerX, player1.centerY,
+                  RSTICK_X_1, RSTICK_Y_1);
+               fireRateDeltaPlayer1 -= RAPID_FIRE_RATE;
+            }
+         }
+      }
+      // Spread fire with LB.
+      // Credit to Tommy So for fixing this.
+      if (BUTTON_LB_1) {
+         if (fireRateDeltaPlayer1 >= SPREAD_FIRE_RATE) {
+            fireRateDeltaPlayer1 = SPREAD_FIRE_RATE;
+            if (RSTICK_X_1 > 10 || RSTICK_X_1 < -10 ||
+               RSTICK_Y_1 > 10 || RSTICK_Y_1 < -10) {
+               for (int i = 0; i < SPREAD_BULLETS; i++) {
+                  bullets.shootSpread(player1.centerX, player1.centerY,
+                     RSTICK_X_1, RSTICK_Y_1);
+               }
+               fireRateDeltaPlayer1 -= SPREAD_FIRE_RATE;
+            }
+         }
+      }
+   }
+
    sf::Joystick::update();
 }
 
