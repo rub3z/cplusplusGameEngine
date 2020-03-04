@@ -31,8 +31,6 @@ private:
    Enemy enemy1 = Enemy(1);
    Enemy enemy2 = Enemy(2);
   
-   int bulletCounter;
-   int spreadBulletCounter;
    float fireRateDeltaPlayer0;
    float fireRateDeltaPlayer1;
    float fireRateDeltaPlayer2;

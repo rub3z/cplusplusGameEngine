@@ -63,7 +63,7 @@ Enemies::Enemies()
       info[i].index = i;
    }
 
-   float space = 20.0f;
+   float space = 40.0f;
    float width = 15.0f;
    float height = 15.0f;
 
@@ -86,7 +86,7 @@ Enemies::Enemies()
       this->at(i).type = 3;
    }
 }
-
+ 
 void Enemies::update(float& elapsedTime, float& playerPosX, float& playerPosY)
 {
    transform(std::execution::par,
