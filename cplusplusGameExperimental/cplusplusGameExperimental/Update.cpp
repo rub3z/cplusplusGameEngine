@@ -6,7 +6,7 @@ using namespace sf;
 void Engine::update(float& dtAsSeconds)
 {
    player0.update(dtAsSeconds);
-   player1.update(dtAsSeconds);
+   //player1.update(dtAsSeconds);
    bullets.update(dtAsSeconds);
    //enemy0.update(dtAsSeconds, player0.centerX, player0.centerY);
    //enemy1.update(dtAsSeconds, player0.centerX, player0.centerY);

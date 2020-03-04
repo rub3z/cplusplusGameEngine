@@ -5,10 +5,8 @@ Engine::Engine()
 {
    // Get the screen resolution and create an SFML window and View
    sf::Vector2u resolution;
-   resolution.x = 1920;
-   resolution.y = 1080;
-   bulletCounter = 0;
-   spreadBulletCounter = 0;
+   resolution.x = RESOLUTION_X;
+   resolution.y = RESOLUTION_Y;
    fireRateDeltaPlayer0 = 0;
    fireRateDeltaPlayer1 = 0;
    fireRateDeltaPlayer2 = 0;
@@ -18,8 +16,10 @@ Engine::Engine()
       "MY SHOOTER GAME WOO"
       // Comment/uncomment this line to change between
       // windowed or fullscreen mode.
-      , Style::Fullscreen
+      //, Style::Fullscreen
    );
+
+   m_Window.setPosition(sf::Vector2i(0, 0));
 
    m_Window.setMouseCursorVisible(false);
 
@@ -30,7 +30,7 @@ Engine::Engine()
    m_BackgroundSprite.setTexture(m_BackgroundTexture);
 
    aabbTree.add(player0);
-   aabbTree.add(player1);
+   //aabbTree.add(player1);
    //aabbTree.add(enemy0);
    //aabbTree.add(enemy1);
    //aabbTree.add(enemy2);
@@ -39,7 +39,7 @@ Engine::Engine()
    //}
 
    gameState.add(player0);
-   gameState.add(player1);
+   //gameState.add(player1);
    //gameState.add(enemy0);
    //gameState.add(enemy1);
    //gameState.add(enemy2);
