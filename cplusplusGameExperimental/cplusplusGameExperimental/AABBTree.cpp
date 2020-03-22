@@ -29,15 +29,13 @@
 #include "stdafx.h"
 #include "AABBTree.h"
 
-void AABBTree::draw(sf::RenderTarget& target, sf::RenderStates states) const
-{
+void AABBTree::draw(sf::RenderTarget& target, sf::RenderStates states) const {
    for (Node n : nodes) {
-      target.draw(n.aabb);
+   //   target.draw(n.aabb);
    }
 }
 
-AABBTree::AABBTree()
-{ 
+AABBTree::AABBTree() { 
    root = Null;
    numNodes = 0;
    maxNodes = 4;
@@ -83,14 +81,14 @@ void AABBTree::insertLeaf(GameObject& objInfo) {
       root = allocNode();
       nodes[root].aabb = AABB(objInfo);
       objInfo.collisionIndex = root;
-      leaves.push_back(root);
+      leaves.insert(root);
       return;
    }
    
    int leaf = allocNode();
    nodes[leaf].aabb = AABB(objInfo);
    objInfo.collisionIndex = leaf;
-   leaves.push_back(leaf);
+   leaves.insert(leaf);
    
    AABB newAABB = nodes[leaf].aabb;
    int index = root;
@@ -210,50 +208,48 @@ void AABBTree::removeLeaf(int index) {
    nodes[index].parent = Null;
 }
 
-bool AABBTree::testOverLap(AABB& a, AABB& b)
-{
-   if (fabs(a.centerX - b.centerX) > (a.radiusX + b.radiusX)) return false;
-   if (fabs(a.centerY - b.centerY) > (a.radiusY + b.radiusY)) return false;
-   return true;
+bool AABBTree::testOverLap(AABB& a, AABB& b) {
+   return (a.lowerBoundX < b.upperBoundX && a.lowerBoundY < b.upperBoundY
+        && b.lowerBoundX < a.upperBoundX && b.lowerBoundY < a.upperBoundY);
 }
 
+bool narrowPhaseCheck(GameObject* a, GameObject* b) {
+   return (a->posX < b->posX + b->width && a->posY < b->posY + b->height
+        && b->posX < a->posX + a->width && b->posY < a->posY + a->width);
+}
+
+
 void AABBTree::update() {
-   for (int i = 0; i < nodes.size(); i++) {
-      if (nodes[i].aabb.objectPtr) {
-         if (nodes[i].aabb.objectCollisionRemoved()) {
-            remove(i);
-            leaves.erase(
-               std::remove(leaves.begin(), leaves.end(), i), leaves.end());
-         }
-         else {
-            nodes[i].aabb.update();
-         }
+   for (int i : leaves) {
+      assert(nodes[i].IsLeaf());
+      if (nodes[i].aabb.objectCollisionRemoved()) {
+         removeLeaf(i);
+         freeNode(i);
+         removeStack.push_back(i);
       }
-      else {
-         int left = nodes[i].left;
-         int right = nodes[i].right;
-         if (nodes[i].height >= 0) {
-            nodes[i].aabb = combine(nodes[left].aabb, nodes[right].aabb);
-         }
+      else if (!nodes[i].aabb.containsObject()) {
+         GameObject* g = nodes[i].aabb.objectPtr;
+         removeLeaf(i);
+         freeNode(i);
+         removeStack.push_back(i);
+         
+         addStack.push_back(g);
       }
    }
+
+   for (int i : removeStack) {
+      leaves.erase(i);
+   }
+
+   for (GameObject * g : addStack) {
+      insertLeaf(*g);
+   }
+
+   removeStack.clear();
+   addStack.clear();
 
    GetCollisionPairs();
    resolveCollisions();
-
-   for (int i = 0; i < removeStack.size(); i++) {
-      assert(nodes[removeStack[i]].IsLeaf());
-      removeLeaf(removeStack[i]);
-      freeNode(removeStack[i]);
-   }
-
-   for (int i = 0; i < addStack.size(); i++) {
-      insertLeaf(*addStack[i]);
-   }
-
-   addStack.clear();
-   removeStack.clear();
-
 }
 
 void AABBTree::GetCollisionPairs() {
@@ -272,23 +268,21 @@ bool AABBTree::TreeCallBack(int idA, int idB) {
 void AABBTree::resolveCollisions() {
    if (pairs.size() > 0) {
       for (Collision c : pairs) {
-         nodes[c.idA].aabb.objectPtr->hit(nodes[c.idB].aabb.objectPtr);
+         if (narrowPhaseCheck(nodes[c.idA].aabb.objectPtr, nodes[c.idB].aabb.objectPtr)) {
+            nodes[c.idA].aabb.objectPtr->hit(nodes[c.idB].aabb.objectPtr);
+            nodes[c.idB].aabb.objectPtr->hit(nodes[c.idA].aabb.objectPtr);
+         }
       }
    }
 }
 
 inline AABB AABBTree::combine(AABB& a, AABB& b) {
-   float upperBoundx = max(a.centerX + a.radiusX, b.centerX + b.radiusX);
-   float upperBoundy = max(a.centerY + a.radiusY, b.centerY + b.radiusY);
-   float lowerBoundx = min(a.centerX - a.radiusX, b.centerX - b.radiusX);
-   float lowerBoundy = min(a.centerY - a.radiusY, b.centerY - b.radiusY);
-
-   float abCenterX = (upperBoundx + lowerBoundx) / 2;
-   float abCenterY = (upperBoundy + lowerBoundy) / 2;
-   float abRadiusX = upperBoundx - abCenterX;
-   float abRadiusY = upperBoundy - abCenterY;
-
-   return AABB(abCenterX, abCenterY, abRadiusX, abRadiusY);
+   float lowerBoundx = min(a.lowerBoundX, b.lowerBoundX);
+   float lowerBoundy = min(a.lowerBoundY, b.lowerBoundY);
+   float upperBoundx = max(a.upperBoundX, b.upperBoundX);
+   float upperBoundy = max(a.upperBoundY, b.upperBoundY);
+   
+   return AABB(lowerBoundx, lowerBoundy, upperBoundx, upperBoundy);
 }
 
 int AABBTree::getSize() {
@@ -299,10 +293,8 @@ int AABBTree::getCapacity() {
    return maxNodes;
 }
 
-void AABBTree::syncHierarchy(int index)
-{
-   while (index != Null)
-   {
+void AABBTree::syncHierarchy(int index) {
+   while (index != Null) {
       index = balance(index);
 
       int left = nodes[index].left;
@@ -365,9 +357,6 @@ int AABBTree::balance(int index) {
          nodes[index].right = rrightGChild;
          nodes[rrightGChild].parent = index;
 
-         //nodes[index].aabb = combine(nodes[leftChild].aabb, nodes[rrightGChild].aabb);
-         //nodes[rightChild].aabb = combine(nodes[index].aabb, nodes[rleftGChild].aabb);
-
          nodes[index].height = 1 + max(nodes[leftChild].height, nodes[rrightGChild].height);
          nodes[rightChild].height = 1 + max(nodes[index].height, nodes[rleftGChild].height);
       }
@@ -375,9 +364,6 @@ int AABBTree::balance(int index) {
          nodes[rightChild].right = rrightGChild;
          nodes[index].right = rleftGChild;
          nodes[rleftGChild].parent = index;
-
-         //nodes[index].aabb = combine(nodes[leftChild].aabb, nodes[rleftGChild].aabb);
-         //nodes[rightChild].aabb = combine(nodes[index].aabb, nodes[rrightGChild].aabb);
 
          nodes[index].height = 1 + max(nodes[leftChild].height, nodes[rleftGChild].height);
          nodes[rightChild].height = 1 + max(nodes[index].height, nodes[rrightGChild].height);
@@ -419,9 +405,6 @@ int AABBTree::balance(int index) {
          nodes[index].left = lrightGChild;
          nodes[lrightGChild].parent = index;
 
-         //nodes[index].aabb = combine(nodes[rightChild].aabb, nodes[lrightGChild].aabb);
-         //nodes[leftChild].aabb = combine(nodes[index].aabb, nodes[lleftGChild].aabb);
-
          nodes[index].height = 1 + max(nodes[rightChild].height, nodes[lrightGChild].height);
          nodes[leftChild].height = 1 + max(nodes[index].height, nodes[lleftGChild].height);
       }
@@ -429,9 +412,6 @@ int AABBTree::balance(int index) {
          nodes[leftChild].right = lrightGChild;
          nodes[index].left = lleftGChild;
          nodes[lleftGChild].parent = index;
-
-         //nodes[index].aabb = combine(nodes[rightChild].aabb, nodes[lleftGChild].aabb);
-         //nodes[leftChild].aabb = combine(nodes[index].aabb, nodes[lrightGChild].aabb);
 
          nodes[index].height = 1 + max(nodes[rightChild].height, nodes[lleftGChild].height);
          nodes[leftChild].height = 1 + max(nodes[index].height, nodes[lrightGChild].height);
@@ -442,4 +422,3 @@ int AABBTree::balance(int index) {
 
    return index;
 }
-

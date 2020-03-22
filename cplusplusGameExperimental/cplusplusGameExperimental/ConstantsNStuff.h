@@ -16,10 +16,13 @@ const float RAPID_FIRE_RATE = 0.02f;
 const float SPREAD_FIRE_RATE = 0.12f;
 
 // Enemy attributes.
-const int MAX_ENEMY1 = 500;
+const int   MAX_ENEMY1 = 10;
 const float ENEMY1_SPEED = 60.0f;
 const float ENEMY1_ACCEL = 50.0f;
 const float ENEMY1_RANDOM = 10.0f;
+
+// Collision attributes.
+const float AABB_FATNESS = 3.0f;
 
 // Input.
 const float INPUT_MAX = 100.0f;

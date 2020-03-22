@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
+#include <set>
 #include <cassert>
-#include "Enemy.h"
 #include "AABB.h"
 
 using namespace std;
@@ -67,7 +67,7 @@ class AABBTree : public sf::Drawable {
    std::vector<Node> nodes;
    std::vector<GameObject*> addStack;
    std::vector<int> removeStack;
-   std::vector<int> leaves;
+   std::set<int> leaves;
 
    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
@@ -91,7 +91,7 @@ class AABBTree : public sf::Drawable {
 
    int numPairs;
    int maxPairs;
-   std::vector<Collision> pairs;
+   vector<Collision> pairs;
 
    inline void GrowFreeList(int index);
 

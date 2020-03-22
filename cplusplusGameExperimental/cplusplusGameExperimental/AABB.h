@@ -3,40 +3,51 @@
 #include <stdlib.h>
 #include "GameObject.h"
 
-using namespace sf;
-using namespace std;
-
-class AABB : public RectangleShape {
+class AABB //: public sf::RectangleShape 
+{
    friend class AABBTree;
 private:
-   float centerX;
-   float centerY;
-   float radiusX;
-   float radiusY;
+   float lowerBoundX;
+   float lowerBoundY;
+   float upperBoundX;
+   float upperBoundY;
 
    GameObject* objectPtr;
    
 public:
-   AABB() : centerX(), centerY(), radiusX(), radiusY() {}
+   AABB() : lowerBoundX(), lowerBoundY(), upperBoundX(), upperBoundY() {}
 
-   AABB(const float& cX, const float& cY,
-      const float& rX, const float& rY);
+   AABB(const float& lowerBoundX, const float& lowerBoundY,
+        const float& upperBoundX, const float& upperBoundY);
+
    AABB(GameObject & objVertex);
    float getPerimeter();
-   void update();
+   bool containsObject();
    bool objectCollisionRemoved();
+   //void setDrawBounds();
 };
 
 inline float AABB::getPerimeter() {
-   return (radiusX * 4.0f) + (radiusY * 4.0f);
+   return ((upperBoundX - lowerBoundX) * 2.0f) 
+        + ((upperBoundY - lowerBoundY) * 2.0f);
 };
 
-inline void AABB::update() {
-   centerX = objectPtr->posX - 1 + radiusX;
-   centerY = objectPtr->posY - 1 + radiusY;
-   //this->setPosition(objectPtr->posX - 5, objectPtr->posY - 5);
+inline bool AABB::containsObject() {
+   return objectPtr->posX > lowerBoundX &&
+          objectPtr->posY > lowerBoundY &&
+          objectPtr->posX + objectPtr->width  < upperBoundX &&
+          objectPtr->posY + objectPtr->height < upperBoundY;
 };
 
 inline bool AABB::objectCollisionRemoved() {
    return objectPtr->collisionIndex == -1;
 }
+
+//inline void AABB::setDrawBounds() {
+//   this->setOutlineColor(sf::Color::Blue);
+//   this->setOutlineThickness(2);
+//   this->setFillColor(sf::Color::Transparent);
+//   this->setPosition(lowerBoundX, lowerBoundY);
+//   this->setSize(sf::Vector2f(upperBoundX - lowerBoundX,
+//      upperBoundY - lowerBoundY));
+//}
