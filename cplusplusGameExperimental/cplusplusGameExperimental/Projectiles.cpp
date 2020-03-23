@@ -18,12 +18,12 @@ Projectiles::Projectiles()
 
    vT[0] = hitBullet;
 
-   for (int i = 0; i < MAX_BULLETS; i++) {
+   for (size_t i = 0; i < MAX_BULLETS; i++) {
       info[i].index = i;
       info[i].shot = false;
    }
 
-   for (int i = 0; i < MAX_BULLETS; i++) {
+   for (size_t i = 0; i < MAX_BULLETS; i++) {
       this->at(i).r = 255;
       this->at(i).posX = -128;
       this->at(i).posY = -128;
@@ -122,7 +122,7 @@ void Projectiles::update(float& elapsedTime)
       });
 
    flagged.clear();
-   for (int i = 0; i < MAX_BULLETS; i++) {
+   for (size_t i = 0; i < MAX_BULLETS; i++) {
       if (this->at(i).flag) {
          flagged.push_back(&this->at(i));
          this->at(i).flag = false;

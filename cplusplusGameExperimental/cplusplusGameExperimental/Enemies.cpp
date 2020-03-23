@@ -53,13 +53,13 @@ void Enemies::doit() {
 Enemies::Enemies()
 {
    this->assign(MAX_ENEMY1, GameObject());
-   for (int i = 0; i < MAX_ENEMY1; i++) {
+   for (size_t i = 0; i < MAX_ENEMY1; i++) {
       this->at(i).g = 255;
    }
    
    info.resize(MAX_ENEMY1);
 
-   for (int i = 0; i < MAX_ENEMY1; i++) {
+   for (size_t i = 0; i < MAX_ENEMY1; i++) {
       info[i].index = i;
    }
 
@@ -69,7 +69,7 @@ Enemies::Enemies()
 
    float px = 0.0f; float py = 0.0f;
 
-   for (int i = 0; i < MAX_ENEMY1; i++) {
+   for (size_t i = 0; i < MAX_ENEMY1; i++) {
       this->at(i).posX = px;
       this->at(i).posY = py;
       px += space;
@@ -81,7 +81,7 @@ Enemies::Enemies()
 
    vT[0] = hitEnemy2;
 
-   for (int i = 0; i < MAX_ENEMY1; i++) {
+   for (size_t i = 0; i < MAX_ENEMY1; i++) {
       this->at(i).vTable = vT;
       this->at(i).type = 3;
    }
@@ -109,7 +109,7 @@ void Enemies::update(float& elapsedTime, float& playerPosX, float& playerPosY)
       });
 
    flagged.clear();
-   for (int i = 0; i < MAX_ENEMY1; i++) {
+   for (size_t i = 0; i < MAX_ENEMY1; i++) {
       if (this->at(i).flag) {
          flagged.push_back(&this->at(i));
          this->at(i).flag = false;

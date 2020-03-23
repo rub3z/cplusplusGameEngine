@@ -87,7 +87,7 @@ void Engine::input(float& dtAsSeconds) {
             fireRateDeltaPlayer0 = SPREAD_FIRE_RATE;
             if (RSTICK_X_0 > 10 || RSTICK_X_0 < -10 ||
                RSTICK_Y_0 > 10 || RSTICK_Y_0 < -10) {
-               for (int i = 0; i < SPREAD_BULLETS; i++) {
+               for (size_t i = 0; i < SPREAD_BULLETS; i++) {
                   bullets.shootSpread(player0.centerX, player0.centerY,
                     RSTICK_X_0, RSTICK_Y_0);
                }
@@ -122,7 +122,7 @@ void Engine::input(float& dtAsSeconds) {
             fireRateDeltaPlayer1 = SPREAD_FIRE_RATE;
             if (RSTICK_X_1 > 10 || RSTICK_X_1 < -10 ||
                RSTICK_Y_1 > 10 || RSTICK_Y_1 < -10) {
-               for (int i = 0; i < SPREAD_BULLETS; i++) {
+               for (size_t i = 0; i < SPREAD_BULLETS; i++) {
                   bullets.shootSpread(player1.centerX, player1.centerY,
                      RSTICK_X_1, RSTICK_Y_1);
                }

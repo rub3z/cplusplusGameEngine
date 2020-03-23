@@ -6,8 +6,6 @@
 #include <cassert>
 #include "AABB.h"
 
-using namespace std;
-
 static const int Null = -1;
 static const AABB NULL_AABB = AABB(1, 1, 1, 1);
  
@@ -25,9 +23,7 @@ class AABBTree : public sf::Drawable {
       int right;
       
       int next; // free list
-      //void* userData;
       
-      // leaf = 0, free nodes = -1
       int height;
       
       AABB aabb;
@@ -91,7 +87,7 @@ class AABBTree : public sf::Drawable {
 
    int numPairs;
    int maxPairs;
-   vector<Collision> pairs;
+   std::vector<Collision> pairs;
 
    inline void GrowFreeList(int index);
 

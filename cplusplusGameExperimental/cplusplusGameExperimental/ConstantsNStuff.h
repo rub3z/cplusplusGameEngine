@@ -1,28 +1,28 @@
 #pragma once
 // Window resolution.
-const float RESOLUTION_X = 1920.0f;
-const float RESOLUTION_Y = 1080.0f;
+const unsigned int RESOLUTION_X = 1920;
+const unsigned int RESOLUTION_Y = 1080;
 
 // Player attributes.
 const float PLAYER_SPEED = 5.0f;
 
 // Bullet / Projectile attributes.
-const int   MAX_BULLETS = 200;
+const size_t   MAX_BULLETS = 200;
 const float BULLET_SPEED = 10.0f;
 const int   BULLET_SPREAD = 32;
 const float BULLET_LIFETIME = 1.0f;
-const int   SPREAD_BULLETS = 7;
+const size_t   SPREAD_BULLETS = 7;
 const float RAPID_FIRE_RATE = 0.02f;
 const float SPREAD_FIRE_RATE = 0.12f;
 
 // Enemy attributes.
-const int   MAX_ENEMY1 = 10;
+const size_t   MAX_ENEMY1 = 500;
 const float ENEMY1_SPEED = 60.0f;
 const float ENEMY1_ACCEL = 50.0f;
 const float ENEMY1_RANDOM = 10.0f;
 
 // Collision attributes.
-const float AABB_FATNESS = 3.0f;
+const float AABB_FATNESS = 2.0f;
 
 // Input.
 const float INPUT_MAX = 100.0f;

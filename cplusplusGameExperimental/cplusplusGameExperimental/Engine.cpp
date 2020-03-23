@@ -34,7 +34,7 @@ Engine::Engine()
    aabbTree.add(enemy0);
    aabbTree.add(enemy1);
    //aabbTree.add(enemy2);
-   for (int i = 0; i < MAX_ENEMY1; i++) {
+   for (size_t i = 0; i < MAX_ENEMY1; i++) {
       aabbTree.add(enemies[i]);
    }
 
@@ -96,8 +96,8 @@ void Engine::start()
 
 void Engine::startWithLogs()
 {
-   cout << sf::VertexBuffer::isAvailable() << "\n";
-   cout << "Number of objects in simulation: " << gameState.size() << "\n";
+   std::cout << sf::VertexBuffer::isAvailable() << "\n";
+   std::cout << "Number of objects in simulation: " << gameState.size() << "\n";
 
    // Timing
    dtAsSeconds = 0;
@@ -210,19 +210,19 @@ void Engine::startWithLogs()
          sumTime = 0; saveSumTime = 0; inputSumTime = 0; updateSumTime = 0;
          collSumTime = 0; drawSumTime = 0; draws = 0;
          if (second == 11) {
-            cout << "Number of AABBs: " <<  aabbTree.getSize() << "\n";
+            std::cout << "Number of AABBs: " <<  aabbTree.getSize() << "\n";
             for (int i = 1; i < 11; i++) {
-               cout << "Avg Save " << i << ": "
+               std::cout << "Avg Save " << i << ": "
                   << saveTimes[i] << " - ";
-               cout << "Avg Input " << i << ": "
+               std::cout << "Avg Input " << i << ": "
                   << inputTimes[i] << " - ";
-               cout << "Avg Update " << i << ": "
+               std::cout << "Avg Update " << i << ": "
                   << updateTimes[i] << "\n   ";
-               cout << "Avg Coll " << i << ": "
+               std::cout << "Avg Coll " << i << ": "
                   << collTimes[i] << " - ";
-               cout << "Avg Update Loop " << i << ": "
+               std::cout << "Avg Update Loop " << i << ": "
                   << updateLoopTimes[i];
-               cout << " - Avg Draw Time " << i << ": "
+               std::cout << " - Avg Draw Time " << i << ": "
                   << drawTimes[i] << " - Draws: " << numDraws[i] << "\n";
             }
 
@@ -238,12 +238,12 @@ void Engine::startWithLogs()
             }
             sa /= 10; ia /= 10; ua /= 10; ca /= 10; 
             ula /= 10; da /= 10; ad /= 10;
-            cout << "AVG SAVE 10s: " << sa << " - ";
-            cout << "AVG INPUT 10s: " << ia << " - ";
-            cout << "AVG UPDATE 10s: " << ua << "\n  ";
-            cout << "AVG UPDATE LOOP 10s: " << ula << " - ";
-            cout << "AVG DRAW 10s: " << da << " - ";
-            cout << "AVG DRAWS 10s: " << ad << "\n\n";
+            std::cout << "AVG SAVE 10s: " << sa << " - ";
+            std::cout << "AVG INPUT 10s: " << ia << " - ";
+            std::cout << "AVG UPDATE 10s: " << ua << "\n  ";
+            std::cout << "AVG UPDATE LOOP 10s: " << ula << " - ";
+            std::cout << "AVG DRAW 10s: " << da << " - ";
+            std::cout << "AVG DRAWS 10s: " << ad << "\n\n";
 
             second = 0;
          }

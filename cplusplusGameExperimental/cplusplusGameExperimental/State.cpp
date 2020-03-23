@@ -25,7 +25,7 @@ void State::add(GameObject & o)
 
 void State::add(std::vector<GameObject> & v)
 {
-   for (int i = 0; i < (int) v.size(); i++) {
+   for (size_t i = 0; i < v.size(); i++) {
       v[i].drawIndex = current.size() * 4;
       current.push_back(&v[i]);
       previous.push_back(v[i]);

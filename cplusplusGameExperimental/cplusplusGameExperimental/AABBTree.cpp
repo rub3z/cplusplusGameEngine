@@ -268,7 +268,8 @@ bool AABBTree::TreeCallBack(int idA, int idB) {
 void AABBTree::resolveCollisions() {
    if (pairs.size() > 0) {
       for (Collision c : pairs) {
-         if (narrowPhaseCheck(nodes[c.idA].aabb.objectPtr, nodes[c.idB].aabb.objectPtr)) {
+         if (narrowPhaseCheck(nodes[c.idA].aabb.objectPtr, 
+                              nodes[c.idB].aabb.objectPtr)) {
             nodes[c.idA].aabb.objectPtr->hit(nodes[c.idB].aabb.objectPtr);
             nodes[c.idB].aabb.objectPtr->hit(nodes[c.idA].aabb.objectPtr);
          }
@@ -277,10 +278,10 @@ void AABBTree::resolveCollisions() {
 }
 
 inline AABB AABBTree::combine(AABB& a, AABB& b) {
-   float lowerBoundx = min(a.lowerBoundX, b.lowerBoundX);
-   float lowerBoundy = min(a.lowerBoundY, b.lowerBoundY);
-   float upperBoundx = max(a.upperBoundX, b.upperBoundX);
-   float upperBoundy = max(a.upperBoundY, b.upperBoundY);
+   float lowerBoundx = std::min(a.lowerBoundX, b.lowerBoundX);
+   float lowerBoundy = std::min(a.lowerBoundY, b.lowerBoundY);
+   float upperBoundx = std::max(a.upperBoundX, b.upperBoundX);
+   float upperBoundy = std::max(a.upperBoundY, b.upperBoundY);
    
    return AABB(lowerBoundx, lowerBoundy, upperBoundx, upperBoundy);
 }
@@ -304,7 +305,7 @@ void AABBTree::syncHierarchy(int index) {
       assert(right != Null);
 
       nodes[index].height = 1 +
-         max(nodes[left].height, nodes[right].height);
+         std::max(nodes[left].height, nodes[right].height);
       nodes[index].aabb = combine(nodes[left].aabb, nodes[right].aabb);
 
       index = nodes[index].parent;
@@ -357,16 +358,16 @@ int AABBTree::balance(int index) {
          nodes[index].right = rrightGChild;
          nodes[rrightGChild].parent = index;
 
-         nodes[index].height = 1 + max(nodes[leftChild].height, nodes[rrightGChild].height);
-         nodes[rightChild].height = 1 + max(nodes[index].height, nodes[rleftGChild].height);
+         nodes[index].height = 1 + std::max(nodes[leftChild].height, nodes[rrightGChild].height);
+         nodes[rightChild].height = 1 + std::max(nodes[index].height, nodes[rleftGChild].height);
       }
       else {
          nodes[rightChild].right = rrightGChild;
          nodes[index].right = rleftGChild;
          nodes[rleftGChild].parent = index;
 
-         nodes[index].height = 1 + max(nodes[leftChild].height, nodes[rleftGChild].height);
-         nodes[rightChild].height = 1 + max(nodes[index].height, nodes[rrightGChild].height);
+         nodes[index].height = 1 + std::max(nodes[leftChild].height, nodes[rleftGChild].height);
+         nodes[rightChild].height = 1 + std::max(nodes[index].height, nodes[rrightGChild].height);
       }
 
       return rightChild;
@@ -405,16 +406,20 @@ int AABBTree::balance(int index) {
          nodes[index].left = lrightGChild;
          nodes[lrightGChild].parent = index;
 
-         nodes[index].height = 1 + max(nodes[rightChild].height, nodes[lrightGChild].height);
-         nodes[leftChild].height = 1 + max(nodes[index].height, nodes[lleftGChild].height);
+         nodes[index].height = 1 + std::max(nodes[rightChild].height, 
+                                            nodes[lrightGChild].height);
+         nodes[leftChild].height = 1 + std::max(nodes[index].height, 
+                                                nodes[lleftGChild].height);
       }
       else {
          nodes[leftChild].right = lrightGChild;
          nodes[index].left = lleftGChild;
          nodes[lleftGChild].parent = index;
 
-         nodes[index].height = 1 + max(nodes[rightChild].height, nodes[lleftGChild].height);
-         nodes[leftChild].height = 1 + max(nodes[index].height, nodes[lrightGChild].height);
+         nodes[index].height = 1 + std::max(nodes[rightChild].height, 
+                                            nodes[lleftGChild].height);
+         nodes[leftChild].height = 1 + std::max(nodes[index].height, 
+                                                nodes[lrightGChild].height);
       }
 
       return leftChild;
