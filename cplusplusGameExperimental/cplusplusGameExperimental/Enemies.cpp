@@ -101,7 +101,9 @@ void Enemies::update(float& elapsedTime, float& playerPosX, float& playerPosY)
          o->posX += (ENEMY1_SPEED / i.distance) * (i.distanceX) * elapsedTime;
          o->posY += (ENEMY1_SPEED / i.distance) * (i.distanceY) * elapsedTime;
 
-         if (o->collisionIndex == -1) {
+         if (o->collisionIndex == -1 &&
+            o->posX > 0.0f && o->posY > 0.0f &&
+            o->posX < RESOLUTION_X && o->posY < RESOLUTION_Y) {
             o->flag = true;
          }
 
@@ -115,5 +117,4 @@ void Enemies::update(float& elapsedTime, float& playerPosX, float& playerPosY)
          this->at(i).flag = false;
       }
    }
-
 }
