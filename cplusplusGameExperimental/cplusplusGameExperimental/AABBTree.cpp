@@ -220,27 +220,27 @@ bool narrowPhaseCheck(GameObject* a, GameObject* b) {
 
 
 void AABBTree::update() {
-   for (int i : leaves) {
-      assert(nodes[i].IsLeaf());
-      if (nodes[i].aabb.objectCollisionRemoved()) {
-         removeLeaf(i);
-         freeNode(i);
-         removeStack.push_back(i);
+   auto it = leaves.begin();
+   while (it != leaves.end()) {
+      assert(nodes[*it].IsLeaf());
+      if (nodes[*it].aabb.objectCollisionRemoved()) {
+          removeLeaf(*it);
+          freeNode(*it);
+          it = leaves.erase(it);
       }
-      else if (!nodes[i].aabb.containsObject()) {
-         GameObject* g = nodes[i].aabb.objectPtr;
-         removeLeaf(i);
-         freeNode(i);
-         removeStack.push_back(i);
-         
+      else if (!nodes[*it].aabb.containsObject()) {
+         GameObject* g = nodes[*it].aabb.objectPtr;
+         removeLeaf(*it);
+         freeNode(*it);
+         it = leaves.erase(it);
+        
          addStack.push_back(g);
       }
+      else {
+         it++;
+      }
    }
-
-   for (int i : removeStack) {
-      leaves.erase(i);
-   }
-
+   
    for (GameObject * g : addStack) {
       insertLeaf(*g);
    }

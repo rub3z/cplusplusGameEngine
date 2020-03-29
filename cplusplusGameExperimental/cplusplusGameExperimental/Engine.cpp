@@ -31,17 +31,14 @@ Engine::Engine()
 
    aabbTree.add(player0);
    //aabbTree.add(player1);
-   aabbTree.add(enemy0);
-   aabbTree.add(enemy1);
+   //aabbTree.add(enemy0);
+   //aabbTree.add(enemy1);
    //aabbTree.add(enemy2);
-   for (size_t i = 0; i < MAX_ENEMY1; i++) {
-      aabbTree.add(enemies[i]);
-   }
-
+   
    gameState.add(player0);
    //gameState.add(player1);
-   gameState.add(enemy0);
-   gameState.add(enemy1);
+   //gameState.add(enemy0);
+   //gameState.add(enemy1);
    //gameState.add(enemy2);
    gameState.add(bullets);
    gameState.add(enemies);
