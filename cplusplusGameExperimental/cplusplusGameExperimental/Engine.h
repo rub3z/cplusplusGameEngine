@@ -31,11 +31,6 @@ private:
    Enemy enemy0 = Enemy(0);
    Enemy enemy1 = Enemy(1);
    Enemy enemy2 = Enemy(2);
-  
-   float fireRateDeltaPlayer0;
-   float fireRateDeltaPlayer1;
-   float fireRateDeltaPlayer2;
-   float fireRateDeltaPlayer3;
 
    Projectiles bullets;
 
@@ -45,7 +40,6 @@ private:
    AABBTree aabbTree;
 
    // Private functions for internal use only.
-   void input();
    void update(float& dtAsSeconds);
    void draw(State & drawState);
 

@@ -7,11 +7,7 @@ Engine::Engine()
    sf::Vector2u resolution;
    resolution.x = RESOLUTION_X;
    resolution.y = RESOLUTION_Y;
-   fireRateDeltaPlayer0 = 0;
-   fireRateDeltaPlayer1 = 0;
-   fireRateDeltaPlayer2 = 0;
-   fireRateDeltaPlayer3 = 0;
-
+   
    m_Window.create(sf::VideoMode(resolution.x, resolution.y),
       "MY SHOOTER GAME WOO"
       // Comment/uncomment this line to change between

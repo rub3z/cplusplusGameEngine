@@ -22,7 +22,7 @@ void Engine::update(float& dtAsSeconds)
 
    static int s = 0;
    if (s == 0) {
-      if (Keyboard::isKeyPressed(Keyboard::Space)) {
+      if (Keyboard::isKeyPressed(Keyboard::P)) {
          enemies.doit();
          s++;
       }
