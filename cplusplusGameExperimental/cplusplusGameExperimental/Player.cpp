@@ -14,6 +14,7 @@ Player::Player(int playerNum) {
 
    pMoveX = 0.0f;
    pMoveY = 0.0f;
+   fireRateDelta = 0.0f;
 
    switch (playerNum) {
    case 0:

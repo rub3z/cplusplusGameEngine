@@ -1,6 +1,49 @@
 #include "stdafx.h"
 #include "Projectiles.h"
 
+// Credit to Tommy So for fixing shoot methods.
+void shoot1(GameObject * b, Info* in, float& playerPosX, float& playerPosY,
+   const float& vX, const float& vY) {
+   b->posX = playerPosX;
+   b->posY = playerPosY;
+
+   b->r = 255;
+
+   b->flag = true;
+
+   float vXU = (vX / (sqrtf(pow(vX, 2) + pow(vY, 2))));
+   float vYU = (vY / (sqrtf(pow(vX, 2) + pow(vY, 2))));
+   
+   in->moveX = vXU * 100.0f;
+   in->moveY = vYU * 100.0f;
+
+   in->lifetime = 0;
+   in->shot = true;
+}
+
+void shoot2(GameObject* b, Info* in, float& playerPosX, float& playerPosY,
+   const float& vX, const float& vY) {
+   b->posX = playerPosX;
+   b->posY = playerPosY;
+
+   b->b = 255;
+  
+   b->flag = true;
+
+   float rf1 = ((rand() % BULLET_SPREAD) - (BULLET_SPREAD / 2)) / 100.0f;
+
+   float vXU = (vX / (sqrtf(pow(vX, 2) + pow(vY, 2))));
+   float vYU = (vY / (sqrtf(pow(vX, 2) + pow(vY, 2))));
+   float vXUr = vXU * cos(rf1) - vYU * sin(rf1);
+   float vYUr = vXU * sin(rf1) + vYU * cos(rf1);
+
+   in->moveX = vXUr * 100.0f;
+   in->moveY = vYUr * 100.0f;
+
+   in->lifetime = 0;
+   in->shot = true;
+}
+
 void hitBullet(GameObject * o, GameObject * that) {
    if (that->type > 1) {
       o->r = 0; o->g = 0; o->b = 0;
@@ -17,6 +60,7 @@ Projectiles::Projectiles()
    info.resize(MAX_BULLETS);
 
    vT[0] = hitBullet;
+   vT[1] = shoot1;
 
    for (size_t i = 0; i < MAX_BULLETS; i++) {
       info[i].index = i;
@@ -24,7 +68,6 @@ Projectiles::Projectiles()
    }
 
    for (size_t i = 0; i < MAX_BULLETS; i++) {
-      this->at(i).r = 255;
       this->at(i).posX = -128;
       this->at(i).posY = -128;
       this->at(i).width = width;
@@ -36,65 +79,32 @@ Projectiles::Projectiles()
    pIterator = 0;
 }
 
-// Credit to Tommy So for fixing shoot methods.
-GameObject& Projectiles::shootStraight(float& playerPosX, float& playerPosY,
-   const float& vX, const float& vY)
+void Projectiles::shoot(float& posX, float& posY,
+   const float& vX, const float& vY, bool type, float & fireRateDelta)
 {
-   GameObject* b = &this->at(info[pIterator].index);
+   vT[1] = type ? shoot2 : shoot1;
+   size_t numberOfProjectiles = type ? SPREAD_BULLETS : 1;
 
-   b->posX = playerPosX;
-   b->posY = playerPosY;
-   
-   b->r = 255;
-   b->b = 0;
-   b->flag = true;
-
-   float rf1 = ((rand() % BULLET_SPREAD) - (BULLET_SPREAD / 2)) / 100.0f;
-   
-   float vXU = (vX / (sqrtf(pow(vX, 2) + pow(vY, 2))));
-   float vYU = (vY / (sqrtf(pow(vX, 2) + pow(vY, 2))));
-   float vXUr = vXU * cos(rf1) - vYU * sin(rf1);
-   float vYUr = vXU * sin(rf1) + vYU * cos(rf1);
-   
-   info[pIterator].moveX = vXUr * 100.0f;
-   info[pIterator].moveY = vYUr * 100.0f;
-
-   info[pIterator].lifetime = 0;
-   info[pIterator].shot = true;
-
-   pIterator++;
-   if (pIterator == MAX_BULLETS) pIterator = 0;
-   return *b;
-}
-
-GameObject& Projectiles::shootSpread(float& playerPosX, float& playerPosY,
-   float& vX, float& vY)
-{
-   GameObject* b = &this->at(info[pIterator].index);
-
-   b->posX = playerPosX;
-   b->posY = playerPosY;
-
-   b->r = 0;
-   b->b = 255;
-   b->flag = true;
-
-   float rf1 = ((rand() % BULLET_SPREAD) - (BULLET_SPREAD / 2)) / 100.0f;
-
-   float vXU = (vX / (sqrtf(pow(vX, 2) + pow(vY, 2))));
-   float vYU = (vY / (sqrtf(pow(vX, 2) + pow(vY, 2))));
-   float vXUr = vXU * cos(rf1) - vYU * sin(rf1);
-   float vYUr = vXU * sin(rf1) + vYU * cos(rf1);
-
-   info[pIterator].moveX = vXUr * 100.0f;
-   info[pIterator].moveY = vYUr * 100.0f;
-
-   info[pIterator].lifetime = 0;
-   info[pIterator].shot = true;
-
-   pIterator++;
-   if (pIterator == MAX_BULLETS) pIterator = 0;
-   return *b;
+   if (type && fireRateDelta >= SPREAD_FIRE_RATE) {
+      for (size_t i = 0; i < numberOfProjectiles; i++) {
+         GameObject* b = &this->at(info[pIterator].index);
+         Info* in = &info[pIterator];
+         ((void(*)(GameObject*, Info*, float&, float&, const float&, const float&))
+            b->vTable[1])(b, in, posX, posY, vX, vY);
+         pIterator++;
+         if (pIterator == MAX_BULLETS) pIterator = 0;
+      }
+      fireRateDelta = 0.0f;
+   }
+   else if (!type && fireRateDelta >= RAPID_FIRE_RATE) {
+      GameObject* b = &this->at(info[pIterator].index);
+      Info* in = &info[pIterator];
+      ((void(*)(GameObject*, Info*, float&, float&, const float&, const float&))
+         b->vTable[1])(b, in, posX, posY, vX, vY);
+      pIterator++;
+      if (pIterator == MAX_BULLETS) pIterator = 0;
+      fireRateDelta = 0.0f;
+   }
 }
 
 void Projectiles::update(float& elapsedTime)

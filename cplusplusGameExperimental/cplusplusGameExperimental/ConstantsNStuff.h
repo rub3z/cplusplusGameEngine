@@ -30,7 +30,7 @@ const float INPUT_RESET = 0.0f;
 const float INNER_DEADZONE = 25.0f;
 
 // Keyboard.
-static bool KEY_W, KEY_A, KEY_S, KEY_D, KEY_ESC;
+static bool KEY_W, KEY_A, KEY_S, KEY_D, KEY_SPACE, KEY_ESC;
 static bool KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN;
 
 // Gamepad inputs.

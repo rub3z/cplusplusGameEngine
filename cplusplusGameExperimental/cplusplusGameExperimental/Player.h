@@ -10,12 +10,12 @@ class Player : public GameObject {
 public:
    float centerX, centerY;
 
+   float fireRateDelta;
+
    Player(int playerNum);
    
    void movement(float const &valX, float const &valY);
 
    void update(float& elapsedTime);
-
-//   virtual void hit();
 
 };
