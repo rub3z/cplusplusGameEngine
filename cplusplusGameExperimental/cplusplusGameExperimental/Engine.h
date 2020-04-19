@@ -11,6 +11,7 @@
 #include "AABB.h"
 #include "AABBTree.h"
 #include <iostream>
+#include <chrono>
 
 class Engine
 {
@@ -42,9 +43,6 @@ private:
 
    State gameState;
    AABBTree aabbTree;
-
-   sf::Int64 dtAsSeconds;
-   sf::Int64 frameTime;
 
    // Private functions for internal use only.
    void input();
