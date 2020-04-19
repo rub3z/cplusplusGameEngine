@@ -47,26 +47,25 @@ Engine::Engine()
 void Engine::start()
 {
    // Timing
-   dtAsSeconds = 0;
-   frameTime = 0;
-   sf::Int64 deltaTime = 0;
-   sf::Int64 tickRate = 16666; // 60 updates per second
+   long long int frameTime = 0;
+   long long int tickRate = 16666; // 60 per second
    float tickFloat = (float)tickRate / 1000000;
    float alpha = 0;
-   sf::Int64 accumulator = 0;
 
-   sf::Clock clock;
-   sf::Time dt;
+   long long int accumulator = 0;
+   
+   auto previousTime = std::chrono::steady_clock::now();
 
    while (m_Window.isOpen())
    {
       // Restart the clock and save the elapsed time into dt
-      dt = clock.getElapsedTime();
+      auto dt = std::chrono::duration_cast<std::chrono::microseconds>
+         (std::chrono::steady_clock::now() - previousTime);
+      previousTime = std::chrono::steady_clock::now();
 
       // Make a fraction from the delta time (frameTime)
-      frameTime = dt.asMicroseconds() - dtAsSeconds;
-      //if (frameTime > 250000) frameTime = 250000;
-      dtAsSeconds = dt.asMicroseconds();
+      frameTime = dt.count();
+      if (frameTime > 25000) frameTime = 25000;
 
       accumulator += frameTime;
 
@@ -95,23 +94,6 @@ void Engine::startWithLogs()
 {
    std::cout << sf::VertexBuffer::isAvailable() << "\n";
    std::cout << "Number of objects in simulation: " << gameState.size() << "\n";
-
-   // Timing
-   dtAsSeconds = 0;
-   frameTime = 0;
-   sf::Int64 deltaTime = 0;
-   sf::Int64 tickRate =
-      //8333;  // 120 ticks per second
-      //10000; // 100 per second
-      16666; // 60 per second
-      //0.02f; // 50 per second
-      //0.0333333f; // 30 per second
-   float tickFloat = (float)tickRate / 1000000;
-   float alpha = 0;
-   sf::Int64 accumulator = 0;
-
-   sf::Clock clock;
-   sf::Time dt;
 
    // Performance Logging
    sf::Clock perfClock;
@@ -142,18 +124,34 @@ void Engine::startWithLogs()
    int draws = 0;
    int numDraws[11];
 
+   // Timing
+   long long int frameTime = 0;
+   long long int tickRate =
+      //8333;  // 120 ticks per second
+      //10000; // 100 per second
+      16666; // 60 per second
+      //0.02f; // 50 per second
+      //0.0333333f; // 30 per second
+   float tickFloat = (float)tickRate / 1000000;
+   float alpha = 0;
+
+   long long int accumulator = 0;
+   
+   auto previousTime = std::chrono::steady_clock::now();
+   
    while (m_Window.isOpen())
    {
       // Restart the clock and save the elapsed time into dt
-      dt = clock.getElapsedTime();
+      auto dt = std::chrono::duration_cast<std::chrono::microseconds>
+         (std::chrono::steady_clock::now() - previousTime);
+      previousTime = std::chrono::steady_clock::now();
 
       // Make a fraction from the delta time (frameTime)
-      frameTime = dt.asMicroseconds() - dtAsSeconds;
+      frameTime = dt.count();
       if (frameTime > 25000) frameTime = 25000;
-      dtAsSeconds = dt.asMicroseconds();
-
+      
       accumulator += frameTime;
-
+      
       while (accumulator >= tickRate) {
          // PERFORMANCE CLOCK RESET
          perfClock.restart();
@@ -174,7 +172,7 @@ void Engine::startWithLogs()
          collSumTime += (int)perfClock.getElapsedTime().asMicroseconds();
 
          accumulator -= tickRate;
-
+         
          // PERFORMANCE CLOCK CHECK
          sumTime += (int) perfClock.getElapsedTime().asMicroseconds();
          updates++;
@@ -183,6 +181,7 @@ void Engine::startWithLogs()
       perfClock.restart();
 
       alpha = (float)accumulator / tickRate;
+      
       gameState.interpolate(alpha);
       draw(gameState);
 
