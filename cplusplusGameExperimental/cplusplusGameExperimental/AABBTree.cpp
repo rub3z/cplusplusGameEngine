@@ -80,14 +80,16 @@ void AABBTree::insertLeaf(GameObject& objInfo) {
    if (root == Null) {
       root = allocNode();
       nodes[root].aabb = AABB(objInfo);
-      objInfo.collisionIndex = root;
+      nodes[root].aabb.index = root;
+      objInfo.collideable = true;
       leaves.insert(root);
       return;
    }
    
    int leaf = allocNode();
    nodes[leaf].aabb = AABB(objInfo);
-   objInfo.collisionIndex = leaf;
+   nodes[leaf].aabb.index = leaf;
+   objInfo.collideable = true;
    leaves.insert(leaf);
    
    AABB newAABB = nodes[leaf].aabb;
@@ -268,10 +270,12 @@ bool AABBTree::TreeCallBack(int idA, int idB) {
 void AABBTree::resolveCollisions() {
    if (pairs.size() > 0) {
       for (Collision c : pairs) {
-         if (narrowPhaseCheck(nodes[c.idA].aabb.objectPtr, 
-                              nodes[c.idB].aabb.objectPtr)) {
-            nodes[c.idA].aabb.objectPtr->hit(nodes[c.idB].aabb.objectPtr);
-            nodes[c.idB].aabb.objectPtr->hit(nodes[c.idA].aabb.objectPtr);
+         GameObject* a = nodes[c.idA].aabb.objectPtr;
+         GameObject* b = nodes[c.idB].aabb.objectPtr;
+
+         if (narrowPhaseCheck(a, b)) {
+            ((void(*)(GameObject*, GameObject*))a->vTable[HIT_FUNC_ID])(a, b);
+            ((void(*)(GameObject*, GameObject*))b->vTable[HIT_FUNC_ID])(b, a);
          }
       }
    }

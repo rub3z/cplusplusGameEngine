@@ -2,6 +2,21 @@
 #include "stdafx.h"
 #include "Enemies.h"
 
+void updateEnemy1(GameObject* o, EnemyInfo & i, float& elapsedTime, float & posX, float & posY) {
+   i.distanceX = posX - o->posX;
+   i.distanceY = posY - o->posY;
+   i.distance = sqrt(pow(i.distanceX, 2) + pow(i.distanceY, 2));
+
+   o->posX += (ENEMY1_SPEED / i.distance) * (i.distanceX) * elapsedTime;
+   o->posY += (ENEMY1_SPEED / i.distance) * (i.distanceY) * elapsedTime;
+
+   if (!o->collideable &&
+      o->posX > 0.0f && o->posY > 0.0f &&
+      o->posX < RESOLUTION_X && o->posY < RESOLUTION_Y) {
+      i.flag = true;
+   }
+}
+
 void hitEnemy2(GameObject * o, GameObject * that) {
    if (that->type < 2) {
       int r = rand();
@@ -35,7 +50,7 @@ void hitEnemy2(GameObject * o, GameObject * that) {
       o->height = (float) (r % 20) + 10.0f;
       o->width = o->height;
 
-      o->collisionIndex = -1;
+      o->collideable = false;
    }
    
 }
@@ -47,7 +62,7 @@ void hitEnemy3(GameObject * o, GameObject * that) {
 }
 
 void Enemies::doit() {
-   vT[0] = hitEnemy3;
+   vT[HIT_FUNC_ID] = hitEnemy3;
 }
 
 Enemies::Enemies()
@@ -79,7 +94,8 @@ Enemies::Enemies()
       this->at(i).width = width; this->at(i).height = height;
    }
 
-   vT[0] = hitEnemy2;
+   vT[UPDATE_FUNC_ID] = updateEnemy1;
+   vT[HIT_FUNC_ID] = hitEnemy2;
 
    for (size_t i = 0; i < MAX_ENEMY1; i++) {
       this->at(i).vTable = vT;
@@ -87,34 +103,22 @@ Enemies::Enemies()
    }
 }
  
-void Enemies::update(float& elapsedTime, float& playerPosX, float& playerPosY)
+void Enemies::update(float& elapsedTime, float& posX, float& posY)
 {
    transform(std::execution::par,
       info.begin(), info.end(),
-      info.begin(), [&](Info i) {
+      info.begin(), [&](EnemyInfo i) {
          GameObject* o = &this->at(i.index);
-
-         i.distanceX = playerPosX - o->posX;
-         i.distanceY = playerPosY - o->posY;
-         i.distance = sqrt(pow(i.distanceX, 2) + pow(i.distanceY, 2));
-
-         o->posX += (ENEMY1_SPEED / i.distance) * (i.distanceX) * elapsedTime;
-         o->posY += (ENEMY1_SPEED / i.distance) * (i.distanceY) * elapsedTime;
-
-         if (o->collisionIndex == -1 &&
-            o->posX > 0.0f && o->posY > 0.0f &&
-            o->posX < RESOLUTION_X && o->posY < RESOLUTION_Y) {
-            o->flag = true;
-         }
-
+         ((void(*)(GameObject*, EnemyInfo&, float&, float&, float&))
+            o->vTable[UPDATE_FUNC_ID])(o, i, elapsedTime, posX, posY);
          return i;
       });
 
    flagged.clear();
    for (size_t i = 0; i < MAX_ENEMY1; i++) {
-      if (this->at(i).flag) {
+      if (info.at(i).flag) {
          flagged.push_back(&this->at(i));
-         this->at(i).flag = false;
+         info.at(i).flag = false;
       }
    }
 }

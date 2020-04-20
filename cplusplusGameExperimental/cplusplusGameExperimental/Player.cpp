@@ -4,7 +4,7 @@
 void hitPlayer(GameObject * o, GameObject * that) {
    if (that->type > 1) {
       o->r = 0; o->g = 0; o->b = 0;
-      o->collisionIndex = -1;
+      o->collideable = false;
    }
 }
 
@@ -40,7 +40,7 @@ Player::Player(int playerNum) {
    centerX = posX + (width / 2);
    centerY = posY + (height / 2);
 
-   vT[0] = hitPlayer;
+   vT[HIT_FUNC_ID] = hitPlayer;
 
    vTable = vT;
 

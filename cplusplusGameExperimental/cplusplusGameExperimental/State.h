@@ -8,12 +8,20 @@
 class State : public sf::Drawable {
 private:
    friend class State;
+
+   struct DrawObject {
+      int drawIndex;
+      GameObject obj;
+      DrawObject(int i, GameObject o) {
+         drawIndex = i;
+         obj = o;
+      }
+   };
+
    std::vector<sf::Vertex> toDraw;
-   std::vector<GameObject> previous;
+   std::vector<DrawObject> previous;
    std::vector<GameObject * > current;
    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-
-   int keepSize;
 
 public:
    void clear();

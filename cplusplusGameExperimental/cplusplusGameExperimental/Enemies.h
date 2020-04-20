@@ -6,25 +6,23 @@
 #include <execution>
 #include "GameObject.h"
 
-class Enemies : public std::vector<GameObject> {
-   int enemyType;
-   
-public:
+struct EnemyInfo {
+   int index;
+   float distanceX, distanceY;
+   float pAccX, pAccY;
+   float distance;
+   bool flag;
+};
 
+class Enemies : public std::vector<GameObject> {
+public:
    Enemies::Enemies();
-   void update(float& elapsedTime, float& playerPosX, float& playerPosY);
+   void update(float& elapsedTime, float& posX, float& posY);
    void doit();
    std::vector<GameObject*> flagged;
 
 private:
-   struct Info {
-      int index;
-      float distanceX, distanceY;
-      float pAccX, pAccY;
-      float distance;
-   };
+   std::vector<EnemyInfo> info;
 
-   std::vector<Info> info;
-
-   void * vT[1];
+   void * vT[3];
 };

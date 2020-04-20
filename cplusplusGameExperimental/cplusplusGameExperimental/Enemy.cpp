@@ -5,7 +5,7 @@ void hitEnemy1(GameObject * o, GameObject * that) {
    if (that->type < 2) {
       o->r = 0; o->g = 0; o->b = 0;
       o->posX = -100; o->posY = -100;
-      o->collisionIndex = -1;
+      o->collideable = false;
    }
 }
 
@@ -71,7 +71,7 @@ Enemy::Enemy(int type) {
 }
 
 void Enemy::update(float& elapsedTime, float& playerPosX, float& playerPosY) {
-   if (collisionIndex != -1) {
+   if (collideable) {
       distanceX = playerPosX - posX;
       distanceY = playerPosY - posY;
       distance = sqrt(pow(distanceX, 2) + pow(distanceY, 2));
