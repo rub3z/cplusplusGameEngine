@@ -145,7 +145,7 @@ inline void AABBTree::Query(AABB& aabb)// const
       if (testOverLap(aabb, n->aabb)) {
          if (n->IsLeaf()) {
             // Report, via callback, a collision with leaf
-            if (!TreeCallBack(aabb.objectPtr->collisionIndex, id))
+            if (!TreeCallBack(aabb.index, id))
                return;
          }
          else {

@@ -36,8 +36,8 @@ Engine::Engine()
    //gameState.add(enemy0);
    //gameState.add(enemy1);
    //gameState.add(enemy2);
-   gameState.add(bullets);
    gameState.add(enemies);
+   gameState.add(bullets);
 }
 
 void Engine::start()

@@ -13,28 +13,23 @@ void State::clear() {
 
 void State::add(GameObject & o)
 {
-   o.drawIndex = current.size() * 4;
+   previous.emplace_back(current.size() * 4, o);
    current.push_back(&o);
-   previous.push_back(o);
-   toDraw.push_back(sf::Vertex(sf::Vector2f(o.posX, o.posY)));
-   toDraw.push_back(sf::Vertex(sf::Vector2f(o.posX + o.width, o.posY)));
-   toDraw.push_back(sf::Vertex(sf::Vector2f(o.posX + o.width, o.posY + o.height)));
-   toDraw.push_back(sf::Vertex(sf::Vector2f(o.posX, o.posY + o.height)));
-
+   toDraw.emplace_back();
+   toDraw.emplace_back();
+   toDraw.emplace_back();
+   toDraw.emplace_back();
 }
 
 void State::add(std::vector<GameObject> & v)
 {
    for (size_t i = 0; i < v.size(); i++) {
-      v[i].drawIndex = current.size() * 4;
+      previous.emplace_back(current.size() * 4, v[i]);
       current.push_back(&v[i]);
-      previous.push_back(v[i]);
-      toDraw.push_back(sf::Vertex(sf::Vector2f(v[i].posX, v[i].posY)));
-      toDraw.push_back(sf::Vertex(sf::Vector2f(v[i].posX + v[i].width, v[i].posY)));
-      toDraw.push_back(sf::Vertex(sf::Vector2f(v[i].posX + v[i].width, v[i].posY + v[i].height)));
-      toDraw.push_back(sf::Vertex(sf::Vector2f(v[i].posX, v[i].posY + v[i].height)));
-
-      keepSize = current.size();
+      toDraw.emplace_back();
+      toDraw.emplace_back();
+      toDraw.emplace_back();
+      toDraw.emplace_back();
    }
 }
 
@@ -42,8 +37,8 @@ void State::save() {
    transform(std::execution::par,
       previous.begin(), previous.end(),
       current.begin(), previous.begin(),
-      [&](GameObject p, GameObject* c) {
-         p = *c;
+      [&](DrawObject p, GameObject* c) {
+         p.obj = *c;
          return p;
       });
 }
@@ -58,36 +53,44 @@ void State::interpolate(float alphaNum)
    transform(std::execution::par,
       previous.begin(), previous.end(),
       current.begin(), previous.begin(),
-      [&](GameObject p, GameObject* c) {
-         p.posX = (c->posX * alphaNum) +
-            (p.posX * (1.0f - alphaNum));
-         p.posY = (c->posY * alphaNum) +
-            (p.posY * (1.0f - alphaNum));
-         p.r = c->r; p.g = c->g; p.b = c->b;
+      [&](DrawObject p, GameObject* c) {
+         p.obj.posX = (c->posX * alphaNum) +
+            (p.obj.posX * (1.0f - alphaNum));
+         p.obj.posY = (c->posY * alphaNum) +
+            (p.obj.posY * (1.0f - alphaNum));
+         p.obj.r = c->r; p.obj.g = c->g; p.obj.b = c->b;
 
          return p;
       });
 
    transform(std::execution::par,
       previous.begin(), previous.end(),
-      previous.begin(), [&](GameObject p) {
+      previous.begin(), [&](DrawObject p) {
          sf::Vertex* quad = &toDraw[p.drawIndex];
 
-         quad[0].position.x = p.posX;
-         quad[0].position.y = p.posY;
-         quad[0].color.r = p.r; quad[0].color.g = p.g; quad[0].color.b = p.b;
+         quad[0].position.x = p.obj.posX;
+         quad[0].position.y = p.obj.posY;
+         quad[0].color.r = p.obj.r; 
+         quad[0].color.g = p.obj.g; 
+         quad[0].color.b = p.obj.b;
 
-         quad[1].position.x = p.posX + p.width;
-         quad[1].position.y = p.posY;
-         quad[1].color.r = p.r; quad[1].color.g = p.g; quad[1].color.b = p.b;
+         quad[1].position.x = p.obj.posX + p.obj.width;
+         quad[1].position.y = p.obj.posY;
+         quad[1].color.r = p.obj.r; 
+         quad[1].color.g = p.obj.g; 
+         quad[1].color.b = p.obj.b;
 
-         quad[2].position.x = p.posX + p.width;
-         quad[2].position.y = p.posY + p.height;
-         quad[2].color.r = p.r; quad[2].color.g = p.g; quad[2].color.b = p.b;
+         quad[2].position.x = p.obj.posX + p.obj.width;
+         quad[2].position.y = p.obj.posY + p.obj.height;
+         quad[2].color.r = p.obj.r; 
+         quad[2].color.g = p.obj.g; 
+         quad[2].color.b = p.obj.b;
 
-         quad[3].position.x = p.posX;
-         quad[3].position.y = p.posY + p.height;
-         quad[3].color.r = p.r; quad[3].color.g = p.g; quad[3].color.b = p.b;
+         quad[3].position.x = p.obj.posX;
+         quad[3].position.y = p.obj.posY + p.obj.height;
+         quad[3].color.r = p.obj.r; 
+         quad[3].color.g = p.obj.g; 
+         quad[3].color.b = p.obj.b;
 
          return p;
       });

@@ -5,7 +5,7 @@ class Player : public GameObject {
    // Movement components in x and y directions.
    float pMoveX, pMoveY;
 
-   void * vT[1];
+   void * vT[3];
    
 public:
    float centerX, centerY;

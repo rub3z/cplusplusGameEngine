@@ -12,6 +12,8 @@ private:
    float upperBoundX;
    float upperBoundY;
 
+   int index;
+
    GameObject* objectPtr;
    
 public:
@@ -40,7 +42,7 @@ inline bool AABB::containsObject() {
 };
 
 inline bool AABB::objectCollisionRemoved() {
-   return objectPtr->collisionIndex == -1;
+   return !objectPtr->collideable;
 }
 
 //inline void AABB::setDrawBounds() {

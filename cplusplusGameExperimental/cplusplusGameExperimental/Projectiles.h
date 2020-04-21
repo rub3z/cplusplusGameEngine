@@ -5,22 +5,23 @@
 #include <execution>
 #include "GameObject.h"
 
-struct Info {
+struct BulletInfo {
    int index;
    float moveX, moveY;
    float pAccX, pAccY;
    float lifetime;
    bool shot;
+   bool flag;
 };
- 
+
 class Projectiles : public std::vector<GameObject> {
    size_t pIterator;
    float width, height;
 
 private:
    
-   std::vector<Info> info;
-   void* vT[2];
+   std::vector<BulletInfo> info;
+   void* vT[3];
    
 public:
    Projectiles();
