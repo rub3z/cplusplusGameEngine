@@ -100,16 +100,16 @@ void Engine::startWithLogs()
    int collSumTime = 0;
 
    int second = 0;
-   int updateLoopTimes[11];
-   int saveTimes[11];
-   int inputTimes[11];
-   int updateTimes[11];
-   int collTimes[11];
+   int updateLoopTimes[LOG_DENSITY];
+   int saveTimes[LOG_DENSITY];
+   int inputTimes[LOG_DENSITY];
+   int updateTimes[LOG_DENSITY];
+   int collTimes[LOG_DENSITY];
 
    int updates = 0;
 
    int drawSumTime = 0;
-   int drawTimes[11];
+   int drawTimes[LOG_DENSITY];
    updateLoopTimes[0] = 0;
    saveTimes[0] = 0;
    inputTimes[0] = 0;
@@ -118,7 +118,7 @@ void Engine::startWithLogs()
 
    drawTimes[0] = 0;
    int draws = 0;
-   int numDraws[11];
+   int numDraws[LOG_DENSITY];
 
    // Timing
    long long int frameTime = 0;
@@ -187,7 +187,7 @@ void Engine::startWithLogs()
 
       if (updates == 60) {
          second++;
-         if (second < 11) {
+         if (second < LOG_DENSITY) {
             collSumTime -= updateSumTime;
             updateSumTime -= inputSumTime;
             inputSumTime -= saveSumTime;
@@ -201,15 +201,15 @@ void Engine::startWithLogs()
          }
          sumTime = 0; saveSumTime = 0; inputSumTime = 0; updateSumTime = 0;
          collSumTime = 0; drawSumTime = 0; draws = 0;
-         if (second == 11) {
+         if (second == LOG_DENSITY) {
             std::cout << "Number of AABBs: " <<  aabbTree.getSize() << "\n";
-            for (int i = 1; i < 11; i++) {
+            for (int i = 1; i < LOG_DENSITY; i++) {
                std::cout << "Avg Save " << i << ": "
                   << saveTimes[i] << " - ";
                std::cout << "Avg Input " << i << ": "
                   << inputTimes[i] << " - ";
                std::cout << "Avg Update " << i << ": "
-                  << updateTimes[i] << "\n   ";
+                  << updateTimes[i] << "\n";
                std::cout << "Avg Coll " << i << ": "
                   << collTimes[i] << " - ";
                std::cout << "Avg Update Loop " << i << ": "
@@ -219,7 +219,7 @@ void Engine::startWithLogs()
             }
 
             int sa = 0, ia = 0, ua = 0, ca = 0, ula = 0, da = 0, ad = 0;
-            for (int i = 1; i < 11; i++) {
+            for (int i = 1; i < LOG_DENSITY; i++) {
                sa += saveTimes[i];
                ia += inputTimes[i];
                ua += updateTimes[i];
@@ -228,14 +228,15 @@ void Engine::startWithLogs()
                da += drawTimes[i];
                ad += numDraws[i];
             }
-            sa /= 10; ia /= 10; ua /= 10; ca /= 10; 
-            ula /= 10; da /= 10; ad /= 10;
-            std::cout << "AVG SAVE 10s: " << sa << " - ";
-            std::cout << "AVG INPUT 10s: " << ia << " - ";
-            std::cout << "AVG UPDATE 10s: " << ua << "\n  ";
-            std::cout << "AVG UPDATE LOOP 10s: " << ula << " - ";
-            std::cout << "AVG DRAW 10s: " << da << " - ";
-            std::cout << "AVG DRAWS 10s: " << ad << "\n\n";
+            sa /= LOG_DENSITY - 1; ia /= LOG_DENSITY - 1; ua /= LOG_DENSITY - 1; 
+            ca /= LOG_DENSITY - 1; ula /= LOG_DENSITY - 1; da /= LOG_DENSITY - 1; 
+            ad /= LOG_DENSITY - 1;
+            std::cout << "AVG SAVE 5s: " << sa << " - ";
+            std::cout << "AVG INPUT 5s: " << ia << " - ";
+            std::cout << "AVG UPDATE 5s: " << ua << "\n  ";
+            std::cout << "AVG UPDATE LOOP 5s: " << ula << " - ";
+            std::cout << "AVG DRAW 5s: " << da << " - ";
+            std::cout << "AVG DRAWS 5s: " << ad << "\n\n";
 
             second = 0;
          }

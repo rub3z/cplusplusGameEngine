@@ -231,12 +231,10 @@ void AABBTree::update() {
           it = leaves.erase(it);
       }
       else if (!nodes[*it].aabb.containsObject()) {
-         GameObject* g = nodes[*it].aabb.objectPtr;
+         addStack.push_back(nodes[*it].aabb.objectPtr);
          removeLeaf(*it);
          freeNode(*it);
          it = leaves.erase(it);
-        
-         addStack.push_back(g);
       }
       else {
          it++;
@@ -255,7 +253,9 @@ void AABBTree::update() {
 }
 
 void AABBTree::GetCollisionPairs() {
-   pairs.clear();
+   collisionPairs.clear();
+   collisionPairs.reserve(leaves.size() * leaves.size());
+   pairFilter.assign(nodes.size(), false);
    for (int i : leaves) {
       Query(nodes[i].aabb);
    }
@@ -263,15 +263,20 @@ void AABBTree::GetCollisionPairs() {
 
 bool AABBTree::TreeCallBack(int idA, int idB) {
    if (idA == idB) return true;
-   pairs.emplace_back(idA, idB);
+   if (!pairFilter[idB]) {
+      pairFilter[idA] = true;
+      collisionPairs.emplace_back(idA, idB);
+   }
    return true;
 }
 
 void AABBTree::resolveCollisions() {
-   if (pairs.size() > 0) {
-      for (Collision c : pairs) {
-         GameObject* a = nodes[c.idA].aabb.objectPtr;
-         GameObject* b = nodes[c.idB].aabb.objectPtr;
+   static GameObject* a;
+   static GameObject* b;
+   if (collisionPairs.size() > 0) {
+      for (auto const & c : collisionPairs) {
+         a = nodes[c.first].aabb.objectPtr;
+         b = nodes[c.second].aabb.objectPtr;
 
          if (narrowPhaseCheck(a, b)) {
             ((void(*)(GameObject*, GameObject*))a->vTable[HIT_FUNC_ID])(a, b);
@@ -282,12 +287,10 @@ void AABBTree::resolveCollisions() {
 }
 
 inline AABB AABBTree::combine(AABB& a, AABB& b) {
-   float lowerBoundx = std::min(a.lowerBoundX, b.lowerBoundX);
-   float lowerBoundy = std::min(a.lowerBoundY, b.lowerBoundY);
-   float upperBoundx = std::max(a.upperBoundX, b.upperBoundX);
-   float upperBoundy = std::max(a.upperBoundY, b.upperBoundY);
-   
-   return AABB(lowerBoundx, lowerBoundy, upperBoundx, upperBoundy);
+   return AABB(std::min(a.lowerBoundX, b.lowerBoundX),
+               std::min(a.lowerBoundY, b.lowerBoundY),
+               std::max(a.upperBoundX, b.upperBoundX),
+               std::max(a.upperBoundY, b.upperBoundY));
 }
 
 int AABBTree::getSize() {

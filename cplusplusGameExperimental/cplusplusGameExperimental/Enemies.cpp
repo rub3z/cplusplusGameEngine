@@ -73,11 +73,7 @@ Enemies::Enemies()
    }
    
    info.resize(MAX_ENEMY1);
-
-   for (size_t i = 0; i < MAX_ENEMY1; i++) {
-      info[i].index = i;
-   }
-
+   
    float space = 40.0f;
    float width = 15.0f;
    float height = 15.0f;
@@ -107,10 +103,11 @@ void Enemies::update(float& elapsedTime, float& posX, float& posY)
 {
    transform(std::execution::par,
       info.begin(), info.end(),
-      info.begin(), [&](EnemyInfo i) {
-         GameObject* o = &this->at(i.index);
+      this->begin(), info.begin(),
+      [&](EnemyInfo & i, GameObject & o) {
+         //GameObject* o = &this->at(i.index);
          ((void(*)(GameObject*, EnemyInfo&, float&, float&, float&))
-            o->vTable[UPDATE_FUNC_ID])(o, i, elapsedTime, posX, posY);
+            o.vTable[UPDATE_FUNC_ID])(&o, i, elapsedTime, posX, posY);
          return i;
       });
 
