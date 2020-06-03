@@ -7,7 +7,6 @@
 #include "GameObject.h"
 
 struct EnemyInfo {
-   int index;
    float distanceX, distanceY;
    float pAccX, pAccY;
    float distance;

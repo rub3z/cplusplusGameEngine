@@ -2,7 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
-#include <set>
+#include <unordered_set>
+#include <utility>
 #include <cassert>
 #include "AABB.h"
 
@@ -63,7 +64,7 @@ class AABBTree : public sf::Drawable {
    std::vector<Node> nodes;
    std::vector<GameObject*> addStack;
    std::vector<int> removeStack;
-   std::set<int> leaves;
+   std::unordered_set<int> leaves;
 
    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
@@ -77,18 +78,11 @@ class AABBTree : public sf::Drawable {
    bool testOverLap(AABB& a, AABB& b);
    AABB combine(AABB& a, AABB& b);
 
-   struct Collision {
-      int idA; int idB;
-
-      Collision(int idX, int idY) {
-         idA = idX; idB = idY;
-      }
-   };
-
    int numPairs;
    int maxPairs;
-   std::vector<Collision> pairs;
-
+   std::vector<std::pair<int,int>> collisionPairs;
+   std::vector<bool> pairFilter;
+   
    inline void GrowFreeList(int index);
 
    //template <typename T>
@@ -98,11 +92,12 @@ class AABBTree : public sf::Drawable {
    void GetCollisionPairs();
    bool TreeCallBack(int idA, int idB);
    void resolveCollisions();
+   void remove(int index);
+   
 
 public:
    AABBTree();
    void add(GameObject& objInfo);
-   void remove(int index);
    void update();
    int getSize();
    int getCapacity();

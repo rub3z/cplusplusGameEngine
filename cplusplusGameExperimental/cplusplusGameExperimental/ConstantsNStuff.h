@@ -16,7 +16,7 @@ const float RAPID_FIRE_RATE = 0.02f;
 const float SPREAD_FIRE_RATE = 0.12f;
 
 // Enemy attributes.
-const size_t   MAX_ENEMY1 = 500  ;
+const size_t   MAX_ENEMY1 = 500;
 const float ENEMY1_SPEED = 60.0f;
 const float ENEMY1_ACCEL = 50.0f;
 const float ENEMY1_RANDOM = 10.0f;
@@ -51,3 +51,6 @@ static float LSTICK_X_2, LSTICK_Y_2, RSTICK_X_2, RSTICK_Y_2;
 
 static bool BUTTON_RB_3, BUTTON_LB_3, BUTTON_B_3;
 static float LSTICK_X_3, LSTICK_Y_3, RSTICK_X_3, RSTICK_Y_3;
+
+//Misc.
+const int LOG_DENSITY = 6;
