@@ -105,7 +105,6 @@ void Enemies::update(float& elapsedTime, float& posX, float& posY)
       info.begin(), info.end(),
       this->begin(), info.begin(),
       [&](EnemyInfo & i, GameObject & o) {
-         //GameObject* o = &this->at(i.index);
          ((void(*)(GameObject*, EnemyInfo&, float&, float&, float&))
             o.vTable[UPDATE_FUNC_ID])(&o, i, elapsedTime, posX, posY);
          return i;

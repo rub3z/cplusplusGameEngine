@@ -6,7 +6,6 @@
 #include "GameObject.h"
 
 struct BulletInfo {
-   int index;
    float moveX, moveY;
    float pAccX, pAccY;
    float lifetime;

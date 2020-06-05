@@ -83,7 +83,6 @@ Projectiles::Projectiles()
    vT[SHOOT_FUNC_ID] = shoot1;
 
    for (size_t i = 0; i < MAX_BULLETS; i++) {
-      info[i].index = i;
       info[i].shot = false;
    }
 
@@ -107,7 +106,7 @@ void Projectiles::shoot(float& posX, float& posY,
 
    if (type && fireRateDelta >= SPREAD_FIRE_RATE) {
       for (size_t i = 0; i < numberOfProjectiles; i++) {
-         GameObject* b = &this->at(info[pIterator].index);
+         GameObject* b = &this->at(pIterator);
          BulletInfo* in = &info[pIterator];
          ((void(*)(GameObject*, BulletInfo*, float&, float&, const float&, const float&))
             b->vTable[SHOOT_FUNC_ID])(b, in, posX, posY, vX, vY);
@@ -117,7 +116,7 @@ void Projectiles::shoot(float& posX, float& posY,
       fireRateDelta = 0.0f;
    }
    else if (!type && fireRateDelta >= RAPID_FIRE_RATE) {
-      GameObject* b = &this->at(info[pIterator].index);
+      GameObject* b = &this->at(pIterator);
       BulletInfo* in = &info[pIterator];
       ((void(*)(GameObject*, BulletInfo*, float&, float&, const float&, const float&))
          b->vTable[SHOOT_FUNC_ID])(b, in, posX, posY, vX, vY);
@@ -131,10 +130,10 @@ void Projectiles::update(float& elapsedTime)
 {
    transform(std::execution::par,
       info.begin(), info.end(),
-      info.begin(), [&](BulletInfo i) {
-         GameObject* b = &this->at(i.index);
+      this->begin(), info.begin(),
+      [&](BulletInfo& i, GameObject& o) {
          ((void(*)(GameObject*, BulletInfo&, float&))
-            b->vTable[UPDATE_FUNC_ID])(b, i, elapsedTime);
+            o.vTable[UPDATE_FUNC_ID])(&o, i, elapsedTime);
          return i;
       });
 

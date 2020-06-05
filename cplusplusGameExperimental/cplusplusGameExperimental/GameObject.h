@@ -11,6 +11,7 @@ public:
    int r, g, b;
    int type;
    
+   //Data data;
    void** vTable;
 
    GameObject() {
@@ -20,4 +21,12 @@ public:
       r = 0; g = 0; b = 0;
       type = -1;
    }
+
+   //Data* operator->() {
+   //   return &data;
+   //}
+};
+
+struct Data {
+
 };
